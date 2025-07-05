@@ -1,0 +1,8 @@
+{
+    "name": "olobase/modules",
+    "description": "Modules module for Olobase App",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {}
+}

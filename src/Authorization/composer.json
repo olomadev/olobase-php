@@ -1,0 +1,10 @@
+{
+    "name": "olobase/authorization",
+    "description": "Authorization Module for Olobase App",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "mezzio/mezzio-authorization": "^1.10"
+    }
+}

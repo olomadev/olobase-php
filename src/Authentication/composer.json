@@ -1,0 +1,12 @@
+{
+    "name": "olobase/authentication",
+    "description": "Authentication Module for Olobase App",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "firebase/php-jwt": "^6.11",
+        "mezzio/mezzio-authentication": "^1.10",
+        "mezzio/mezzio-authentication-laminasauthentication": "^1.7"
+    }
+}

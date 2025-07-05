@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.5.1@3f17a6b24a2dbe543e21408c2b19108cf6a355ef">
+  <file src="src/LaminasAuthentication.php">
+    <MixedArgument>
+      <code><![CDATA[$this->config['redirect']]]></code>
+    </MixedArgument>
+    <MixedReturnStatement>
+      <code><![CDATA[$userFactory($identity, $roles, $details)]]></code>
+    </MixedReturnStatement>
+    <PossiblyNullReference>
+      <code><![CDATA[setCredential]]></code>
+      <code><![CDATA[setIdentity]]></code>
+    </PossiblyNullReference>
+  </file>
+  <file src="src/LaminasAuthenticationFactory.php">
+    <MixedArgument>
+      <code><![CDATA[$auth]]></code>
+      <code><![CDATA[$container->get(UserInterface::class)]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$auth]]></code>
+    </MixedAssignment>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$config]]></code>
+    </PossiblyInvalidArgument>
+  </file>
+  <file src="test/LaminasAuthenticationTest.php">
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+      <code><![CDATA[$this->responseFactory]]></code>
+    </MixedArgumentTypeCoercion>
+  </file>
+</files>
