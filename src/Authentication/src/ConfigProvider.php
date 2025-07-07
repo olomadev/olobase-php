@@ -9,10 +9,16 @@ use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Olobase\Mezzio\ColumnFiltersInterface;
-use Olobase\Mezzio\Authentication\JwtEncoderInterface;
+use Olobase\Mezzio\Authentication\Service\JwtAuthentication;
+use Olobase\Mezzio\Authentication\Service\JwtEncoderInterface;
+use Olobase\Mezzio\Authentication\Service\TokenServiceInterface;
+use Olobase\Mezzio\Authentication\Helper\TokenEncryptHelper;
+use Olobase\Mezzio\Authentication\Helper\TokenEncryptHelperFactory;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
+use Olobase\Mezzio\Authorization\RoleModelInterface;
+use Authentication\Model\NullRoleModel;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
 /**
@@ -56,17 +62,19 @@ class ConfigProvider
     {
         return [
             'aliases' => [
-                AuthenticationInterface::class => Authentication\JwtAuthentication::class,
+                AuthenticationInterface::class => JwtAuthentication::class,
             ],
             'factories' => [
-                // classes
-                Authentication\JwtAuthentication::class => Authentication\JwtAuthenticationFactory::class,
+                // services
+                JwtAuthentication::class => Authentication\JwtAuthenticationFactory::class,
+                JwtEncoderInterface::class => Authentication\JwtEncoderFactory::class,
+                TokenServiceInterface::class => Authentication\TokenServiceFactory::class,
 
                 // middlewares
                 Middleware\JwtAuthenticationMiddleware::class => Middleware\JwtAuthenticationMiddlewareFactory::class,
                 
                 // helpers
-                Helper\TokenEncryptHelper::class => Helper\TokenEncryptHelperFactory::class,
+                TokenEncryptHelper::class => TokenEncryptHelperFactory::class,
 
                 // handlers
                 Handler\TokenHandler::class => Handler\TokenHandlerFactory::class,
@@ -74,15 +82,12 @@ class ConfigProvider
                 Handler\LogoutHandler::class => Handler\LogoutHandlerFactory::class,
                 Handler\SessionUpdateHandler::class => Handler\SessionUpdateHandlerFactory::class,
 
-                // models
-                Model\TokenModelInterface::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $tokenEncrypt = $container->get(Helper\TokenEncryptHelper::class);
-                    $cacheStorage = $container->get(StorageInterface::class);
-                    $jwtEncoder = $container->get(JwtEncoderInterface::class);
-                    $users = new TableGateway('users', $dbAdapter, null);
-                    return new Model\TokenModel($container->get('config'), $cacheStorage, $tokenEncrypt, $jwtEncoder, $users);
-                }
+                RoleModelInterface::class => function ($container) {
+                    if ($container->has(\Authorization\Model\RoleModel::class)) {
+                        return $container->get(\Authorization\Model\RoleModel::class);
+                    }
+                    return new NullRoleModel();
+                },
             ],
         ];
     }

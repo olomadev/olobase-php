@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Common\Contracts\RoleModelInterface;
+use Olobase\Mezzio\Authorization\RoleModelInterface;
 use Olobase\Mezzio\DataManagerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;

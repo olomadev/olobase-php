@@ -16,13 +16,13 @@ use const JSON_THROW_ON_ERROR;
  */
 final class PluginListFactory
 {
-    private string $project_root;
+    private string $ROOT;
 
     private string $psalm_root;
 
-    public function __construct(string $project_root, string $psalm_root)
+    public function __construct(string $ROOT, string $psalm_root)
     {
-        $this->project_root = $project_root;
+        $this->ROOT = $ROOT;
         $this->psalm_root = $psalm_root;
     }
 
@@ -42,20 +42,20 @@ final class PluginListFactory
     private function findLockFiles(): array
     {
         // use cases
-        // 1. plugins are installed into project vendors - composer.lock is PROJECT_ROOT/composer.lock
+        // 1. plugins are installed into project vendors - composer.lock is ROOT/composer.lock
         // 2. plugins are installed into separate composer environment (either global or bamarni-bin)
         //  - composer.lock is PSALM_ROOT/../../../composer.lock
         // 3. plugins are installed into psalm vendors - composer.lock is PSALM_ROOT/composer.lock
         // 4. none of the above - use stub (empty virtual composer.lock)
 
-        if ($this->psalm_root === $this->project_root) {
+        if ($this->psalm_root === $this->ROOT) {
             // managing plugins for psalm itself
             $composer_lock_filenames = [
                 Composer::getLockFilePath($this->psalm_root),
             ];
         } else {
             $composer_lock_filenames = [
-                Composer::getLockFilePath($this->project_root),
+                Composer::getLockFilePath($this->ROOT),
                 Composer::getLockFilePath($this->psalm_root . '/../../..'),
                 Composer::getLockFilePath($this->psalm_root),
             ];

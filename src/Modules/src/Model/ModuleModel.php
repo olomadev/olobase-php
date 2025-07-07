@@ -37,7 +37,7 @@ class ModuleModel implements ModuleModelInterface
 
     public function findAll(): array
     {
-        $key = CACHE_ROOT_KEY.Self::class.':'. __FUNCTION__;
+        $key = APP_CACHE_PREFIX.Self::class.':'. __FUNCTION__;
         if ($this->cache->hasItem($key)) {
             return $this->cache->getItem($key);
         }
@@ -190,7 +190,7 @@ class ModuleModel implements ModuleModelInterface
 
     private function deleteCache() : void
     {
-        $this->cache->removeItem(CACHE_ROOT_KEY.Self::class.':findAll');
+        $this->cache->removeItem(APP_CACHE_PREFIX.Self::class.':findAll');
     }    
 
 }

@@ -29,7 +29,7 @@ class UserRoleModel implements UserRoleModelInterface
     {
         try {
             $this->conn->beginTransaction();
-            $this->userRoles->insert(['userId' => $userId, 'roleId' => $roleId]);
+            $this->userRoles->insert(['user_id' => $userId, 'role_id' => $roleId]);
             $this->conn->commit();
         } catch (Exception $e) {
             $this->conn->rollback();
@@ -41,7 +41,7 @@ class UserRoleModel implements UserRoleModelInterface
     {
         try {
             $this->conn->beginTransaction();
-            $this->userRoles->delete(['userId' => $userId, 'roleId' => $roleId]);
+            $this->userRoles->delete(['user_id' => $userId, 'role_id' => $roleId]);
             $this->conn->commit();
         } catch (Exception $e) {
             $this->conn->rollback();
@@ -63,8 +63,8 @@ class UserRoleModel implements UserRoleModelInterface
         );
         $select->from(['u' => 'users']);
         $select->join(
-            ['ur' => 'userRoles'],
-            'u.id = ur.userId',
+            ['ur' => 'user_roles'],
+            'u.id = ur.user_id',
             [],
             $select::JOIN_LEFT
         );
@@ -97,7 +97,7 @@ class UserRoleModel implements UserRoleModelInterface
             }
             $nest->unnest();
         }
-        $select->where(['ur.roleId' => $roleId]);
+        $select->where(['ur.role_id' => $roleId]);
 
         if ($this->columnFilters->orderDataIsNotEmpty()) {
             foreach ($this->columnFilters->getOrderData() as $order) {

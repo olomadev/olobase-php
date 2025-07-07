@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Authentication\Model\TokenModelInterface;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -25,7 +24,6 @@ class RefreshHandler implements RequestHandlerInterface
     public function __construct(
         array $config,
         private AuthenticationInterface $authentication,
-        private TokenModelInterface $tokenModel,
         private Error $error
     ) {
         $this->config = $config;
@@ -115,7 +113,7 @@ class RefreshHandler implements RequestHandlerInterface
                 );
             }
             // token renewal process
-            $data = $this->tokenModel->refresh($request, $payload);
+            $data = $this->authentication->getTokenService()->refresh($request, $payload);
             if (false == $data) {
                 return new JsonResponse(
                     [

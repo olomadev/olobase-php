@@ -38,7 +38,7 @@ class PermissionModel implements PermissionModelInterface
      */
     public function findPermissions() : array
     {
-        $key = CACHE_ROOT_KEY.Self::class.':'.__FUNCTION__;
+        $key = APP_CACHE_PREFIX.Self::class.':'.__FUNCTION__;
         if ($this->cache->hasItem($key)) {
             return $this->cache->getItem($key);
         }
@@ -51,11 +51,11 @@ class PermissionModel implements PermissionModelInterface
             'action',
         ]);
         $select->join(
-            ['rp' => 'rolePermissions'],
-            'permissions.id = rp.permId', [], $select::JOIN_INNER);
+            ['rp' => 'role_permissions'],
+            'permissions.id = rp.perm_id', [], $select::JOIN_INNER);
         $select->join(
             ['r' => 'roles'],
-            'r.id = rp.roleId', ['key','level'], $select::JOIN_LEFT);
+            'r.id = rp.role_id', ['key','level'], $select::JOIN_LEFT);
         
         // echo $select->getSqlString($adapter->getPlatform());
         // die;
@@ -183,10 +183,10 @@ class PermissionModel implements PermissionModelInterface
             'method',
         );
         $select->from(['p' => 'permissions']);
-        $select->join(['rp' => 'rolePermissions'], 'p.id = rp.permId',
+        $select->join(['rp' => 'role_permissions'], 'p.id = rp.perm_id',
             [],
         $select::JOIN_LEFT);
-        $select->where(['rp.roleId' => $roleId]);
+        $select->where(['rp.role_id' => $roleId]);
          
         // echo $select->getSqlString($this->adapter->getPlatform());
         // die;
@@ -267,7 +267,7 @@ class PermissionModel implements PermissionModelInterface
 
     private function deleteCache()
     {
-        $this->cache->removeItem(CACHE_ROOT_KEY.Self::class.':findPermissions');
+        $this->cache->removeItem(APP_CACHE_PREFIX.Self::class.':findPermissions');
     }
 
 }

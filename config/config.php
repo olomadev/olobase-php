@@ -13,12 +13,10 @@ $cacheConfig = [
 
 // Let's merge the configuration with ConfigAggregator
 $aggregator = new ConfigAggregator([
-  \Mezzio\Authentication\LaminasAuthentication\ConfigProvider::class,
-  \Mezzio\Authentication\ConfigProvider::class,
-  \Authentication\ConfigProvider::class,
   \Modules\ConfigProvider::class,
-  \Common\ConfigProvider::class,
+  \Users\ConfigProvider::class,
   \Olobase\Mezzio\ConfigProvider::class,
+  \Common\ConfigProvider::class,
   \Laminas\Db\ConfigProvider::class,
   \Laminas\Paginator\ConfigProvider::class,
   \Laminas\Serializer\ConfigProvider::class,

@@ -96,7 +96,7 @@ class TokenHandler implements RequestHandlerInterface
                 $user = $this->authentication->createUser($request);           
                 if (null !== $user) {
                     $request = $request->withAttribute(UserInterface::class, $user);
-                    $encoded = $this->authentication->getTokenModel()->create($request);
+                    $encoded = $this->authentication->getTokenService()->create($request);
                     $details = $user->getDetails();
 
                     return new JsonResponse(

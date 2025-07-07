@@ -32,6 +32,8 @@
         "php": ">=8.1.0",
         "composer/package-versions-deprecated": "^1.10.99",
         "doctrine/annotations": "^2.0",
+        "doctrine/dbal": "^4.2",
+        "doctrine/migrations": "^3.9",
         "laminas/laminas-cache": "^3.0",
         "laminas/laminas-cache-storage-adapter-redis": "^2.10",
         "laminas/laminas-component-installer": "^3.5",
@@ -48,12 +50,14 @@
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.9.0",
-        "olobase/mezzio": "^2.1",
+        "olobase/mezzio": "^2.2",
+        "olobase/users": "*",
         "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
+        "symfony/console": "^6.4",
         "symfony/uid": "*",
         "zircote/swagger-php": "^4.4",
-        "olobase/authentication": "*"
+        "olobase/modules": "*"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -74,14 +78,14 @@
         },
         {
             "type": "path",
-            "url": "./src/Modules",
+            "url": "./src/Users",
             "options": {
                 "symlink": true
             }
         },
         {
             "type": "path",
-            "url": "./src/Authentication",
+            "url": "./src/Modules",
             "options": {
                 "symlink": true
             }
@@ -90,8 +94,8 @@
     "autoload": {
         "psr-4": {
             "Common\\": "src/Common/src/",
-            "Modules\\": "src/Modules/src/",
-            "Authentication\\": "src/Authentication/src/"
+            "Users\\": "src/Users/src/",
+            "Modules\\": "src/Modules/src/"
         }
     },
     "autoload-dev": {

@@ -12,7 +12,6 @@ use Olobase\Mezzio\Authorization\PermissionModelInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Common\Contracts\RoleModelInterface;
 
 /**
  * The configuration provider for the Authorization module
@@ -46,7 +45,7 @@ class ConfigProvider
                 Model\PermissionModel::class => PermissionModelInterface::class, // permission model used by Authorization
             ],
             'factories'  => [
-                RoleModelInterface::class => Factory\RoleModelFactory::class,
+                Model\RoleModel::class => Factory\RoleModelFactory::class,
 
                 // handlers - roles
                 Handler\Roles\CreateHandler::class => Handler\Roles\CreateHandlerFactory::class,
@@ -70,21 +69,6 @@ class ConfigProvider
                 Handler\Permissions\FindAllByPagingHandler::class => Handler\Permissions\FindAllByPagingHandlerFactory::class,
 
                 // models
-                Common\Contracts\RoleModelInterface::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $cacheStorage = $container->get(StorageInterface::class);
-                    $columnFilters = $container->get(ColumnFiltersInterface::class);
-                    $roles = new TableGateway('roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    $rolePermissions = new TableGateway('rolePermissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    $userRoles = new TableGateway('userRoles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    return new Model\RoleModel(
-                        $roles,
-                        $rolePermissions,
-                        $userRoles,
-                        $cacheStorage,
-                        $columnFilters
-                    );
-                },
                 Model\UserRoleModelInterface::Class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $columnFilters = $container->get(ColumnFiltersInterface::class);

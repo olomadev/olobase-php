@@ -1,6 +1,6 @@
 <?php
 return [
     'Common',
-    'Modules',
-    'Authentication'
+    'Users',
+    'Modules'
 ];

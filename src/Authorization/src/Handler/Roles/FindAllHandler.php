@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Common\Contracts\RoleModelInterface;
+use Olobase\Mezzio\Authorization\RoleModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -26,8 +26,8 @@ class ErrorResponseGenerator
         $data = $e->getTrace();
 
         $trace = array_map(
-            fn ($a) => isset($a['file']) && defined('PROJECT_ROOT') 
-                ? array_merge($a, ['file' => str_replace(PROJECT_ROOT, '', $a['file'])]) 
+            fn ($a) => isset($a['file']) && defined('APP_ROOT') 
+                ? array_merge($a, ['file' => str_replace(APP_ROOT, '', $a['file'])]) 
                 : $a,
             $data
         );
@@ -36,7 +36,7 @@ class ErrorResponseGenerator
             'title'  => get_class($e),
             'type'   => 'https://httpstatus.es/400',
             'status' => 400,
-            'file'   => defined('PROJECT_ROOT') ? str_replace(PROJECT_ROOT, '', $e->getFile()) : $e->getFile(),
+            'file'   => defined('APP_ROOT') ? str_replace(APP_ROOT, '', $e->getFile()) : $e->getFile(),
             'line'   => $e->getLine(),
             'error'  => $e->getMessage(),
         ];

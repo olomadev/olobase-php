@@ -37,7 +37,7 @@ class RoleModel implements RoleModelInterface
      */
     public function findAll() : ?array
     {
-        $key = CACHE_ROOT_KEY.Self::class.':'.__FUNCTION__;
+        $key = APP_CACHE_PREFIX.Self::class.':'.__FUNCTION__;
         if ($this->cache->hasItem($key)) {
             return $this->cache->getItem($key);
         }
@@ -74,8 +74,8 @@ class RoleModel implements RoleModelInterface
         $select->columns([
             'key',
         ]);
-        $select->join(['ru' => 'userRoles'], 'r.id = ru.roleId', ['userId'], $select::JOIN_LEFT);
-        $select->where(['ru.userId' => $userId]);
+        $select->join(['ru' => 'user_roles'], 'r.id = ru.role_id', ['user_id'], $select::JOIN_LEFT);
+        $select->where(['ru.user_id' => $userId]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $resultSet = $statement->execute();
         // echo $select->getSqlString($adapter->getPlatform());
@@ -226,10 +226,10 @@ class RoleModel implements RoleModelInterface
             ]
         );
         $select->from(['p' => 'permissions']);
-        $select->join(['rp' => 'rolePermissions'], 'p.id = rp.permId',
+        $select->join(['rp' => 'role_permissions'], 'p.id = rp.perm_id',
             [],
         $select::JOIN_LEFT);
-        $select->where(['rp.roleId' => $roleId]);
+        $select->where(['rp.role_id' => $roleId]);
          
         // echo $select->getSqlString($this->adapter->getPlatform());
         // die;
@@ -245,20 +245,20 @@ class RoleModel implements RoleModelInterface
         $select = $sql->select();
         $select->columns(
             [
-                'roleId',
+                'role_id',
             ]
         );
-        $select->from(['ru' => 'userRoles']);
-        $select->join(['u' => 'users'], 'u.id = ru.userId',
+        $select->from(['ru' => 'user_roles']);
+        $select->join(['u' => 'users'], 'u.id = ru.user_id',
             [
                 'firstname',
                 'lastname',
                 'email',
-                'isActive',
-                'createdAt',
+                'is_active',
+                'created_at',
             ],
         $select::JOIN_LEFT);
-        $select->where(['ru.roleId' => $roleId]);
+        $select->where(['ru.role_id' => $roleId]);
         // echo $select->getSqlString($this->adapter->getPlatform());
         // die;
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -276,11 +276,11 @@ class RoleModel implements RoleModelInterface
         try {
             $this->conn->beginTransaction();
             $this->roles->insert($data['roles']);
-            $this->rolePermissions->delete(['roleId' => $roleId]);
+            $this->rolePermissions->delete(['role_id' => $roleId]);
             if (! empty($data['rolePermissions'])) {
                 foreach ($data['rolePermissions'] as $val) {
-                    $val['roleId'] = $roleId;
-                    $val['permId'] = $val['id'];
+                    $val['role_id'] = $roleId;
+                    $val['perm_id'] = $val['id'];
                     unset($val['id']);
                     $this->rolePermissions->insert($val);
                 }
@@ -300,12 +300,12 @@ class RoleModel implements RoleModelInterface
         try {
             $this->conn->beginTransaction();
             $this->roles->update($data['roles'], ['id' => $roleId]);
-            $this->rolePermissions->delete(['roleId' => $roleId]);
+            $this->rolePermissions->delete(['role_id' => $roleId]);
 
             if (! empty($data['rolePermissions'])) {
                 foreach ($data['rolePermissions'] as $val) {
-                    $val['roleId'] = $roleId;
-                    $val['permId'] = $val['id'];
+                    $val['role_id'] = $roleId;
+                    $val['perm_id'] = $val['id'];
                     unset($val['id']);
                     $this->rolePermissions->insert($val);
                 }
@@ -333,8 +333,8 @@ class RoleModel implements RoleModelInterface
 
     private function deleteCache() : void
     {
-        $this->cache->removeItem(CACHE_ROOT_KEY.Self::class.':findAll');
-        $this->cache->removeItem(CACHE_ROOT_KEY.\Authorization\Model\PermissionModel::class.':findPermissions');
+        $this->cache->removeItem(APP_CACHE_PREFIX.Self::class.':findAll');
+        $this->cache->removeItem(APP_CACHE_PREFIX.\Authorization\Model\PermissionModel::class.':findPermissions');
     }    
 
 }

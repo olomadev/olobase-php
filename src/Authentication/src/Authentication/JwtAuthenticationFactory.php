@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Authentication\Authentication;
 
-use Common\Contracts\RoleModelInterface;
-use Authentication\Model\TokenModelInterface;
+use Olobase\Mezzio\Authorization\RoleModelInterface;
+use Olobase\Mezzio\Authentication\Service\JwtEncoderInterface;
+use Olobase\Mezzio\Authentication\Service\JwtAuthentication;
+use Olobase\Mezzio\Authentication\Service\TokenServiceInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Olobase\Mezzio\Authentication\JwtEncoderInterface;
 use Laminas\Authentication\Adapter\DbTable\CallbackCheckAdapter;
 use Mezzio\Authentication\Exception;
 use Mezzio\Authentication\UserInterface;
@@ -28,7 +29,7 @@ class JwtAuthenticationFactory implements FactoryInterface
             return password_verify($password, $hash);
         };
 
-        $adapter = new AuthenticationAdapter(  // CallbackCheckAdapter
+        $adapter = new AuthenticationAdapter(  // Change it with your own adapter ..
             $container->get(Adapter::class),
             $config['authentication']['adapter']['options']['table'],
             $config['authentication']['adapter']['options']['identity_column'],
@@ -39,7 +40,7 @@ class JwtAuthenticationFactory implements FactoryInterface
             $config,
             $adapter,
             $container->get(JwtEncoderInterface::class),
-            $container->get(TokenModelInterface::class),
+            $container->get(TokenServiceInterface::class),
             $container->get(RoleModelInterface::class),
             $container->has(UserInterface::class) ? $container->get(UserInterface::class) : null
         );

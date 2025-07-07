@@ -13,9 +13,9 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'e8aa6e4b5a1db2f56ae794f1505391a8' => __DIR__ . '/..' . '/amphp/amp/lib/functions.php',
         '76cd0796156622033397994f25b0d8fc' => __DIR__ . '/..' . '/amphp/amp/lib/Internal/functions.php',
-        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '3f8ee9969da604d0f15c841b77b11450' => __DIR__ . '/..' . '/laminas/laminas-stratigility/src/functions/double-pass-middleware.php',
         'ee5523a5d51d6d51030227439db1ef74' => __DIR__ . '/..' . '/laminas/laminas-stratigility/src/functions/host.php',
         '5f6e29ca023a0bdefa2476adb465d527' => __DIR__ . '/..' . '/laminas/laminas-stratigility/src/functions/middleware.php',
@@ -55,6 +55,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
             'Webimpress\\SafeWriter\\' => 22,
             'WebimpressCodingStandard\\' => 25,
         ),
+        'U' => 
+        array (
+            'Users\\' => 6,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Uuid\\' => 22,
@@ -65,8 +69,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
             'Symfony\\Contracts\\Service\\' => 26,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Yaml\\' => 23,
+            'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\Uid\\' => 22,
             'Symfony\\Component\\String\\' => 25,
+            'Symfony\\Component\\Stopwatch\\' => 28,
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Filesystem\\' => 29,
@@ -109,8 +115,6 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
             'Mezzio\\Template\\' => 16,
             'Mezzio\\Router\\' => 14,
             'Mezzio\\Helper\\' => 14,
-            'Mezzio\\Authentication\\LaminasAuthentication\\' => 44,
-            'Mezzio\\Authentication\\' => 22,
             'Mezzio\\' => 7,
         ),
         'L' => 
@@ -143,19 +147,21 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
             'Laminas\\Cli\\' => 12,
             'Laminas\\Cache\\Storage\\Adapter\\' => 30,
             'Laminas\\Cache\\' => 14,
-            'Laminas\\Authentication\\' => 23,
             'LaminasCodingStandard\\' => 22,
         ),
         'F' => 
         array (
-            'Firebase\\JWT\\' => 13,
             'Fig\\Http\\Message\\' => 17,
             'Fidry\\CpuCoreCounter\\' => 21,
         ),
         'D' => 
         array (
+            'Doctrine\\Migrations\\' => 20,
+            'Doctrine\\Deprecations\\' => 22,
+            'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
+            'Doctrine\\Common\\' => 16,
             'DeepCopy\\' => 9,
             'Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => 55,
         ),
@@ -173,7 +179,6 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         ),
         'A' => 
         array (
-            'Authentication\\' => 15,
             'AppTest\\' => 8,
             'Amp\\ByteStream\\' => 15,
             'Amp\\' => 4,
@@ -203,6 +208,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         'WebimpressCodingStandard\\' => 
         array (
             0 => __DIR__ . '/..' . '/webimpress/coding-standard/src/WebimpressCodingStandard',
+        ),
+        'Users\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Users/src',
         ),
         'Symfony\\Polyfill\\Uuid\\' => 
         array (
@@ -236,6 +245,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
+        'Symfony\\Component\\VarExporter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/var-exporter',
+        ),
         'Symfony\\Component\\Uid\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/uid',
@@ -243,6 +256,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         'Symfony\\Component\\String\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
+        ),
+        'Symfony\\Component\\Stopwatch\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/stopwatch',
         ),
         'Symfony\\Component\\Process\\' => 
         array (
@@ -367,14 +384,6 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         array (
             0 => __DIR__ . '/..' . '/mezzio/mezzio-helpers/src',
         ),
-        'Mezzio\\Authentication\\LaminasAuthentication\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mezzio/mezzio-authentication-laminasauthentication/src',
-        ),
-        'Mezzio\\Authentication\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mezzio/mezzio-authentication/src',
-        ),
         'Mezzio\\' => 
         array (
             0 => __DIR__ . '/..' . '/mezzio/mezzio/src',
@@ -491,17 +500,9 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-cache/src',
         ),
-        'Laminas\\Authentication\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-authentication/src',
-        ),
         'LaminasCodingStandard\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-coding-standard/src/LaminasCodingStandard',
-        ),
-        'Firebase\\JWT\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Fig\\Http\\Message\\' => 
         array (
@@ -511,6 +512,18 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         array (
             0 => __DIR__ . '/..' . '/fidry/cpu-core-counter/src',
         ),
+        'Doctrine\\Migrations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/migrations/src',
+        ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/src',
+        ),
+        'Doctrine\\DBAL\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/dbal/src',
+        ),
         'Doctrine\\Common\\Lexer\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
@@ -518,6 +531,10 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         'Doctrine\\Common\\Annotations\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/annotations/lib/Doctrine/Common/Annotations',
+        ),
+        'Doctrine\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
         'DeepCopy\\' => 
         array (
@@ -550,10 +567,6 @@ class ComposerStaticInit1d5adf6934f1eddf3db93181d936ebd7
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
-        ),
-        'Authentication\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src/Authentication/src',
         ),
         'AppTest\\' => 
         array (
