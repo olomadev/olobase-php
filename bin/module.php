@@ -23,17 +23,36 @@ define('ROOT', dirname(__DIR__));
 
 require 'vendor/autoload.php';
 
+$argv = $_SERVER['argv'];
 $container = require ROOT.'/config/container.php';
 $envVariables = $container->get('config')['env_variables'];
 
+// validate command is empty
+if (empty($argv[1])) {
+    echo "\033[31mCommand not found\033[0m\n";
+    die;
+}
+// check command list
+if (false == in_array(trim($argv[1]), ['install','remove','migrations:migrate','migrations:migrate-all','migrations:list'])) {
+    echo "\033[31mCommand $argv[1] not found\033[0m\n";
+    die;
+}
+// Command
+$command = trim($argv[1]);
+
 // Command line options
-$options = getopt('', ['install:', 'remove:', 'env:', 'migrate:', 'migrate-all:', 'rollback:', 'steps:', 'to:', 'strict:', 'status:']);
+$parsed = parseArgv($_SERVER['argv'], ['env', 'module', 'prev', 'to', 'strict']);
+$options = $parsed['options'];
 
 if (! isset($options['env'])) {
     echo "\033[31mPlease set an env variable: --env=local\033[0m\n";
     die;
 } else if (false == in_array($options['env'], $envVariables)) {
     echo "\033[31mThe env variable you entered does not exist in your 'env_variables' configuration\033[0m\n";
+    die;
+}
+if (! isset($options['module'])) {
+    echo "\033[31mPlease set a module variable: --module=moduleName\033[0m\n";
     die;
 }
 putenv('APP_ENV='.trim($options['env']));
@@ -53,13 +72,9 @@ $composerJson = json_decode(file_get_contents($composerJsonFile), true);
 $repositories = $composerJson['repositories'] ?? [];
 $require = $composerJson['require'] ?? [];
 
-
-// var_dump($options);
-// die;
-
 // Install Module
-if (isset($options['install'])) {
-    $moduleName = $options['install'];
+if ($command == "install") {
+    $moduleName = $options['module'];
 
     if (!in_array($moduleName, $modulesConfig)) {
         $modulesConfig[] = $moduleName;
@@ -111,7 +126,7 @@ if (isset($options['install'])) {
         $doctrineDbConfig = convertLaminasDbToDoctrine($laminasDbConfig);
         $conn = \Doctrine\DBAL\DriverManager::getConnection($doctrineDbConfig);
 
-        runModuleMigrations($moduleName, $conn);
+        runAllModuleMigrations($moduleName, $conn);
 
     } else {
         echo "\033[33mModule '{$moduleName}' is already enabled in module.config.php.\n\033[0m";
@@ -119,8 +134,8 @@ if (isset($options['install'])) {
 }
 
 // Remove Module
-if (isset($options['remove'])) {
-    $moduleName = $options['remove'];
+if ($command == "remove") {
+    $moduleName = $options['module'];
     if (($key = array_search($moduleName, $modulesConfig)) !== false) {
         unset($modulesConfig[$key]);
         echo "\033[32mRemoving module: $moduleName\n\033[0m";
@@ -146,7 +161,6 @@ if (isset($options['remove'])) {
                 echo "\033[31mFailed to remove module '{$moduleFullName}' from composer.json.\n\033[0m";
             }
         }
-
         // Save updated composer.json
         file_put_contents($composerJsonFile, json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
@@ -181,66 +195,93 @@ if (isset($options['remove'])) {
         echo "\033[33mModule '{$moduleName}' is not found in module.config.php.\n\033[0m";
     }
 }
-
+//
 // Handle migration commands 
-if (isset($options['migrate']) || isset($options['status']) || isset($options['rollback']) || isset($options['migrate-all'])) {
+// 
+if (in_array($command, ['migrations:migrate', 'migrations:list', 'migrations:migrate-all'])) {
 
     $laminasDbConfig = $container->get('config')['db'];
     $doctrineDbConfig = convertLaminasDbToDoctrine($laminasDbConfig);
     $conn = DriverManager::getConnection($doctrineDbConfig); // Create Doctrine DBAL connection from container config
 
-    if (isset($options['migrate'])) {
-        $moduleName = $options['migrate'];
-        runModuleMigrations($moduleName, $conn);
+    if ($command == "migrations:list") {
+        $moduleName = $options['module'];
+        passthru("php bin/migrations.php --module={$moduleName} migrations:list --no-interaction --ansi");
     }
 
-    if (isset($options['status'])) {
-        $moduleName = $options['status'];
-        statusModuleMigrations($moduleName, $conn);
-    }
-
-    if (isset($options['rollback'])) {
-        $moduleName = $options['rollback'];
-        $steps = isset($options['steps']) ? (int)$options['steps'] : 1;
+    if ($command == "migrations:migrate") {
+        $moduleName = $options['module'];
+        $prev = $options['prev'] ?? null;
         $toVersion = $options['to'] ?? null;
-        $strict = empty($options['strict']) ? false : true;
-        rollbackModuleMigrations($moduleName, $conn, $steps, $toVersion, $strict);
+        $strict = empty($options['strict']) ? false : (bool)$options['strict'];
+
+        runModuleMigrations($moduleName, $conn, $prev, $toVersion, $strict);
     }
 
-    if (isset($options['migrate-all'])) {
-        $app = new Application();
-        $dirs = glob(ROOT . '/src/*', GLOB_ONLYDIR);
-        $i = 0;
-        foreach ($dirs as $dir) {
-            $moduleName = basename($dir);
-            echo "\n\033[34m== $moduleName Migration ==\033[0m\n";
+    if ($command == "migrations:migrate-all") {
+        // $app = new Application();
+        // $dirs = glob(ROOT . '/src/*', GLOB_ONLYDIR);
+        // $i = 0;
+        // foreach ($dirs as $dir) {
+        //     $moduleName = basename($dir);
+        //     echo "\n\033[34m== $moduleName Migration ==\033[0m\n";
 
-            $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
-            if (!is_dir($moduleMigrations)) {
-                echo "\033[33mMigration folder not found: $moduleName\033[0m\n";
-                continue;
+        //     $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
+        //     if (!is_dir($moduleMigrations)) {
+        //         echo "\033[33mMigration folder not found: $moduleName\033[0m\n";
+        //         continue;
+        //     }
+        //     $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
+
+        //     if ($i == 0) { // create migrations table one time if does not exists ..
+        //         $syncCommand = new SyncMetadataCommand($factory);
+        //         $syncCommand->setApplication($app);
+        //         $input = new ArrayInput([]);
+        //         $output = new ConsoleOutput();
+
+        //         $output->writeln("<info>Running metadata sync for: $moduleName</info>");
+        //         $syncCommand->run($input, $output);
+        //     }
+        //     $migrateCommand = new MigrateCommand($factory);
+        //     $app->add($migrateCommand);
+
+        //     $input = new ArrayInput(['command' => 'migrate']);
+        //     $output = new ConsoleOutput();
+        //     $app->run($input, $output);
+        //     ++$i;
+        // }
+        // exit(0);
+    }
+}
+
+// Function to parse command arguments
+function parseArgv(array $argv, array $expected = []): array
+{
+    $result = [
+        'command' => null,
+        'options' => [],
+    ];
+    $result['command'] = $argv[1] ?? null;
+
+    for ($i = 2; $i < count($argv); $i++) {
+        $arg = $argv[$i];
+
+        if (str_starts_with($arg, '--')) {
+            $arg = substr($arg, 2);
+
+            if (strpos($arg, '=') !== false) {
+                [$key, $value] = explode('=', $arg, 2);
+            } else {
+                $key = $arg;
+                $value = true; // sadece flag gibi
             }
-            $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
-
-            if ($i == 0) { // create migrations table one time if does not exists ..
-                $syncCommand = new SyncMetadataCommand($factory);
-                $syncCommand->setApplication($app);
-                $input = new ArrayInput([]);
-                $output = new ConsoleOutput();
-
-                $output->writeln("<info>Running metadata sync for: $moduleName</info>");
-                $syncCommand->run($input, $output);
+            if (empty($expected) || in_array($key, $expected, true)) {
+                $result['options'][$key] = $value;
             }
-            $migrateCommand = new MigrateCommand($factory);
-            $app->add($migrateCommand);
-
-            $input = new ArrayInput(['command' => 'migrate']);
-            $output = new ConsoleOutput();
-            $app->run($input, $output);
-            ++$i;
         }
-        exit(0);
     }
+
+    return $result;
 }
 
 // Function to print the composer install output in green using passthru
@@ -271,7 +312,7 @@ function getModuleNameFromComposerJson(string $moduleFullPath): ?string
 // Create DependencyFactory for Doctrine Migrations
 function createDependencyFactory(string $moduleName, string $migrationsPath, \Doctrine\DBAL\Connection $conn): DependencyFactory
 {
-    $configFactory = require __DIR__ . '/migrations.php';
+    $configFactory = require __DIR__ . '/migration_config.php';
 
     /** @var ConfigurationArray $config */
     $config = $configFactory($moduleName);
@@ -293,7 +334,7 @@ function convertLaminasDbToDoctrine(array $laminasConfig): array
     ];
 }
 
-function runModuleMigrations($moduleName, $conn)
+function runAllModuleMigrations($moduleName, $conn)
 {
     $app = new Application();
     $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
@@ -322,76 +363,30 @@ function runModuleMigrations($moduleName, $conn)
     exit(0);
 }
 
-function statusModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn): void
+function runModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn, $prev = false, ?string $toVersion = null, $strict = false): void
 {
-    $colors = [
-        'reset'       => "\033[0m",
-        'fg_white'    => "\033[97m",
-        'fg_black'    => "\033[30m",
-        'bg_green'    => "\033[42m",
-        'bg_yellow'   => "\033[43m",
-        'fg_red'      => "\033[31m",
-        'fg_cyan'     => "\033[36m",
-    ];
-    echo $colors['fg_white'] . "Migration Status for module: $moduleName\n" . $colors['reset'];
-    echo "--------------------------------------------------\n";
-
-    $migrationsPath = ROOT . "/src/$moduleName/src/Migrations";
-    if (!is_dir($migrationsPath)) {
-        echo $colors['fg_red'] . "Migration path not found: $migrationsPath\n" . $colors['reset'];
-        return;
-    }
-    $factory = createDependencyFactory($moduleName, $migrationsPath, $conn);
-
-    /** @var ExecutedMigrationsList $executedMigrations */
-    $executedMigrations = $factory->getMetadataStorage()->getExecutedMigrations();
-
-    /** @var AvailableMigrationsList $availableMigrations */
-    $availableMigrations = $factory->getMigrationRepository()->getMigrations();
-
-    if (count($availableMigrations->getItems()) === 0) {
-        $line = "No available migrations found.";
-        $line = str_pad($line, 50, ' ');
-        echo $colors['bg_yellow'] . $colors['fg_black'] . $line . $colors['reset'] . "\n";
-        return;
-    }
-    foreach ($availableMigrations->getItems() as $migration) {
-        $version = $migration->getVersion();
-
-        if ($executedMigrations->hasMigration($version)) {
-            $line = "  [APPLIED] $version";
-            $line = str_pad($line, 50, ' ');
-            echo $colors['bg_green'] . $colors['fg_black'] . $line . $colors['reset'] . "\n";
-        } else {
-            $line = "  [PENDING] $version";
-            $line = str_pad($line, 50, ' ');
-            echo $colors['bg_yellow'] . $colors['fg_black'] . $line . $colors['reset'] . "\n";
-        }
-    }
-
-    echo "--------------------------------------------------\n";
-}
-
-function rollbackModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn, int $steps = 1, ?string $toVersion = null, $strict = false): void
-{
-    $app = new Application();
     $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
-
     if (!is_dir($moduleMigrations)) {
         echo "\033[31mMigration folder not found for module: $moduleName\033[0m\n";
         echo "\033[31mCurrent folder: $moduleMigrations\033[0m\n";
         exit(1);
     }
     $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
-    $app->add(new MigrateCommand($factory));
-    $output = new ConsoleOutput();
 
-    if ($toVersion) {
-        echo "\033[33m<<--- Rolling back to version: $toVersion\033[0m\n";
+    if ($prev) {
+        echo "\033[33mRolling back to previous version..\033[0m\n";
+        passthru("php bin/migrations.php --module={$moduleName} migrations:migrate prev --no-interaction --ansi", $exitCode);
 
+        if ($exitCode !== 0) {
+            echo "\033[31mRollback failed\033[0m\n";
+        }
+        echo "\033[32m[OK] Rollback completed for module: $moduleName\033[0m\n";
+      die;
+    }
+
+    if ($toVersion) {  // migrate to specific version ..
         $executed = $factory->getMetadataStorage()->getExecutedMigrations();
         $executedMigrations = (array)$executed->getItems();
-
         $executedVersions = [];
         foreach ($executedMigrations as $migrationItem)  {
             $version = $migrationItem->getVersion(); // Doctrine\Migrations\Version\Version
@@ -407,65 +402,42 @@ function rollbackModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection 
         $toVersionObj = new Version($fullToVersion);
         $executedVersions = array_reverse($executedVersions); // Ters sıraya çevir (en yeni en başta)
 
-
         $stepsToRollback = 0;
         foreach ($executedVersions as $version) {
             $stepsToRollback++;
             if ($version === (string)$toVersionObj) {
                 if (!$strict) {
-                    $stepsToRollback--; // dahil etmeyeceğiz
+                    $stepsToRollback--;
                 }
-                break;
             }
         }
-        // var_dump($strict);
-        // echo $stepsToRollback."\n";
-        // die;
-
         if ($stepsToRollback === 0) {
             echo "\033[32m[OK] Already at or before target version.\033[0m\n";
             exit(0);
         }
-
         echo "\033[33mRolling back $stepsToRollback step(s) to reach version: $toVersion\033[0m\n";
 
         for ($i = 0; $i < $stepsToRollback; $i++) {
-            echo "\033[33m<<--- Rolling back step " . ($i + 1) . "\033[0m\n";
-
-            $input = new ArrayInput([
-                'command' => 'migrate',
-                'version' => 'prev',
-                '--no-interaction' => true,
-            ]);
-            $exitCode = $app->run($input, $output);
+            echo "\033[33mRolling back step " . ($i + 1) . "\033[0m\n";
+            passthru("php bin/migrations.php --module={$moduleName} migrations:migrate prev --no-interaction --ansi", $exitCode);
 
             if ($exitCode !== 0) {
                 echo "\033[31mRollback failed at step " . ($i + 1) . "\033[0m\n";
                 break;
             }
         }
-
         echo "\033[32m[OK] Rollback completed to version: $toVersion\033[0m\n";
 
-    } else {
-        for ($i = 0; $i < $steps; $i++) {
-            echo "\033[33m<<--- Rolling back step " . ($i + 1) . "\033[0m\n";
+    } else { // run migrations ...
 
-            $input = new ArrayInput([
-                'command' => 'migrate',
-                'version' => 'prev',
-                '--no-interaction' => true,
-            ]);
-            $exitCode = $app->run($input, $output);
+        passthru("php bin/migrations.php --module={$moduleName} migrations:migrate --no-interaction --ansi", $exitCode);
 
-            if ($exitCode !== 0) {
-                echo "\033[31mRollback failed at step " . ($i + 1) . "\033[0m\n";
-                break;
-            }
+        if ($exitCode !== 0) {
+            echo "\033[31mMigration failed\033[0m\n";
         }
-
-        echo "\033[32m[OK] Rollback completed ($steps step(s)) for module: $moduleName\033[0m\n";
+        echo "\033[32m[OK] Migration completed for module: $moduleName\033[0m\n";
     }
 
     exit(0);
 }
+
