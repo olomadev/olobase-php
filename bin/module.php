@@ -13,7 +13,6 @@ use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 ini_set('display_errors', 1);
@@ -219,38 +218,7 @@ if (in_array($command, ['migrations:migrate', 'migrations:list', 'migrations:mig
     }
 
     if ($command == "migrations:migrate-all") {
-        // $app = new Application();
-        // $dirs = glob(ROOT . '/src/*', GLOB_ONLYDIR);
-        // $i = 0;
-        // foreach ($dirs as $dir) {
-        //     $moduleName = basename($dir);
-        //     echo "\n\033[34m== $moduleName Migration ==\033[0m\n";
 
-        //     $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
-        //     if (!is_dir($moduleMigrations)) {
-        //         echo "\033[33mMigration folder not found: $moduleName\033[0m\n";
-        //         continue;
-        //     }
-        //     $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
-
-        //     if ($i == 0) { // create migrations table one time if does not exists ..
-        //         $syncCommand = new SyncMetadataCommand($factory);
-        //         $syncCommand->setApplication($app);
-        //         $input = new ArrayInput([]);
-        //         $output = new ConsoleOutput();
-
-        //         $output->writeln("<info>Running metadata sync for: $moduleName</info>");
-        //         $syncCommand->run($input, $output);
-        //     }
-        //     $migrateCommand = new MigrateCommand($factory);
-        //     $app->add($migrateCommand);
-
-        //     $input = new ArrayInput(['command' => 'migrate']);
-        //     $output = new ConsoleOutput();
-        //     $app->run($input, $output);
-        //     ++$i;
-        // }
-        // exit(0);
     }
 }
 
@@ -334,32 +302,39 @@ function convertLaminasDbToDoctrine(array $laminasConfig): array
     ];
 }
 
-function runAllModuleMigrations($moduleName, $conn)
+function runAllModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn)
 {
     $app = new Application();
-    $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
+    $dirs = glob(ROOT . '/src/*', GLOB_ONLYDIR);
+    $i = 0;
+    foreach ($dirs as $dir) {
+        $moduleName = basename($dir);
+        echo "\n\033[34m== $moduleName Migration ==\033[0m\n";
 
-    if (!is_dir($moduleMigrations)) {
-        echo "\033[31mMigration folder not found for module: $moduleName\033[0m\n";
-        echo "\033[31mCurrent folder: $moduleMigrations\033[0m\n";
-        exit(1);
+        $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
+        if (!is_dir($moduleMigrations)) {
+            echo "\033[33mMigration folder not found: $moduleName\033[0m\n";
+            continue;
+        }
+        $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
+
+        if ($i == 0) { // create migrations table one time if does not exists ..
+            $syncCommand = new SyncMetadataCommand($factory);
+            $syncCommand->setApplication($app);
+            $input = new ArrayInput([]);
+            $output = new ConsoleOutput();
+
+            $output->writeln("<info>Running metadata sync for: $moduleName</info>");
+            $syncCommand->run($input, $output);
+        }
+        $migrateCommand = new MigrateCommand($factory);
+        $app->add($migrateCommand);
+
+        $input = new ArrayInput(['command' => 'migrate']);
+        $output = new ConsoleOutput();
+        $app->run($input, $output);
+        ++$i;
     }
-    $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
-
-    $syncCommand = new SyncMetadataCommand($factory);
-    $syncCommand->setApplication($app);
-    $input = new ArrayInput([]);
-    $output = new ConsoleOutput();
-
-    $output->writeln("<info>Running metadata sync for: $moduleName</info>");
-    $syncCommand->run($input, $output);
-    
-    $migrateCommand = new MigrateCommand($factory);
-    $app->add($migrateCommand);
-
-    $input = new ArrayInput(['command' => 'migrate']);
-    $output = new ConsoleOutput();
-    $app->run($input, $output);
     exit(0);
 }
 
