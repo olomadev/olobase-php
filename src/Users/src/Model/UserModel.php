@@ -110,10 +110,10 @@ class UserModel implements UserModelInterface
             'firstname',
             'lastname',
             'email',
-            'isActive',
-            'isEmailActivated',
-            'createdAt',
-            'userRoles' => new Expression($this->rolesFunction),            
+            'is_active',
+            'is_email_activated',
+            'created_at',
+            'user_roles' => new Expression($this->rolesFunction),            
         ]);
         $select->from(['u' => 'users']);
         return $select;
@@ -123,29 +123,29 @@ class UserModel implements UserModelInterface
     {
         $select = $this->findAllBySelect();
         $this->columnFilters->clear();
-        $this->columnFilters->setAlias('userRoles', new Expression($this->rolesFunction));
+        $this->columnFilters->setAlias('user_roles', new Expression($this->rolesFunction));
         $this->columnFilters->setColumns([
             'firstname',
             'lastname',
             'email',
-            'userRoles',
-            'isActive',
-            'isEmailActivated',
-            'createdAt',
+            'user_roles',
+            'is_active',
+            'is_email_activated',
+            'created_at',
         ]);
         $this->columnFilters->setLikeColumns(
             [
                 'firstname',
                 'lastname',
-                'userRoles',
+                'user_roles',
                 'email',
             ]
         );
         $this->columnFilters->setWhereColumns(
             [
-                'isActive',
-                'isEmailActivated',
-                'createdAt',
+                'is_active',
+                'is_email_activated',
+                'created_at',
             ]
         );
         $this->columnFilters->setSelect($select);
@@ -190,7 +190,7 @@ class UserModel implements UserModelInterface
         }
         // date filters
         // 
-        $this->columnFilters->setDateFilter('createdAt');
+        $this->columnFilters->setDateFilter('created_at');
         // orders
         // 
         if ($this->columnFilters->orderDataIsNotEmpty()) {
@@ -217,15 +217,15 @@ class UserModel implements UserModelInterface
                 'firstname',
                 'lastname',
                 'email',
-                'isEmailActivated',
-                'isActive',
-                'createdAt',
+                'is_active',
+                'is_email_activated',
+                'created_at',
             ]
         );
         $select->from(['u' => 'users']);
-        $select->join(['ua' => 'userAvatars'], 'ua.userId = u.id',
+        $select->join(['ua' => 'user_avatars'], 'ua.user_id = u.id',
             [
-                'avatar' => new Expression("JSON_OBJECT('image', CONCAT('data:image/png;base64,', TO_BASE64(avatarImage)))"),
+                'avatar_image' => new Expression("JSON_OBJECT('image', CONCAT('data:image/png;base64,', TO_BASE64(avatar_image)))"),
             ],
         $select::JOIN_LEFT);
         $select->where(['u.id' => $userId]);
@@ -249,7 +249,7 @@ class UserModel implements UserModelInterface
                 'firstname',
                 'lastname',
                 'email',
-                'isActive',
+                'is_active',
             ]
         );
         $select->from('users');
@@ -279,9 +279,9 @@ class UserModel implements UserModelInterface
             }
             $this->users->insert($data['users']);
             if (! empty($data['avatar']['image'])) {
-                $this->userAvatars->insert(['userId' => $userId, 'avatarImage' => $data['avatar']['image']]);
+                $this->userAvatars->insert(['user_id' => $userId, 'avatar_image' => $data['avatar']['image']]);
             }
-            $this->userRoles->insert(['userId' => $userId, 'roleId' => Self::DEFAULT_USER_ROLE_ID]);
+            $this->userRoles->insert(['user_id' => $userId, 'role_id' => Self::DEFAULT_USER_ROLE_ID]);
             $this->deleteCache();
             $this->conn->commit();
         } catch (Exception $e) {
@@ -308,9 +308,9 @@ class UserModel implements UserModelInterface
             } else {
                 unset($data['users']['password']);
             }
-            $data['users']['updatedAt'] = date('Y-m-d H:i:s');
+            $data['users']['updated_at'] = date('Y-m-d H:i:s');
             $this->users->update($data['users'], ['id' => $userId]);
-            $this->userAvatars->delete(['userId' => $userId]);
+            $this->userAvatars->delete(['user_id' => $userId]);
             if (! empty($data['avatar']['image'])) { // let's read mime type safely
                 $mimeType = finfo_buffer(
                     finfo_open(),
@@ -319,9 +319,9 @@ class UserModel implements UserModelInterface
                 );
                 $this->userAvatars->insert(
                     [
-                        'userId' => $userId, 
-                        'mimeType' => $mimeType,
-                        'avatarImage' => $data['avatar']['image']
+                        'user_id' => $userId, 
+                        'mime_type' => $mimeType,
+                        'avatar_image' => $data['avatar']['image']
                     ]
                 );
             }
@@ -338,7 +338,7 @@ class UserModel implements UserModelInterface
         try {
             $this->conn->beginTransaction();
             $this->users->delete(['id' => $userId]);        
-            $this->userAvatars->delete(['userId' => $userId]);
+            $this->userAvatars->delete(['user_id' => $userId]);
             $this->deleteCache();
             $this->conn->commit();
         } catch (Exception $e) {

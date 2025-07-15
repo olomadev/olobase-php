@@ -18,12 +18,12 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-define('ROOT', dirname(__DIR__));
+define('APP_ROOT', dirname(__DIR__));
 
 require 'vendor/autoload.php';
 
 $argv = $_SERVER['argv'];
-$container = require ROOT.'/config/container.php';
+$container = require APP_ROOT.'/config/container.php';
 $envVariables = $container->get('config')['env_variables'];
 
 // validate command is empty
@@ -32,7 +32,7 @@ if (empty($argv[1])) {
     die;
 }
 // check command list
-if (false == in_array(trim($argv[1]), ['install','remove','migrations:migrate','migrations:migrate-all','migrations:list'])) {
+if (false == in_array(trim($argv[1]), ['install','remove','migrations:migrate','migrations:list'])) {
     echo "\033[31mCommand $argv[1] not found\033[0m\n";
     die;
 }
@@ -59,9 +59,9 @@ putenv('APP_ENV='.trim($options['env']));
 // Laminas db adapter
 $adapter = $container->get(Adapter::class);
 
-$modulesConfigFile = ROOT . '/config/module.config.php';
-$composerJsonFile = ROOT . '/composer.json';
-$composerLockFile = ROOT . '/composer.lock';
+$modulesConfigFile = APP_ROOT . '/config/module.config.php';
+$composerJsonFile = APP_ROOT . '/composer.json';
+$composerLockFile = APP_ROOT . '/composer.lock';
 
 // Read the existing modules
 $modulesConfig = file_exists($modulesConfigFile) ? include $modulesConfigFile : [];
@@ -80,7 +80,7 @@ if ($command == "install") {
         echo "\033[32mInstalling module: $moduleName\n\033[0m";
 
         $modulePath = "./src/$moduleName";
-        $moduleFullPath = ROOT . "/$modulePath";
+        $moduleFullPath = APP_ROOT . "/$modulePath";
         $moduleFullName = getModuleNameFromComposerJson($moduleFullPath);
 
         // Add to repositories
@@ -104,7 +104,7 @@ if ($command == "install") {
         file_put_contents($modulesConfigFile, "<?php\nreturn [\n    " . implode(",\n    ", array_map(fn($m) => "'$m'", $modulesConfig)) . "\n];\n");
 
         // Mezzio register
-        exec("composer mezzio mezzio:module:register $moduleName");
+        passthru("composer mezzio mezzio:module:register $moduleName --ansi");
 
         echo "\033[32mAutoload updated successfully.\n\033[0m";
 
@@ -125,7 +125,7 @@ if ($command == "install") {
         $doctrineDbConfig = convertLaminasDbToDoctrine($laminasDbConfig);
         $conn = \Doctrine\DBAL\DriverManager::getConnection($doctrineDbConfig);
 
-        runAllModuleMigrations($moduleName, $conn);
+        runModuleMigrations($moduleName, $conn);
 
     } else {
         echo "\033[33mModule '{$moduleName}' is already enabled in module.config.php.\n\033[0m";
@@ -140,7 +140,7 @@ if ($command == "remove") {
         echo "\033[32mRemoving module: $moduleName\n\033[0m";
 
         $modulePath = "./src/$moduleName";
-        $moduleFullPath = ROOT . "/$modulePath";
+        $moduleFullPath = APP_ROOT . "/$modulePath";
         $moduleFullName = getModuleNameFromComposerJson($moduleFullPath);
 
         // Remove from repositories
@@ -153,7 +153,7 @@ if ($command == "remove") {
             $composerJson['require'] = $require;
 
             // Run composer remove
-            exec("composer remove $moduleFullName", $output, $returnVar);
+            passthru("composer remove $moduleFullName --ansi", $returnVar);
             if ($returnVar === 0) {
                 echo "\033[32mModule '{$moduleFullName}' removed successfully from composer.json.\n\033[0m";
             } else {
@@ -167,7 +167,7 @@ if ($command == "remove") {
         file_put_contents($modulesConfigFile, "<?php\nreturn [\n    " . implode(",\n    ", array_map(fn($m) => "'$m'", $modulesConfig)) . "\n];\n");
 
         // Mezzio deregister
-        exec("composer mezzio mezzio:module:deregister $moduleName");
+        passthru("composer mezzio mezzio:module:deregister $moduleName --ansi");
 
         echo "\033[32mAutoload updated successfully.\n\033[0m";
 
@@ -188,7 +188,7 @@ if ($command == "remove") {
         $doctrineDbConfig = convertLaminasDbToDoctrine($laminasDbConfig);
         $conn = \Doctrine\DBAL\DriverManager::getConnection($doctrineDbConfig);
 
-        rollbackModuleMigrations($moduleName, $conn);
+        runModuleMigrations($moduleName, $conn, true);
 
     } else {
         echo "\033[33mModule '{$moduleName}' is not found in module.config.php.\n\033[0m";
@@ -197,7 +197,7 @@ if ($command == "remove") {
 //
 // Handle migration commands 
 // 
-if (in_array($command, ['migrations:migrate', 'migrations:list', 'migrations:migrate-all'])) {
+if (in_array($command, ['migrations:migrate', 'migrations:list'])) {
 
     $laminasDbConfig = $container->get('config')['db'];
     $doctrineDbConfig = convertLaminasDbToDoctrine($laminasDbConfig);
@@ -213,12 +213,7 @@ if (in_array($command, ['migrations:migrate', 'migrations:list', 'migrations:mig
         $prev = $options['prev'] ?? null;
         $toVersion = $options['to'] ?? null;
         $strict = empty($options['strict']) ? false : (bool)$options['strict'];
-
-        runModuleMigrations($moduleName, $conn, $prev, $toVersion, $strict);
-    }
-
-    if ($command == "migrations:migrate-all") {
-
+        runModuleMigrations($moduleName, $conn, false, $prev, $toVersion, $strict);
     }
 }
 
@@ -256,7 +251,7 @@ function parseArgv(array $argv, array $expected = []): array
 function runComposerInstall(): bool
 {
     echo "\033[32mRunning composer install...\033[0m\n";
-    passthru("composer install", $returnVar);
+    passthru("composer install --ansi", $returnVar);
     if ($returnVar === 0) {
         echo "\033[32mComposer install completed successfully.\033[0m\n";
         return true;
@@ -302,51 +297,50 @@ function convertLaminasDbToDoctrine(array $laminasConfig): array
     ];
 }
 
-function runAllModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn)
+function runModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn, $removeModule = false, $prev = false, ?string $toVersion = null, $strict = false): void
 {
-    $app = new Application();
-    $dirs = glob(ROOT . '/src/*', GLOB_ONLYDIR);
-    $i = 0;
-    foreach ($dirs as $dir) {
-        $moduleName = basename($dir);
-        echo "\n\033[34m== $moduleName Migration ==\033[0m\n";
+    $moduleMigrations = APP_ROOT . "/src/$moduleName/src/Migrations";
 
-        $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
-        if (!is_dir($moduleMigrations)) {
-            echo "\033[33mMigration folder not found: $moduleName\033[0m\n";
-            continue;
-        }
-        $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
-
-        if ($i == 0) { // create migrations table one time if does not exists ..
-            $syncCommand = new SyncMetadataCommand($factory);
-            $syncCommand->setApplication($app);
-            $input = new ArrayInput([]);
-            $output = new ConsoleOutput();
-
-            $output->writeln("<info>Running metadata sync for: $moduleName</info>");
-            $syncCommand->run($input, $output);
-        }
-        $migrateCommand = new MigrateCommand($factory);
-        $app->add($migrateCommand);
-
-        $input = new ArrayInput(['command' => 'migrate']);
-        $output = new ConsoleOutput();
-        $app->run($input, $output);
-        ++$i;
-    }
-    exit(0);
-}
-
-function runModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn, $prev = false, ?string $toVersion = null, $strict = false): void
-{
-    $moduleMigrations = ROOT . "/src/$moduleName/src/Migrations";
-    if (!is_dir($moduleMigrations)) {
-        echo "\033[31mMigration folder not found for module: $moduleName\033[0m\n";
-        echo "\033[31mCurrent folder: $moduleMigrations\033[0m\n";
-        exit(1);
+    $migrationFiles = glob($moduleMigrations . '/Version*.php');
+    if (!is_dir($moduleMigrations) || !$migrationFiles || count($migrationFiles) === 0) {
+        echo "\033[34mMigrations skipped due to no found any migration file for module: $moduleName\033[0m\n";
+        return; // no migration files found in /Migrations folder
     }
     $factory = createDependencyFactory($moduleName, $moduleMigrations, $conn);
+
+    if ($removeModule) {
+        $executed = $factory->getMetadataStorage()->getExecutedMigrations();
+        $executedMigrations = (array)$executed->getItems();
+        $executedVersions = [];
+        foreach ($executedMigrations as $migrationItem)  {
+            $version = $migrationItem->getVersion(); // Doctrine\Migrations\Version\Version
+            $versionString = (string) $version; // e.g.: "Modules\Migrations\Version20250707151000"
+            $executedVersions[] = $versionString;
+        }
+        $namespace = $moduleName . '\\Migrations';
+        $executedVersions = array_reverse($executedVersions); // Reverse order (newest first)
+        $stepsToRollback = 0;
+        foreach ($executedVersions as $version) {
+            $stepsToRollback++;
+        }
+        if ($stepsToRollback === 0) {
+            echo "\033[32m[OK] Already at or before target version.\033[0m\n";
+            exit(0);
+        }
+        echo "\033[33mRolling back $stepsToRollback step(s) to reach version: $toVersion\033[0m\n";
+
+        for ($i = 0; $i < $stepsToRollback; $i++) {
+            echo "\033[33mRolling back step " . ($i + 1) . "\033[0m\n";
+            passthru("php bin/migrations.php --module={$moduleName} migrations:migrate prev --no-interaction --ansi", $exitCode);
+
+            if ($exitCode !== 0) {
+                echo "\033[31mRollback failed at step " . ($i + 1) . "\033[0m\n";
+                break;
+            }
+        }
+        echo "\033[32m[OK] Rollback completed to version: $toVersion\033[0m\n";
+        die;
+    }
 
     if ($prev) {
         echo "\033[33mRolling back to previous version..\033[0m\n";
@@ -375,7 +369,7 @@ function runModuleMigrations(string $moduleName, \Doctrine\DBAL\Connection $conn
             $fullToVersion = $toVersion;
         }
         $toVersionObj = new Version($fullToVersion);
-        $executedVersions = array_reverse($executedVersions); // Ters sıraya çevir (en yeni en başta)
+        $executedVersions = array_reverse($executedVersions); // Reverse order (newest first) 
 
         $stepsToRollback = 0;
         foreach ($executedVersions as $version) {

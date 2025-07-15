@@ -27,15 +27,13 @@ class AuthenticationAdapter extends CallbackCheckAdapter
                 ['ua' => 'user_avatars'],
                 'ua.user_id = u.id',
                 [
-                    'avatar' => new Expression("TO_BASE64(avatar_image)"),
+                    'avatar_image' => new Expression("TO_BASE64(avatar_image)"),
                     'mime_type',
                 ],
                 $dbSelect::JOIN_LEFT
             )
             ->where(new SqlOp($this->identityColumn, '=', $this->identity));
-
-        // ->where(['client_id' => CLIENT_ID]);
-
+            
         // Debug SQL Output:
         // echo $dbSelect->getSqlString($this->laminasDb->getPlatform());
         // die;

@@ -5,11 +5,11 @@ declare(strict_types=1);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-define('ROOT', dirname(__DIR__));
+define('APP_ROOT', dirname(__DIR__));
 
 require 'vendor/autoload.php';
 
-$container = require ROOT.'/config/container.php';
+$container = require APP_ROOT.'/config/container.php';
 $laminasDbConfig = $container->get('config')['db'];
 
 use Symfony\Component\Console\Input\ArgvInput;
@@ -51,7 +51,7 @@ $config = new ConfigurationArray([
         "{$moduleName}\\Migrations" => $migrationPath
     ],
     'table_storage' => [
-        'table_name' => 'migrations_' . strtolower($moduleName),
+        'table_name' => 'migrations',
     ],
     'all_or_nothing' => true,
     'check_database_platform' => true,

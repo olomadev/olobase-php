@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
+use Common\Attribute\Route;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\TextResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -11,6 +12,13 @@ use Laminas\Cache\Storage\StorageInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+#[Route(
+    path: '/api/auth/session',
+    methods: ['POST'],
+    middlewares: [
+        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
+    ]
+)]
 class SessionUpdateHandler implements RequestHandlerInterface
 {
     private $config;

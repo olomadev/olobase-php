@@ -17,7 +17,9 @@ class NullRoleModel implements RoleModelInterface
      */
     public function findRolesByUserId(string $userId): array
     {
-        return array();
+        return array(
+            'user',
+        );
     }
 
     /**

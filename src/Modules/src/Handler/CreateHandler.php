@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
+use Common\Attribute\Route;
 use Modules\Model\ModuleModelInterface;
 use Modules\Schema\ModuleSave;
 use Modules\InputFilter\SaveFilter;
@@ -14,6 +15,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+#[Route(
+    path: '/api/modules/create',
+    methods: ['POST'],
+    middlewares: [
+        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class
+    ]
+)]
 class CreateHandler implements RequestHandlerInterface
 {
     public function __construct(
@@ -24,7 +33,7 @@ class CreateHandler implements RequestHandlerInterface
     ) 
     {
     }
-    
+
     /**
      * @OA\Post(
      *   path="/modules/create",

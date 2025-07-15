@@ -13,7 +13,7 @@ This document explains how to run and manage **module-based Doctrine Migrations*
 Runs migration files located at `src/ModuleName/src/Migrations/`.
 
 ```bash
-php bin/module.php --module="ModuleName" migrations:migrate --env=local
+php bin/module.php migrations:migrate --module="ModuleName" --env=local
 ````
 
 💡 **Note:**
@@ -26,7 +26,7 @@ If this is the first migration run, Doctrine will automatically create the `migr
 Shows current migration status for the specified module.
 
 ```bash
-php bin/module.php --module="ModuleName" migrations:list --env=local
+php bin/module.php migrations:list --module="ModuleName" --env=local
 ```
 
 💡 **Note:**
@@ -39,7 +39,7 @@ Displays which migrations have been **executed** and which are **pending**.
 Rolls back the last executed migration (`down()` method is executed).
 
 ```bash
-php bin/module.php --module="ModuleName" migrations:migrate --prev=true --env=local
+php bin/module.php migrations:migrate --module="ModuleName" --prev=true --env=local
 ```
 
 💡 **Note:**
@@ -54,7 +54,7 @@ Rolls back to the specified version.
 ⚠️ **The specified version remains applied** (i.e., its `down()` is **not** called).
 
 ```bash
-php bin/module.php --module="ModuleName" --to=Version20250707151000 --env=local
+php bin/module.php migrations:migrate --module="ModuleName" --to=Version20250707151000 --env=local
 ```
 
 💡 **Note:**
@@ -68,7 +68,7 @@ This is useful for partial rollbacks or keeping that version active.
 Rolls back **to the specified version and includes it** — i.e., the `down()` of the target version is also executed.
 
 ```bash
-php bin/module.php --module="ModuleName" --to=Version20250707151000 --env=local --strict=true
+php bin/module.php migrations:migrate --module="ModuleName" --to=Version20250707151000 --env=local --strict=true
 ```
 
 💡 **Note:**
@@ -82,7 +82,7 @@ Without this flag, the target version remains **applied**.
 ### Migrate a specific module
 
 ```bash
-php bin/module.php --module="Users" migrations:migrate --env=local
+php bin/module.php migrations:migrate  --module="Users" migrations:migrate --env=local
 ```
 
 ### Rollback to Previous Version
@@ -105,17 +105,8 @@ Rollback to head of the specified version (0).
 php bin/module.php migrations:migrate --module="Users" --to=Version20250707151000 --env=local --strict
 ```
 
----
-
-## ♻️ Migrate All Modules
-
-Scans all `src/*` module folders and runs migrations for each, in order.
-
-```bash
-php bin/module.php --migrate-all --env=local
-```
-
 💡 **Note:**
+
 Each module must have a `src/Migrations/` folder. If missing, that module will be skipped with a warning.
 
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
+use Common\Attribute\Route;
 use Firebase\JWT\ExpiredException;
 use Authentication\Model\TokenModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -12,6 +13,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+#[Route(
+    path: '/api/auth/logout',
+    methods: ['GET'],
+)]
 class LogoutHandler implements RequestHandlerInterface
 {
     public function __construct(

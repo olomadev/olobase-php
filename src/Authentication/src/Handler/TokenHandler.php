@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
+use Common\Attribute\Route;
 use Authentication\InputFilter\TokenFilter;
 use Firebase\JWT\ExpiredException;
 use Mezzio\Authentication\UserInterface;
@@ -26,7 +27,7 @@ use Mezzio\Authentication\AuthenticationInterface;
  *     version="1.0"
  * ),
  * @OA\Server(
- *     url="https://pmm.oloma.dev/api",
+ *     url="https://olobase.dev/api",
  *     description="Production Server"
  * ),
  * @OA\SecurityScheme(
@@ -37,6 +38,10 @@ use Mezzio\Authentication\AuthenticationInterface;
  * ),
  * @OA\SecurityRequirement(name="bearerAuth")
  */
+#[Route(
+    path: '/api/auth/token',
+    methods: ['POST'],
+)]
 class TokenHandler implements RequestHandlerInterface
 {
     private $config;
@@ -93,7 +98,7 @@ class TokenHandler implements RequestHandlerInterface
         $this->filter->setInputData($request->getParsedBody());
         if ($this->filter->isValid()) {
             try {
-                $user = $this->authentication->createUser($request);           
+                $user = $this->authentication->createUser($request);
                 if (null !== $user) {
                     $request = $request->withAttribute(UserInterface::class, $user);
                     $encoded = $this->authentication->getTokenService()->create($request);
@@ -109,7 +114,7 @@ class TokenHandler implements RequestHandlerInterface
                                     'email' => $user->getIdentity(),
                                     'permissions' => $user->getRoles(),
                                 ],
-                                'avatar' => $details['avatar'],
+                                // 'avatar' => $details['avatar'],
                                 'expiresAt' => $encoded['expiresAt']
                             ]
                         ]

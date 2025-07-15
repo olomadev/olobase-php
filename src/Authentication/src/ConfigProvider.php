@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Authentication;
 
-use Mezzio\Application;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
@@ -19,6 +18,7 @@ use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
 use Olobase\Mezzio\Authorization\RoleModelInterface;
 use Authentication\Model\NullRoleModel;
+use Common\Router\AttributeRouteProviderInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
 /**
@@ -92,11 +92,9 @@ class ConfigProvider
         ];
     }
 
-    /**
-     * Registers routes for the module
-     */
-    public static function registerRoutes(Application $app, ContainerInterface $container): void
+    public static function registerRoutes(ContainerInterface $container): void
     {
-        (require __DIR__ . '/../config/routes.php')($app, $container);
+        $provider = $container->get(AttributeRouteProviderInterface::class);
+        $provider->registerRoutes(dirname(__DIR__));
     }
 }

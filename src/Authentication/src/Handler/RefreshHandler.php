@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
+use Common\Attribute\Route;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -14,6 +15,10 @@ use Common\Helper\ErrorWrapperInterface as Error;
 use Olobase\Mezzio\Authentication\JwtEncoderInterface as JwtEncoder;
 use Mezzio\Authentication\AuthenticationInterface;
 
+#[Route(
+    path: '/api/auth/refresh',
+    methods: ['POST'],
+)]
 class RefreshHandler implements RequestHandlerInterface
 {
     private $config;

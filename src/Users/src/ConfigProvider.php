@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Users;
 
-use Mezzio\Application;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -13,6 +12,7 @@ use Laminas\Db\TableGateway\TableGateway;
 use Olobase\Mezzio\ColumnFiltersInterface;
 use Olobase\Mezzio\Authorization\PermissionModelInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+use Common\Router\AttributeRouteProviderInterface;
 
 /**
  * The configuration provider for the Authorization module
@@ -35,9 +35,6 @@ class ConfigProvider
         ];
     }
 
-    /**
-     * Returns the container dependencies
-     */
     public function getDependencies() : array
     {
         return [
@@ -76,9 +73,6 @@ class ConfigProvider
         ];
     }
 
-    /**
-     * Returns the input filter dependencies
-     */
     public function getInputFilters() : array
     {
         return [
@@ -94,12 +88,10 @@ class ConfigProvider
         ];
     }
     
-    /**
-     * Registers routes for the module
-     */
-    public static function registerRoutes(Application $app, ContainerInterface $container): void
+    public static function registerRoutes(ContainerInterface $container): void
     {
-        (require __DIR__ . '/../config/routes.php')($app, $container);
+        $provider = $container->get(AttributeRouteProviderInterface::class);
+        $provider->registerRoutes(dirname(__DIR__));
     }
 
 }

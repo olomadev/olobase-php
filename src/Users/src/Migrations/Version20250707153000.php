@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Modules\Migrations;
+namespace Users\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20250707154000 extends AbstractMigration
+final class Version20250707153000 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -41,6 +41,16 @@ final class Version20250707154000 extends AbstractMigration
         $avatars->addColumn('avatar_image', Types::BLOB, ['notnull' => false]);
 
         $avatars->setPrimaryKey(['user_id']);
+
+        // Foreign key with ON DELETE CASCADE
+        $avatars->addForeignKeyConstraint(
+            'users',       // foreign table name
+            ['user_id'],   // local columns
+            ['id'],        // foreign columns
+            ['onDelete' => 'CASCADE'],
+            'fk_user_avatar_user'
+        );
+
     }
 
     public function down(Schema $schema): void

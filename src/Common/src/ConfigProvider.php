@@ -8,6 +8,8 @@ use Mezzio\Application;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Common\Router\AttributeRouteCollector;
+use Common\Router\AttributeRouteProviderInterface;
 use Predis\ClientInterface as PredisInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
@@ -50,9 +52,18 @@ class ConfigProvider
                 PredisInterface::class => Factory\PredisFactory::class,
                 Helper\ErrorWrapperInterface::class => Factory\ErrorWrapperFactory::class,
 
+                AttributeRouteProviderInterface::class => function (ContainerInterface $container) {
+                    return new AttributeRouteCollector(
+                        $container->get(Application::class),
+                        $container
+                    );
+                },
+
                 // middlewares
                 Middleware\SetLocaleMiddleware::class => Middleware\SetLocaleMiddlewareFactory::class,
                 Middleware\JsonBodyParserMiddleware::class => Middleware\JsonBodyParserMiddlewareFactory::class,
+                Middleware\ModuleValidationMiddleware::class => Middleware\ModuleValidationMiddlewareFactory::class,
+
             ],
         ];
     }

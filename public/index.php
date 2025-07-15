@@ -8,25 +8,6 @@ ini_set('display_errors', 1);
 define('APP_ROOT', dirname(__DIR__));
 define('APP_CACHE_PREFIX', 'olobase_app:');
 
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
-}
-// Access-Control headers are received during OPTIONS requests
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        // may also be using PUT, PATCH, HEAD etc
-        header("Access-Control-Allow-Methods: PATCH, PUT, DELETE, GET, POST, OPTIONS");         
-    
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
-    exit(0);
-}
-// default time zone set
-date_default_timezone_set('Europe/Istanbul');
-
 // Delegate static file requests back to the PHP built-in webserver
 if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
     return false;
@@ -55,12 +36,13 @@ if (! is_file('config/module.config.php')) {
     (require 'config/routes.php')($app, $factory, $container);
 
     // Register module routes ..
-    $modules = require 'config/module.config.php';
+    $modules = $container->get('config')['modules'];
     $moduleProviders = [];
     foreach ($modules as $module) {
         $configProviderClass = $module . '\ConfigProvider';
-        if (class_exists($configProviderClass) && method_exists($configProviderClass, 'registerRoutes')) {
-            $configProviderClass::registerRoutes($app, $container);
+        if (class_exists($configProviderClass) 
+            && method_exists($configProviderClass, 'registerRoutes')) {
+            $configProviderClass::registerRoutes($container);
         }
     }
     $app->run();

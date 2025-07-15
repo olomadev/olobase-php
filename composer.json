@@ -51,13 +51,14 @@
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.9.0",
         "olobase/mezzio": "^2.2",
-        "olobase/users": "*",
         "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "symfony/console": "^6.4",
         "symfony/uid": "*",
         "zircote/swagger-php": "^4.4",
-        "olobase/modules": "*"
+        "olobase/modules": "*",
+        "olobase/users": "*",
+        "olobase/authentication": "*"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -78,6 +79,13 @@
         },
         {
             "type": "path",
+            "url": "./src/Modules",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
             "url": "./src/Users",
             "options": {
                 "symlink": true
@@ -85,7 +93,7 @@
         },
         {
             "type": "path",
-            "url": "./src/Modules",
+            "url": "./src/Authentication",
             "options": {
                 "symlink": true
             }
@@ -94,8 +102,9 @@
     "autoload": {
         "psr-4": {
             "Common\\": "src/Common/src/",
+            "Modules\\": "src/Modules/src/",
             "Users\\": "src/Users/src/",
-            "Modules\\": "src/Modules/src/"
+            "Authentication\\": "src/Authentication/src/"
         }
     },
     "autoload-dev": {

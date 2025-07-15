@@ -15,9 +15,10 @@ use Mezzio\Router\Middleware\MethodNotAllowedMiddleware;
 use Mezzio\Router\Middleware\RouteMiddleware;
 use Psr\Container\ContainerInterface;
 use Laminas\Diactoros\Response;
-use Common\Middleware\SetLocaleMiddleware;
+use Common\Middleware\ModuleValidationMiddleware;
 use Common\Middleware\JsonBodyParserMiddleware;
 use Common\Middleware\ErrorResponseGenerator;
+use Common\Middleware\CorsMiddleware;
 
 /**
  * Setup middleware pipeline:
@@ -25,7 +26,7 @@ use Common\Middleware\ErrorResponseGenerator;
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
     // The error handler should be the first (most outer) middleware to catch
     // all Exceptions.
-    
+
     $config = $container->get('config');
     $errorHandler = new ErrorHandler(
         function () {
@@ -34,6 +35,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
         new Common\Middleware\ErrorResponseGenerator($config, $container)
     );
     $app->pipe($errorHandler);
+    $app->pipe(CorsMiddleware::class);
     $app->pipe(ServerUrlMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:
