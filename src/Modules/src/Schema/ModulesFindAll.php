@@ -2,30 +2,20 @@
 
 namespace Modules\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class ModulesFindAll
 {
-    /**
-    *  @var array
-    *  @OA\Property(
-    *      type="array",
-    *      @OA\Items(
-    *           @OA\Property(
-    *             property="id",
-    *             type="string",
-    *           ),
-    *            @OA\Property(
-    *             property="name",
-    *             type="string",
-    *           ),
-    *           @OA\Property(
-    *             property="version",
-    *             type="string",
-    *           )
-    *     ),
-    *  )
-    */
-    public $data;
+    #[OA\Property(
+        type: 'array',
+        items: new OA\Items(
+            properties: [
+                new OA\Property(property: 'id', type: 'string'),
+                new OA\Property(property: 'name', type: 'string'),
+                new OA\Property(property: 'version', type: 'string'),
+            ]
+        )
+    )]
+    public array $data;
 }

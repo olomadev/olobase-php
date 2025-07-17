@@ -50,15 +50,15 @@
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.9.0",
+        "olobase/authentication": "*",
         "olobase/mezzio": "^2.2",
+        "olobase/modules": "*",
+        "olobase/users": "*",
         "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "symfony/console": "^6.4",
         "symfony/uid": "*",
-        "zircote/swagger-php": "^4.4",
-        "olobase/modules": "*",
-        "olobase/users": "*",
-        "olobase/authentication": "*"
+        "olobase/swagger": "*"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -97,6 +97,13 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "path",
+            "url": "./src/Swagger",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "autoload": {
@@ -104,7 +111,8 @@
             "Common\\": "src/Common/src/",
             "Modules\\": "src/Modules/src/",
             "Users\\": "src/Users/src/",
-            "Authentication\\": "src/Authentication/src/"
+            "Authentication\\": "src/Authentication/src/",
+            "Swagger\\": "src/Swagger/src/"
         }
     },
     "autoload-dev": {

@@ -15,9 +15,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class JwtAuthenticationMiddleware implements MiddlewareInterface
 {
-    /**
-     * This signal is controlled by the frontend, do not change the value.
-     */
     protected const EXPIRE_SIGNAL = 'Token Expired';
 
     protected $authentication;

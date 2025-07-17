@@ -6,5 +6,8 @@
     "prefer-stable": true,
     "require": {
         "mezzio/mezzio-authorization": "^1.10"
+    },
+    "extra": {
+        "olobase-module-type": "external"
     }
 }

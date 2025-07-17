@@ -1,0 +1,13 @@
+{
+    "name": "olobase/swagger",
+    "description": "Swagger Module for Olobase App",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "zircote/swagger-php": "^5.1"
+    },
+    "extra": {
+        "olobase-module-type": "internal"
+    }
+}

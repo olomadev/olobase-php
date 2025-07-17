@@ -2,16 +2,11 @@
 
 namespace Modules\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class ModuleUpdateResponse
 {
-    /**
-     * @var object
-     * @OA\Property(
-     *     ref="#/components/schemas/ModuleUpdateResponseObject",
-     * )
-     */
-    public $oldRecord;
+    #[OA\Property(ref: '#/components/schemas/ModuleUpdateResponseObject')]
+    public object $oldRecord;
 }

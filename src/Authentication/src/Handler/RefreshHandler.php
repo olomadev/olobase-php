@@ -14,6 +14,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Olobase\Mezzio\Authentication\JwtEncoderInterface as JwtEncoder;
 use Mezzio\Authentication\AuthenticationInterface;
+use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/auth/refresh',
@@ -22,8 +23,6 @@ use Mezzio\Authentication\AuthenticationInterface;
 class RefreshHandler implements RequestHandlerInterface
 {
     private $config;
-
-    // This signal is controlled by the frontend, do not change its value.
     protected const LOGOUT_SIGNAL = 'Logout';
 
     public function __construct(
@@ -33,57 +32,62 @@ class RefreshHandler implements RequestHandlerInterface
     ) {
         $this->config = $config;
     }
-
-    /**
-     * @OA\Post(
-     *   path="/auth/refresh",
-     *   tags={"Authentication"},
-     *   summary="Refresh the token",
-     *   operationId="auth_refresh",
-     *
-     *   @OA\RequestBody(
-     *     description="Token refresh request",
-     *     @OA\JsonContent(
-     *       type="object",
-     *       required={"token"},
-     *       @OA\Property(property="token", type="string")
-     *     )
-     *   ),
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *     @OA\JsonContent(
-     *       type="object",
-     *       @OA\Property(property="token", type="string"),
-     *       @OA\Property(
-     *         property="user",
-     *         type="object",
-     *         ref="#/components/schemas/UserObject"
-     *       ),
-     *       @OA\Property(
-     *         property="avatar",
-     *         type="object",
-     *         ref="#/components/schemas/AvatarObject"
-     *       ),
-     *       @OA\Property(
-     *         property="expiresAt",
-     *         type="string",
-     *         format="date-time",
-     *         description="Expiration date of token"
-     *       )
-     *     )
-     *   ),
-     *   @OA\Response(
-     *      response=401,
-     *      description="Unauthorized Response: token is expired"
-     *   )
-     * )
-     */
+    
+    #[OA\Post(
+        path: '/auth/refresh',
+        tags: ['Authentication'],
+        summary: 'Refresh the token',
+        operationId: 'auth_refresh',
+        requestBody: new OA\RequestBody(
+            description: 'Token refresh request',
+            content: new OA\JsonContent(
+                type: 'object',
+                required: ['token'],
+                properties: [
+                    new OA\Property(
+                        property: 'token',
+                        type: 'string'
+                    )
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'token', type: 'string'),
+                        new OA\Property(
+                            property: 'user',
+                            type: 'object',
+                            ref: '#/components/schemas/UserObject'
+                        ),
+                        new OA\Property(
+                            property: 'avatar',
+                            type: 'object',
+                            ref: '#/components/schemas/AvatarObject'
+                        ),
+                        new OA\Property(
+                            property: 'expiresAt',
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Expiration date of token'
+                        )
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: 'Unauthorized Response: token is expired'
+            )
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $post = $request->getParsedBody();
 
-        // don't change the these codes !
         if (empty($post['token'])) {
             return new JsonResponse(
                 [
@@ -92,7 +96,6 @@ class RefreshHandler implements RequestHandlerInterface
                 401
             );
         }
-        // token decryption
         $token = $this->tokenModel->getTokenEncrypt()->decrypt($post['token']);
         if (!$token) {
             return new JsonResponse(
@@ -117,8 +120,7 @@ class RefreshHandler implements RequestHandlerInterface
                     401
                 );
             }
-            // token renewal process
-            $data = $this->authentication->getTokenService()->refresh($request, $payload);
+            $data = $this->authentication->getTokenService()->refresh($request, $payload); // token renewal process
             if (false == $data) {
                 return new JsonResponse(
                     [

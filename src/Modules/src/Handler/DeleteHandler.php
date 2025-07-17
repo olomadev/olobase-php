@@ -11,7 +11,16 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use OpenApi\Attributes as OA;
 
+#[Route(
+    path: '/api/modules/delete/:id',
+    methods: ['DELETE'],
+    middlewares: [
+        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
+        \Mezzio\Authorization\AuthorizationMiddleware::class
+    ]
+)]
 class DeleteHandler implements RequestHandlerInterface
 {
     public function __construct(
@@ -21,30 +30,31 @@ class DeleteHandler implements RequestHandlerInterface
     ) 
     {
     }
-    
-    /**
-     * @OA\Delete(
-     *   path="/modules/delete/{permId}",
-     *   tags={"Modules"},
-     *   summary="Delete module",
-     *   operationId="modules_delete",
-     *
-     *   @OA\Parameter(
-     *       in="path",
-     *       name="roleId",
-     *       required=true,
-     *       description="Module uuid",
-     *       @OA\Schema(
-     *           type="string",
-     *           format="uuid",
-     *       ),
-     *   ),
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *   )
-     *)
-     **/
+
+    #[OA\Delete(
+        path: '/modules/delete/{id}',
+        operationId: 'modules_delete',
+        summary: 'Delete module',
+        tags: ['Modules'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'Module uuid',
+                schema: new OA\Schema(
+                    type: 'string',
+                    format: 'uuid'
+                )
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation'
+            )
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {   
         $this->filter->setInputData($request->getQueryParams());

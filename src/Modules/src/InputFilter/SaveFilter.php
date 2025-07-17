@@ -78,7 +78,7 @@ class SaveFilter extends InputFilter
             ],
         ]);
         $this->add([
-            'name' => 'isActive',
+            'name' => 'is_active',
             'required' => false,
             'filters' => [
                 ['name' => ToInt::class],

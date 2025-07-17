@@ -4,5 +4,8 @@
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "require": {}
+    "require": {},
+    "extra": {
+        "olobase-module-type": "external"
+    }
 }

@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/auth/session',
@@ -32,19 +33,18 @@ class SessionUpdateHandler implements RequestHandlerInterface
         $this->cache = $cache;
     }
 
-    /**
-     * @OA\Get(
-     *   path="/auth/session",
-     *   tags={"Authentication"},
-     *   summary="Update session with http requests",
-     *   operationId="auth_session",
-     *   
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation"
-     *   ),
-     *)
-     **/
+    #[OA\Get(
+        path: '/auth/session',
+        tags: ['Authentication'],
+        summary: 'Update session with http requests',
+        operationId: 'auth_session',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation'
+            )
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $user = $request->getAttribute(UserInterface::class);

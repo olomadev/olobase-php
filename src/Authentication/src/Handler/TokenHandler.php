@@ -15,29 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Mezzio\Authentication\AuthenticationInterface;
+use OpenApi\Attributes as OA;
 
-/**
- * @OA\OpenApi(
- *     security={
- *         {"bearerAuth": {}}
- *     }
- * ),
- * @OA\Info(
- *     title="Patient Medicine Tracker (PMM) API",
- *     version="1.0"
- * ),
- * @OA\Server(
- *     url="https://olobase.dev/api",
- *     description="Production Server"
- * ),
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT"
- * ),
- * @OA\SecurityRequirement(name="bearerAuth")
- */
 #[Route(
     path: '/api/auth/token',
     methods: ['POST'],
@@ -55,44 +34,52 @@ class TokenHandler implements RequestHandlerInterface
     ) {
         $this->config = $config;
     }
-    
-    /**
-     * @OA\Post(
-     *   path="/auth/token",
-     *   tags={"Authentication"},
-     *   summary="Authenticate the user",
-     *   operationId="auth_token",
-     *
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *     @OA\JsonContent(
-     *       type="object",
-     *       @OA\Property(property="token", type="string"),
-     *       @OA\Property(
-     *         property="user",
-     *         type="object",
-     *         ref="#/components/schemas/UserObject"
-     *       ),
-     *       @OA\Property(
-     *         property="avatar",
-     *         type="object",
-     *         ref="#/components/schemas/AvatarObject"
-     *       ),
-     *       @OA\Property(
-     *         property="expiresAt",
-     *         type="string",
-     *         format="date-time",
-     *         description="Expiration date of token"
-     *       )
-     *     )
-     *   ),
-     *   @OA\Response(
-     *     response=400,
-     *     description="Bad request, returns to validation errors"
-     *   )
-     * )
-     */
+
+    #[OA\Post(
+        path: '/auth/token',
+        tags: ['Authentication'],
+        summary: 'Authenticate the user',
+        operationId: 'auth_token',
+        requestBody: new OA\RequestBody(
+            description: 'Login credentials',
+            required: true,
+            content: new OA\JsonContent(
+                ref: '#/components/schemas/TokenRequest'
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'token', type: 'string'),
+                        new OA\Property(
+                            property: 'user',
+                            type: 'object',
+                            ref: '#/components/schemas/UserObject'
+                        ),
+                        new OA\Property(
+                            property: 'avatar',
+                            type: 'object',
+                            ref: '#/components/schemas/AvatarObject'
+                        ),
+                        new OA\Property(
+                            property: 'expiresAt',
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Expiration date of token'
+                        )
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Bad request, returns to validation errors'
+            )
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->filter->setInputData($request->getParsedBody());
@@ -103,6 +90,7 @@ class TokenHandler implements RequestHandlerInterface
                     $request = $request->withAttribute(UserInterface::class, $user);
                     $encoded = $this->authentication->getTokenService()->create($request);
                     $details = $user->getDetails();
+                    $date = new \DateTime($encoded['expiresAt'], new \DateTimeZone('UTC'));
 
                     return new JsonResponse(
                         [
@@ -114,8 +102,8 @@ class TokenHandler implements RequestHandlerInterface
                                     'email' => $user->getIdentity(),
                                     'permissions' => $user->getRoles(),
                                 ],
-                                // 'avatar' => $details['avatar'],
-                                'expiresAt' => $encoded['expiresAt']
+                                'avatar' => $details['avatar'],
+                                'expiresAt' => $date->format('Y-m-d\TH:i:s.v\Z')                                
                             ]
                         ]
                     );

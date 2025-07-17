@@ -1,6 +1,153 @@
 {
     "openapi": "3.0.0",
+    "info": {
+        "title": "Example API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://example.com/api",
+            "description": "Docs"
+        }
+    ],
     "paths": {
+        "/auth/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout the user",
+                "operationId": "auth_logout",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh the token",
+                "operationId": "auth_refresh",
+                "requestBody": {
+                    "description": "Token refresh request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserObject"
+                                        },
+                                        "avatar": {
+                                            "$ref": "#/components/schemas/AvatarObject"
+                                        },
+                                        "expiresAt": {
+                                            "description": "Expiration date of token",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized Response: token is expired"
+                    }
+                }
+            }
+        },
+        "/auth/session": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Update session with http requests",
+                "operationId": "auth_session",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/auth/token": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Authenticate the user",
+                "operationId": "auth_token",
+                "requestBody": {
+                    "description": "Login credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TokenRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/UserObject"
+                                        },
+                                        "avatar": {
+                                            "$ref": "#/components/schemas/AvatarObject"
+                                        },
+                                        "expiresAt": {
+                                            "description": "Expiration date of token",
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, returns to validation errors"
+                    }
+                }
+            }
+        },
         "/modules/create": {
             "post": {
                 "tags": [
@@ -28,7 +175,7 @@
                 }
             }
         },
-        "/modules/delete/{permId}": {
+        "/modules/delete/{id}": {
             "delete": {
                 "tags": [
                     "Modules"
@@ -37,7 +184,7 @@
                 "operationId": "modules_delete",
                 "parameters": [
                     {
-                        "name": "roleId",
+                        "name": "id",
                         "in": "path",
                         "description": "Module uuid",
                         "required": true,
@@ -141,7 +288,7 @@
                 }
             }
         },
-        "/modules/update/{moduleId}": {
+        "/modules/update/{id}": {
             "put": {
                 "tags": [
                     "Modules"
@@ -150,7 +297,7 @@
                 "operationId": "modules_update",
                 "parameters": [
                     {
-                        "name": "moduleId",
+                        "name": "id",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -501,6 +648,22 @@
     },
     "components": {
         "schemas": {
+            "TokenRequest": {
+                "required": [
+                    "username",
+                    "password"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "AvatarObject": {
                 "properties": {
                     "image": {
@@ -575,7 +738,7 @@
                     "version": {
                         "type": "string"
                     },
-                    "isActive": {
+                    "is_active": {
                         "type": "integer"
                     }
                 },
@@ -601,7 +764,7 @@
                     "version": {
                         "type": "string"
                     },
-                    "isActive": {
+                    "is_active": {
                         "type": "integer"
                     }
                 },
@@ -640,13 +803,13 @@
                     "page": {
                         "type": "integer"
                     },
-                    "perPage": {
+                    "per_page": {
                         "type": "integer"
                     },
-                    "totalPages": {
+                    "total_pages": {
                         "type": "integer"
                     },
-                    "totalItems": {
+                    "total_items": {
                         "type": "integer"
                     }
                 },
@@ -664,7 +827,7 @@
                     "version": {
                         "type": "string"
                     },
-                    "isActive": {
+                    "is_active": {
                         "type": "integer"
                     }
                 },
@@ -873,9 +1036,25 @@
                 },
                 "type": "object"
             }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
         }
     },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
     "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
         {
             "name": "Modules",
             "description": "Modules"

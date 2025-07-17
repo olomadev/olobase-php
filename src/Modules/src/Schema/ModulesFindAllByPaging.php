@@ -2,40 +2,26 @@
 
 namespace Modules\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class ModulesFindAllByPaging
 {
-    /**
-     * @var array
-     * @OA\Property(
-     *      type="array",
-     *      @OA\Items(
-     *          type="object",
-     *          ref="#/components/schemas/ModulesFindAllByPagingObject",
-     *      ),
-     * )
-     */
-    public $data;
-    /**
-     * @var integer
-     * @OA\Property()
-     */
-    public $page;
-    /**
-     * @var integer
-     * @OA\Property()
-     */
-    public $perPage;
-    /**
-     * @var integer
-     * @OA\Property()
-     */
-    public $totalPages;
-    /**
-     * @var integer
-     * @OA\Property()
-     */
-    public $totalItems;
+    #[OA\Property(
+        type: 'array',
+        items: new OA\Items(ref: '#/components/schemas/ModulesFindAllByPagingObject')
+    )]
+    public array $data;
+
+    #[OA\Property(property: "page", type: "integer")]
+    public int $page;
+
+    #[OA\Property(property: "per_page", type: "integer")]
+    public int $perPage;
+
+    #[OA\Property(property: "total_pages", type: "integer")]
+    public int $totalPages;
+
+    #[OA\Property(property: "total_items", type: "integer")]
+    public int $totalItems;
 }

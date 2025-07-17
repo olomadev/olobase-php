@@ -8,5 +8,8 @@
         "firebase/php-jwt": "^6.11",
         "mezzio/mezzio-authentication": "^1.10",
         "mezzio/mezzio-authentication-laminasauthentication": "^1.7"
+    },
+    "extra": {
+        "olobase-module-type": "external"
     }
 }

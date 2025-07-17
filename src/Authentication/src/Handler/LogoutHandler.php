@@ -12,6 +12,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/auth/logout',
@@ -24,19 +25,18 @@ class LogoutHandler implements RequestHandlerInterface
     ) {
     }
 
-    /**
-     * @OA\Get(
-     *   path="/auth/logout",
-     *   tags={"Authentication"},
-     *   summary="Logout the user",
-     *   operationId="auth_logout",
-     *
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *   )
-     *)
-     **/
+    #[OA\Get(
+        path: '/auth/logout',
+        tags: ['Authentication'],
+        summary: 'Logout the user',
+        operationId: 'auth_logout',
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation'
+            )
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $token = null;
@@ -56,8 +56,7 @@ class LogoutHandler implements RequestHandlerInterface
                 401
             );
         }
-        // decode token
-        $token = $this->tokenModel->getTokenEncrypt()->decrypt($token);
+        $token = $this->tokenModel->getTokenEncrypt()->decrypt($token);  // decode token
         try {
             $data = $this->tokenModel->decode($token);
             if (!empty($data['data']->details->id)) {
@@ -81,8 +80,7 @@ class LogoutHandler implements RequestHandlerInterface
                     401
                 );
             }
-            // terminate user with expired token
-            if ($token) {
+            if ($token) { // terminate user with expired token
                 $this->tokenModel->kill(
                     $token['data']['details']['id'],
                     $token['data']['details']['tokenId']

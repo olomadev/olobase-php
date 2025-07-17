@@ -20,6 +20,21 @@ class InputFilter extends LaminasInputFilter implements InputFilterInterface
     }
 
     /**
+     * Return a list of filtered values (Override)
+     *
+     * List should be an associative array, with the values filtered. If
+     * validation failed, this should raise an exception.
+     *
+     * @return TFilteredValues
+     */
+    public function getSchemaValues($schema = null)
+    {
+        $values = parent::getValues();
+
+        return $values;
+    }
+
+    /**
      * Add an input to the input filter
      *
      * @param array|Traversable|InputInterface|InputFilterInterface $input
