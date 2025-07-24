@@ -7,7 +7,7 @@ namespace Authorization\Handler\Permissions;
 use Authorization\Model\PermissionModel;
 use Authorization\InputFilter\Permissions\DeleteFilter;
 use Common\Helper\ErrorWrapperInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\Authorization\PermissionModelInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;

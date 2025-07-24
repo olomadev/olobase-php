@@ -3,6 +3,6 @@ return [
     'Common',
     'Modules',
     'Users',
-    'Authentication',
-    'Swagger'
+    'Swagger',
+    'Authentication'
 ];

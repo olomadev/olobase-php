@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Common\Attribute\Route;
+use Olobase\Attribute\Route;
 use Firebase\JWT\ExpiredException;
 use Authentication\Model\TokenModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;

@@ -6,7 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\Authorization\PermissionModelInterface;
 
 class FindAllHandlerFactory
 {

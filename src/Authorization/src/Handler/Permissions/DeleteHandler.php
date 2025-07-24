@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authorization\Handler\Permissions;
 
 use Authorization\InputFilter\Permissions\DeleteFilter;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\Authorization\PermissionModelInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

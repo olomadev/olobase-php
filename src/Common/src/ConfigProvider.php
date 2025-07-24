@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Common;
 
-use Mezzio\Application;
-use Psr\Container\ContainerInterface;
-use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Common\Router\AttributeRouteCollector;
-use Common\Router\AttributeRouteProviderInterface;
 use Predis\ClientInterface as PredisInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
@@ -29,9 +24,6 @@ class ConfigProvider
     public function __invoke() : array
     {
         return [
-            'data_manager' => [
-                'common_schema_module' => 'Common',
-            ],
             'dependencies' => $this->getDependencies(),
         ];
     }
@@ -51,13 +43,6 @@ class ConfigProvider
                 SimpleCacheInterface::class => Factory\SimpleCacheFactory::class,   
                 PredisInterface::class => Factory\PredisFactory::class,
                 Helper\ErrorWrapperInterface::class => Factory\ErrorWrapperFactory::class,
-
-                AttributeRouteProviderInterface::class => function (ContainerInterface $container) {
-                    return new AttributeRouteCollector(
-                        $container->get(Application::class),
-                        $container
-                    );
-                },
 
                 // middlewares
                 Middleware\SetLocaleMiddleware::class => Middleware\SetLocaleMiddlewareFactory::class,

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Mezzio\Authorization\RoleModelInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Olobase\Authorization\Contracts\RoleModelInterface;
 
 class FindAllByPagingHandlerFactory
 {

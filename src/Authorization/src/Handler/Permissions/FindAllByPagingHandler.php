@@ -9,7 +9,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\Authorization\PermissionModelInterface;
 
 class FindAllByPagingHandler implements RequestHandlerInterface
 {

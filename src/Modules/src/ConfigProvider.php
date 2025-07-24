@@ -7,11 +7,11 @@ namespace Modules;
 use Mezzio\Application;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\Mezzio\ColumnFiltersInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Common\Router\AttributeRouteProviderInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
+use Olobase\Router\AttributeRouteProviderInterface;
 
 /**
  * The configuration provider for the Authorization module

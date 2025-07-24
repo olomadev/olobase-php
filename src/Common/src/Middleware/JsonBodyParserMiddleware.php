@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Common\Middleware;
 
 use Mezzio\Router\RouteResult;
-use Olobase\Mezzio\Exception\BodyDecodeException;
+use Olobase\Exception\BodyDecodeException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

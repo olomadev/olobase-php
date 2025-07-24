@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Mezzio\Authorization\RoleModelInterface;
-use Authorization\InputFilter\Roles\DeleteFilter;
-use Common\Helper\ErrorWrapperInterface;
+use Olobase\Authorization\Contracts\RoleModelInterface;
+use Common\Helper\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
@@ -16,12 +15,11 @@ class DeleteHandlerFactory
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         $pluginManager = $container->get(InputFilterPluginManager::class);
-        $inputFilter   = $pluginManager->get(DeleteFilter::class);
 
         return new DeleteHandler(
             $container->get(RoleModelInterface::class),
-            $inputFilter,
-            $container->get(ErrorWrapperInterface::class)
+            $pluginManager,
+            $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

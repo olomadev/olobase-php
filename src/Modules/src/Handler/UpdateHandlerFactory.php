@@ -6,7 +6,7 @@ namespace Modules\Handler;
 
 use Modules\Model\ModuleModelInterface;
 use Modules\InputFilter\SaveFilter;
-use Olobase\Mezzio\DataManagerInterface;
+use Olobase\DataTable\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;

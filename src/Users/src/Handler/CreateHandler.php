@@ -7,7 +7,6 @@ namespace Users\Handler;
 use Users\Schema\UserSave;
 use Users\InputFilter\SaveFilter;
 use Users\Model\UserModelInterface;
-use Olobase\Mezzio\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -18,7 +17,6 @@ class CreateHandler implements RequestHandlerInterface
 {
     public function __construct(
         private UserModelInterface $userModel,        
-        private DataManagerInterface $dataManager,
         private SaveFilter $filter,
         private Error $error,
     ) 

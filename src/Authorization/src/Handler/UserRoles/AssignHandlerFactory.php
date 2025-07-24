@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\UserRoles;
 
-use Common\Contracts\UserRoleModelInterface;
+use Authorization\Model\UserRoleModelInterface;
 use Authorization\InputFilter\UserRoles\AssignRoleFilter;
-use Olobase\Mezzio\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
@@ -23,7 +22,6 @@ class AssignHandlerFactory
 
         return new AssignHandler(
             $container->get(UserRoleModelInterface::class),
-            $container->get(DataManagerInterface::class),
             $inputFilter,
             $container->get(ErrorWrapperInterface::class)
         );

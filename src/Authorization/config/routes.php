@@ -12,13 +12,6 @@ return function (Application $app, ContainerInterface $container) {
         JwtAuthenticationMiddleware::class,
         Mezzio\Authorization\AuthorizationMiddleware::class,
     ];
-    // Roles (private)
-    $app->route('/api/authorization/roles/create', [...$auth, ...[Authorization\Handler\Roles\CreateHandler::class]], ['POST']);
-    $app->route('/api/authorization/roles/update/:roleId', [...$auth, ...[Authorization\Handler\Roles\UpdateHandler::class]], ['PUT']);
-    $app->route('/api/authorization/roles/delete/:roleId', [...$auth, ...[Authorization\Handler\Roles\DeleteHandler::class]], ['DELETE']);
-    $app->route('/api/authorization/roles/findAll', [Authorization\Handler\Roles\FindAllHandler::class], ['GET']);
-    $app->route('/api/authorization/roles/findAllByPaging', [...$auth, ...[Authorization\Handler\Roles\FindAllByPagingHandler::class]], ['GET']);
-    $app->route('/api/authorization/roles/findOneById/:roleId', [...$auth, ...[Authorization\Handler\Roles\FindOneByIdHandler::class]], ['GET']);
 
     // User Roles (private)
     $app->route('/api/authorization/userRoles/assign', [...$auth, ...[Authorization\Handler\UserRoles\AssignHandler::class]], ['PUT']);

@@ -85,7 +85,6 @@ try {
     echo "[RUN ERROR] " . $e->getMessage() . "\n";
 }
 
-
 // Convert laminas db configuration to doctrine
 function convertLaminasDbToDoctrine(array $laminasConfig): array
 {

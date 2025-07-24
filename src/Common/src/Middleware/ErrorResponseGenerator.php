@@ -8,7 +8,8 @@ use Throwable;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Mezzio\Cors\Configuration\ConfigurationInterface;
+use Mezzio\Exception\MissingDependencyException;
+use Olobase\Exception\MissingDependencyErrorFormatter;
 
 class ErrorResponseGenerator
 {
@@ -23,6 +24,20 @@ class ErrorResponseGenerator
 
     public function __invoke(Throwable $e, ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        if ($e instanceof MissingDependencyException && false == empty($this->config['module_dependencies'])) {
+            $formatter = new MissingDependencyErrorFormatter($this->config['module_dependencies']);
+            $json = $formatter->format($e);
+
+            $response = $response
+                ->withHeader('Access-Control-Expose-Headers', 'Token-Expired')
+                ->withHeader('Access-Control-Max-Age', '3600')
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus($json['status']);
+
+            $response->getBody()->write(json_encode($json, JSON_THROW_ON_ERROR));
+            return $response;
+        }
+
         $data = $e->getTrace();
 
         $trace = array_map(

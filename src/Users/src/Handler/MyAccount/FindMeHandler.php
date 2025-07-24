@@ -6,7 +6,6 @@ namespace Users\Handler\MyAccount;
 
 use Users\Model\UserModelInterface;
 use Users\Schema\MyAccount\MyAccountFindMe;
-use Olobase\Mezzio\DataManagerInterface;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

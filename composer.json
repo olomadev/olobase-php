@@ -51,14 +51,14 @@
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.9.0",
         "olobase/authentication": "*",
-        "olobase/mezzio": "^2.2",
         "olobase/modules": "*",
+        "olobase/swagger": "*",
         "olobase/users": "*",
+        "olomadev/olobase": "^3.0@RC",
         "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "symfony/console": "^6.4",
-        "symfony/uid": "*",
-        "olobase/swagger": "*"
+        "symfony/uid": "*"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -93,14 +93,14 @@
         },
         {
             "type": "path",
-            "url": "./src/Authentication",
+            "url": "./src/Swagger",
             "options": {
                 "symlink": true
             }
         },
         {
             "type": "path",
-            "url": "./src/Swagger",
+            "url": "./src/Authentication",
             "options": {
                 "symlink": true
             }
@@ -111,8 +111,8 @@
             "Common\\": "src/Common/src/",
             "Modules\\": "src/Modules/src/",
             "Users\\": "src/Users/src/",
-            "Authentication\\": "src/Authentication/src/",
-            "Swagger\\": "src/Swagger/src/"
+            "Swagger\\": "src/Swagger/src/",
+            "Authentication\\": "src/Authentication/src/"
         }
     },
     "autoload-dev": {
@@ -125,8 +125,14 @@
         "post-create-project-cmd": [
             "@development-enable"
         ],
-        "post-install-cmd": "@clear-config-cache",
-        "post-update-cmd": "@clear-config-cache",
+        "post-install-cmd": [
+          "@clear-config-cache",
+          "php bin/fetch-dependencies.php"
+        ],
+        "post-update-cmd": [
+          "@clear-config-cache",
+          "php bin/fetch-dependencies.php"
+        ],
         "development-disable": "laminas-development-mode disable",
         "development-enable": "laminas-development-mode enable",
         "development-status": "laminas-development-mode status",

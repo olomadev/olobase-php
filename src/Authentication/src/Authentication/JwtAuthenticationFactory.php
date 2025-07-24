@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Authentication\Authentication;
 
-use Olobase\Mezzio\Authorization\RoleModelInterface;
-use Olobase\Mezzio\Authentication\Service\JwtEncoderInterface;
-use Olobase\Mezzio\Authentication\Service\JwtAuthentication;
-use Olobase\Mezzio\Authentication\Service\TokenServiceInterface;
+use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authentication\Service\JwtEncoderInterface;
+use Olobase\Authentication\Service\JwtAuthentication;
+use Olobase\Authentication\Service\TokenServiceInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;

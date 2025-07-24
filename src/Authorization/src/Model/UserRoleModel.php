@@ -9,7 +9,7 @@ use Laminas\Db\Sql\Expression;
 use Laminas\Paginator\Paginator;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Db\TableGateway\TableGatewayInterface;
-use Olobase\Mezzio\ColumnFiltersInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
 
 class UserRoleModel implements UserRoleModelInterface
 {

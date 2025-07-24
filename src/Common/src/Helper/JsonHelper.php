@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Helper;
 
-use Olobase\Mezzio\Exception\JsonDecodeException;
+use Olobase\Exception\JsonDecodeException;
 
 class JsonHelper
 {

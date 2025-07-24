@@ -9,10 +9,10 @@ use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Olobase\Mezzio\ColumnFiltersInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
+use Olobase\Router\AttributeRouteProviderInterface;
+use Olobase\Authorization\PermissionModelInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
-use Common\Router\AttributeRouteProviderInterface;
 
 /**
  * The configuration provider for the Authorization module

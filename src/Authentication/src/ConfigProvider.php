@@ -7,18 +7,16 @@ namespace Authentication;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\Mezzio\ColumnFiltersInterface;
-use Olobase\Mezzio\Authentication\Service\JwtAuthentication;
-use Olobase\Mezzio\Authentication\Service\JwtEncoderInterface;
-use Olobase\Mezzio\Authentication\Service\TokenServiceInterface;
-use Olobase\Mezzio\Authentication\Helper\TokenEncryptHelper;
-use Olobase\Mezzio\Authentication\Helper\TokenEncryptHelperFactory;
+use Olobase\ColumnFiltersInterface;
+use Olobase\Router\AttributeRouteProviderInterface;
+use Olobase\Authentication\Service\JwtAuthentication;
+use Olobase\Authentication\Service\JwtEncoderInterface;
+use Olobase\Authentication\Service\TokenServiceInterface;
+use Olobase\Authentication\Helper\TokenEncryptHelper;
+use Olobase\Authentication\Helper\TokenEncryptHelperFactory;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Olobase\Mezzio\Authorization\RoleModelInterface;
-use Authentication\Model\NullRoleModel;
-use Common\Router\AttributeRouteProviderInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
 /**
@@ -65,6 +63,9 @@ class ConfigProvider
                 AuthenticationInterface::class => JwtAuthentication::class,
             ],
             'factories' => [
+                // authorication
+                \Mezzio\Authorization\AuthorizationInterface::class => \Olobase\Authorization\Service\AuthorizationFactory::class,
+
                 // services
                 JwtAuthentication::class => Authentication\JwtAuthenticationFactory::class,
                 JwtEncoderInterface::class => Authentication\JwtEncoderFactory::class,
@@ -82,12 +83,6 @@ class ConfigProvider
                 Handler\LogoutHandler::class => Handler\LogoutHandlerFactory::class,
                 Handler\SessionUpdateHandler::class => Handler\SessionUpdateHandlerFactory::class,
 
-                RoleModelInterface::class => function ($container) {
-                    if ($container->has(\Authorization\Model\RoleModel::class)) {
-                        return $container->get(\Authorization\Model\RoleModel::class);
-                    }
-                    return new NullRoleModel();
-                },
             ],
         ];
     }

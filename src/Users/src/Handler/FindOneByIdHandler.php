@@ -6,7 +6,6 @@ namespace Users\Handler;
 
 use Users\Model\UserModelInterface;
 use Users\Schema\UsersFindOneById;
-use Olobase\Mezzio\DataManagerInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

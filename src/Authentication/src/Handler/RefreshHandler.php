@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Common\Attribute\Route;
+use Olobase\Attribute\Route;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Common\Helper\ErrorWrapperInterface as Error;
-use Olobase\Mezzio\Authentication\JwtEncoderInterface as JwtEncoder;
+use Common\Helper\ValidationErrorFormatterInterface as Error;
+use Olobase\Authentication\JwtEncoderInterface as JwtEncoder;
 use Mezzio\Authentication\AuthenticationInterface;
 use OpenApi\Attributes as OA;
 

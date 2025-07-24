@@ -7,7 +7,7 @@ namespace Modules\Handler;
 use Modules\Model\ModuleModelInterface;
 use Modules\Schema\ModuleSave;
 use Modules\InputFilter\SaveFilter;
-use Olobase\Mezzio\DataManagerInterface;
+use Olobase\DataTable\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

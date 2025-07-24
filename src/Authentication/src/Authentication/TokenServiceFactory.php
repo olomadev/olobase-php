@@ -6,9 +6,9 @@ namespace Authentication\Authentication;
 
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\Mezzio\Authentication\Helper\TokenEncryptHelper;
-use Olobase\Mezzio\Authentication\Service\TokenService;
-use Olobase\Mezzio\Authentication\Service\JwtEncoderInterface;
+use Olobase\Authentication\Helper\TokenEncryptHelper;
+use Olobase\Authentication\Service\TokenService;
+use Olobase\Authentication\Service\JwtEncoderInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TokenServiceFactory implements FactoryInterface
@@ -20,7 +20,6 @@ class TokenServiceFactory implements FactoryInterface
             $container->get(StorageInterface::class),
             $container->get(TokenEncryptHelper::class),
             $container->get(JwtEncoderInterface::class),
-
         );
     }
 }

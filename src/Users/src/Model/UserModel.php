@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Users\Model;
 
 use Exception;
-use Olobase\Mezzio\ColumnFiltersInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Expression;
 use Laminas\Paginator\Paginator;

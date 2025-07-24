@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Common\Attribute\Route;
-use Authentication\InputFilter\TokenFilter;
+use Olobase\Attribute\Route;
+use Olobase\Filter\AttributeInputFilterCollector;
 use Firebase\JWT\ExpiredException;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Common\Helper\ErrorWrapperInterface as Error;
+use Common\Helper\ValidationErrorFormatterInterface as Error;
 use Mezzio\Authentication\AuthenticationInterface;
+use Laminas\InputFilter\InputFilterPluginManager;
+use Authentication\Dto\TokenRequestDto;
 use OpenApi\Attributes as OA;
 
 #[Route(
@@ -29,7 +31,7 @@ class TokenHandler implements RequestHandlerInterface
     public function __construct(
         array $config, 
         private AuthenticationInterface $authentication,
-        private TokenFilter $filter,
+        private InputFilterPluginManager $filterPluginManager,
         private Error $error
     ) {
         $this->config = $config;
@@ -44,7 +46,12 @@ class TokenHandler implements RequestHandlerInterface
             description: 'Login credentials',
             required: true,
             content: new OA\JsonContent(
-                ref: '#/components/schemas/TokenRequest'
+                type: 'object',
+                required: ['username', 'password'],
+                properties: [
+                    new OA\Property(property: 'username', type: 'string', format: 'email'),
+                    new OA\Property(property: 'password', type: 'string')
+                ]
             )
         ),
         responses: [
@@ -82,8 +89,11 @@ class TokenHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->filter->setInputData($request->getParsedBody());
-        if ($this->filter->isValid()) {
+        $dto = new TokenRequestDto();
+        $collector = new AttributeInputFilterCollector($this->filterPluginManager);
+        $filter = $collector->fromObject($dto, $request->getParsedBody());
+        
+        if ($filter->isValid()) {
             try {
                 $user = $this->authentication->createUser($request);
                 if (null !== $user) {
@@ -128,8 +138,11 @@ class TokenHandler implements RequestHandlerInterface
                 );
             }
             return $this->authentication->unauthorizedResponse($request);
+
         } else {
-            return new JsonResponse($this->error->getMessages($this->filter), 400);
+
+            return new JsonResponse($this->error->getMessages($filter), 400);
         }
+
     }
 }

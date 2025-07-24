@@ -6,8 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Authorization\Schema\PermissionSave;
 use Authorization\InputFilter\Permissions\SaveFilter;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
-use Olobase\Mezzio\DataManagerInterface;
+use Olobase\Authorization\PermissionModelInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

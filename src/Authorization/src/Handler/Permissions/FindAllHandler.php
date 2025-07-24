@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Permissions;
 
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\Authorization\PermissionModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
-use Common\Helper\ErrorWrapperInterface;
+use Common\Helper\ValidationErrorFormatterInterface
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -16,7 +16,7 @@ class RefreshHandlerFactory
         return new RefreshHandler(
             $container->get('config'), 
             $container->get(AuthenticationInterface::class), 
-            $container->get(ErrorWrapperInterface::class)
+            $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

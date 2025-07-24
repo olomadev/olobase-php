@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
-use Common\Attribute\Route;
+use Modules\Dto\ModuleCreateDto;
 use Modules\Model\ModuleModelInterface;
 use Modules\Schema\ModuleSave;
-use Modules\InputFilter\SaveFilter;
-use Olobase\Mezzio\DataManagerInterface;
+use Olobase\Attribute\Route;
+use Olobase\Filter\AttributeInputFilterCollector;
+use Olobase\Mapper\InputSchemaMapper;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Laminas\InputFilter\InputFilterPluginManager;
 use OpenApi\Attributes as OA;
 
 #[Route(
@@ -28,8 +30,7 @@ class CreateHandler implements RequestHandlerInterface
 {
     public function __construct(
         private ModuleModelInterface $moduleModel,
-        private DataManagerInterface $dataManager,
-        private SaveFilter $filter,
+        private InputFilterPluginManager $filterPluginManager,
         private Error $error,
     ) 
     {
@@ -57,15 +58,15 @@ class CreateHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->filter->setInputData($request->getParsedBody());
         $data = array();
         $response = array();
-        if ($this->filter->isValid()) {
+        $dto = new ModuleCreateDto();
+        $collector = new AttributeInputFilterCollector($this->filterPluginManager);
+        $filter = $collector->fromObject($dto, $post);
 
-            $data = $this->filter->getSchemaValues(ModuleSave::class);
-
-            // $this->dataManager->setInputFilter($this->filter);
-            // $data = $this->dataManager->getSaveData(ModuleSave::class, 'modules');
+        if ($filter->isValid()) {
+            $mapper = new InputSchemaMapper();
+            $data = $mapper->map($filter, ModuleSave::class);
             $this->moduleModel->create($data);
         } else {
             return new JsonResponse($this->error->getMessages($this->filter), 400);

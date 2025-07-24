@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Authorization\Factory;
+namespace Authorization\Model;
 
-use Authorization\Model\RoleModel;
-use Olobase\Mezzio\Authorization\RoleModelInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
 use Laminas\Cache\Storage\StorageInterface;
-use Common\Contracts\ColumnFiltersInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
 use Psr\Container\ContainerInterface;
+use Olobase\Authorization\Contracts\RoleModelInterface;
 
 class RoleModelFactory
 {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Authorization\Model;
@@ -12,8 +13,8 @@ use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 use Common\Helper\RandomStringHelper;
-use Olobase\Mezzio\ColumnFiltersInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
+use Olobase\Authorization\PermissionModelInterface;
 
 class PermissionModel implements PermissionModelInterface
 {
@@ -33,7 +34,8 @@ class PermissionModel implements PermissionModelInterface
     /**
      * Authorization permissions method
      * 
-     * @see Olobase\Mezzio\Authorization\PermissionModelInterface;
+     * @see Olobase\
+Authorization\PermissionModelInterface;
      * @return array
      */
     public function findPermissions() : array
@@ -225,7 +227,7 @@ class PermissionModel implements PermissionModelInterface
         }
     }
 
-    public function copy(string $permId) : array
+    public function buildCreateDataFromPermission(string $permId) : array
     {
         $sql = new Sql($this->adapter);
         $select = $sql->select();

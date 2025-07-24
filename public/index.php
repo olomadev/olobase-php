@@ -19,6 +19,7 @@ require 'vendor/autoload.php';
 if (! is_file('config/module.config.php')) {
     throw new RuntimeException('Module configuration is missing or incorrect.');
 }
+
 /**
  * Self-called anonymous function that creates its own scope and keeps the global namespace clean.
  */

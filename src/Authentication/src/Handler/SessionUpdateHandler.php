@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
-use Common\Attribute\Route;
+use Olobase\Attribute\Route;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\TextResponse;
 use Psr\Http\Message\ResponseInterface;

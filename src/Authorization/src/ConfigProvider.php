@@ -6,12 +6,12 @@ namespace Authorization;
 
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\Mezzio\ColumnFiltersInterface;
-use Olobase\Mezzio\Authorization\PermissionModelInterface;
+use Olobase\DataTable\ColumnFiltersInterface;
+use Olobase\Router\AttributeRouteProviderInterface;
+use Olobase\Authorization\Contracts\PermissionModelInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Common\Router\AttributeRouteProviderInterface;
 
 /**
  * The configuration provider for the Authorization module
@@ -45,7 +45,7 @@ class ConfigProvider
                 Model\PermissionModel::class => PermissionModelInterface::class, // permission model used by Authorization
             ],
             'factories'  => [
-                Model\RoleModel::class => Factory\RoleModelFactory::class,
+                Model\RoleModel::class => Model\RoleModelFactory::class,
 
                 // handlers - roles
                 Handler\Roles\CreateHandler::class => Handler\Roles\CreateHandlerFactory::class,

@@ -6,7 +6,6 @@ namespace Users\Handler\MyAccount;
 
 use Users\Model\UserModelInterface;
 use Users\InputFilter\MyAccount\SaveFilter;
-use Olobase\Mezzio\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
