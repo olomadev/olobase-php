@@ -95,6 +95,20 @@ if ($command == "install") {
             $require[$moduleFullName] = '*';
         }
 
+        // Add Tests/ folder to autoload-dev
+        if (!isset($composerJson['autoload-dev'])) {
+            $composerJson['autoload-dev'] = ['psr-4' => []];
+        } elseif (!isset($composerJson['autoload-dev']['psr-4']) || !is_array($composerJson['autoload-dev']['psr-4']) || array_keys($composerJson['autoload-dev']['psr-4']) === range(0, count($composerJson['autoload-dev']['psr-4']) - 1)) {
+            $composerJson['autoload-dev']['psr-4'] = []; // If the array is indexed (i.e. there is no object), it will be fixed
+        }
+        $autoloadDevKey = $moduleName . "\\Tests\\";
+        $autoloadDevPath = "src/{$moduleName}/Tests/";
+
+        if (!array_key_exists($autoloadDevKey, $composerJson['autoload-dev']['psr-4'])) {
+            $composerJson['autoload-dev']['psr-4'][$autoloadDevKey] = $autoloadDevPath;
+            echo "\033[32mAdded autoload-dev: \"$autoloadDevKey\" => \"$autoloadDevPath\"\n\033[0m";
+        }
+
         // Save updated composer.json
         $composerJson['repositories'] = $repositories;
         $composerJson['require'] = $require;
@@ -102,6 +116,9 @@ if ($command == "install") {
 
         // Save updated module config
         file_put_contents($modulesConfigFile, "<?php\nreturn [\n    " . implode(",\n    ", array_map(fn($m) => "'$m'", $modulesConfig)) . "\n];\n");
+
+        // echo "\033[34mRunning composer dump-autoload...\n\033[0m";
+        // passthru("composer dump-autoload");
 
         // Mezzio register
         passthru("composer mezzio mezzio:module:register $moduleName --ansi");
@@ -160,6 +177,22 @@ if ($command == "remove") {
                 echo "\033[31mFailed to remove module '{$moduleFullName}' from composer.json.\n\033[0m";
             }
         }
+
+        // Remove from autoload-dev psr-4
+        $autoloadDevKey = $moduleName . "\\Tests\\";
+
+        // psr-4 kısmı varsa ve gerçekten bir associative array'se
+        if (
+            isset($composerJson['autoload-dev']['psr-4']) &&
+            is_array($composerJson['autoload-dev']['psr-4']) &&
+            array_keys($composerJson['autoload-dev']['psr-4']) !== range(0, count($composerJson['autoload-dev']['psr-4']) - 1)
+        ) {
+            if (isset($composerJson['autoload-dev']['psr-4'][$autoloadDevKey])) {
+                unset($composerJson['autoload-dev']['psr-4'][$autoloadDevKey]);
+                echo "\033[32mRemoved autoload-dev: \"$autoloadDevKey\"\n\033[0m";
+            }
+        }
+
         // Save updated composer.json
         file_put_contents($composerJsonFile, json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 

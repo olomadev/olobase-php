@@ -6,7 +6,7 @@ namespace Authorization\Handler\Roles;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 
 class FindAllHandlerFactory
 {

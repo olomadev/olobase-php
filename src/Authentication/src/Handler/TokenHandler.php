@@ -7,13 +7,13 @@ namespace Authentication\Handler;
 use Exception;
 use Olobase\Attribute\Route;
 use Olobase\Filter\AttributeInputFilterCollector;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Firebase\JWT\ExpiredException;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Common\Helper\ValidationErrorFormatterInterface as Error;
 use Mezzio\Authentication\AuthenticationInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Authentication\Dto\TokenRequestDto;
@@ -95,7 +95,7 @@ class TokenHandler implements RequestHandlerInterface
         
         if ($filter->isValid()) {
             try {
-                $user = $this->authentication->createUser($request);
+                $user = $this->authentication->authenticateWithCredentials($request);
                 if (null !== $user) {
                     $request = $request->withAttribute(UserInterface::class, $user);
                     $encoded = $this->authentication->getTokenService()->create($request);
@@ -141,7 +141,7 @@ class TokenHandler implements RequestHandlerInterface
 
         } else {
 
-            return new JsonResponse($this->error->getMessages($filter), 400);
+            return new JsonResponse($this->error->format($filter), 400);
         }
 
     }

@@ -50,6 +50,6 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
                     ]
             );
         }
-        return $this->authentication->unauthorizedResponse($request);
+        return $this->authentication->createUnauthorizedResponse($request);
     }
 }

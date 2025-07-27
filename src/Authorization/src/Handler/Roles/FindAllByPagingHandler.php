@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Authorization\Handler\Roles;
 
 use Olobase\Attribute\Route;
-use Common\Helper\JsonHelper;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Common\Util\JsonHelper;
+use Olobase\Authorization\Contract\RoleModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

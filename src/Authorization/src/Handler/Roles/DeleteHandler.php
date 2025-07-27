@@ -6,7 +6,7 @@ namespace Authorization\Handler\Roles;
 
 use Olobase\Attribute\Route;
 use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;

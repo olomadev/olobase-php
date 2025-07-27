@@ -42,7 +42,6 @@ class ConfigProvider
                 StorageInterface::class => Factory\CacheFactory::class,
                 SimpleCacheInterface::class => Factory\SimpleCacheFactory::class,   
                 PredisInterface::class => Factory\PredisFactory::class,
-                Helper\ErrorWrapperInterface::class => Factory\ErrorWrapperFactory::class,
 
                 // middlewares
                 Middleware\SetLocaleMiddleware::class => Middleware\SetLocaleMiddlewareFactory::class,

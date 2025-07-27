@@ -6,7 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Authorization\InputFilter\Permissions\SaveFilter;
 use Olobase\Authorization\PermissionModelInterface;
-use Common\Helper\ErrorWrapperInterface as Error;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;

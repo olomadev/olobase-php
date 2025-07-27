@@ -6,7 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Authorization\InputFilter\Permissions\DeleteFilter;
 use Olobase\Authorization\PermissionModelInterface;
-use Common\Helper\ErrorWrapperInterface as Error;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

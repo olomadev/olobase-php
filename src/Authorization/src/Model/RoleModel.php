@@ -11,7 +11,7 @@ use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\TableGateway\TableGatewayInterface;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 use Olobase\DataTable\ColumnFiltersInterface;
 
 class RoleModel implements RoleModelInterface

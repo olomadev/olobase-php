@@ -11,8 +11,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Common\Helper\ValidationErrorFormatterInterface as Error;
-use Olobase\Authentication\JwtEncoderInterface as JwtEncoder;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Mezzio\Authentication\AuthenticationInterface;
 use OpenApi\Attributes as OA;
 

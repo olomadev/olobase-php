@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Permissions;
 
-use Authorization\InputFilter\Permissions\SaveFilter
+use Authorization\InputFilter\Permissions\SaveFilter;
 use Olobase\Authorization\PermissionModelInterface;
-use Common\Helper\ErrorWrapperInterface;
+use Olobase\Util\ValidationErrorFormatterInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -24,7 +24,7 @@ class CreateHandlerFactory
             $container->get(PermissionModelInterface::class),
             $container->get(DataManagerInterface::class),
             $inputFilter,
-            $container->get(ErrorWrapperInterface::class)
+            $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

@@ -46,7 +46,6 @@
         "laminas/laminas-serializer": "^2.18",
         "laminas/laminas-servicemanager": "^3.22",
         "laminas/laminas-stdlib": "^3.6",
-        "league/mime-type-detection": "^1.16",
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.9.0",
@@ -56,9 +55,7 @@
         "olobase/users": "*",
         "olomadev/olobase": "^3.0@RC",
         "predis/predis": "^2.3",
-        "ramsey/uuid": "^4.7",
-        "symfony/console": "^6.4",
-        "symfony/uid": "*"
+        "symfony/console": "^6.4"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -117,7 +114,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "AppTest\\": "test/AppTest/"
+            "Authentication\\Tests\\": "src/Authentication/Tests/"
         }
     },
     "scripts": {
@@ -126,12 +123,12 @@
             "@development-enable"
         ],
         "post-install-cmd": [
-          "@clear-config-cache",
-          "php bin/fetch-dependencies.php"
+            "@clear-config-cache",
+            "php bin/fetch-dependencies.php"
         ],
         "post-update-cmd": [
-          "@clear-config-cache",
-          "php bin/fetch-dependencies.php"
+            "@clear-config-cache",
+            "php bin/fetch-dependencies.php"
         ],
         "development-disable": "laminas-development-mode disable",
         "development-enable": "laminas-development-mode enable",

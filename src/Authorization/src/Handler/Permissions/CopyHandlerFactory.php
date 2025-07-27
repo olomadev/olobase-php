@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authorization\Handler\Permissions;
 
 use Olobase\Authorization\PermissionModelInterface;
-use Common\Helper\ErrorWrapperInterface;
+use Common\Util\ErrorWrapperInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;

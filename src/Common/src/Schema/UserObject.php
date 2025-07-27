@@ -2,39 +2,26 @@
 
 namespace Common\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class UserObject
 {
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $id;
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $firstname;
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $lastname;
-    /**
-     * @var array
-     * @OA\Property(
-     *     type="array",
-     *     @OA\Items(
-     *         type="string",
-     *     )
-     * )
-     */
-    public $roles;
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $email;
+    #[OA\Property(type: "string")]
+    public string $id;
+
+    #[OA\Property(type: "string")]
+    public string $firstname;
+
+    #[OA\Property(type: "string")]
+    public string $lastname;
+
+    #[OA\Property(
+        type: "array",
+        items: new OA\Items(type: "string")
+    )]
+    public array $roles;
+
+    #[OA\Property(type: "string")]
+    public string $email;
 }

@@ -7,7 +7,7 @@ namespace Authorization\Handler\Permissions;
 use Authorization\Schema\PermissionSave;
 use Authorization\InputFilter\Permissions\SaveFilter;
 use Olobase\Authorization\PermissionModelInterface;
-use Common\Helper\ErrorWrapperInterface as Error;
+use Olobase\Helper\ValidationErrorFormatterInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

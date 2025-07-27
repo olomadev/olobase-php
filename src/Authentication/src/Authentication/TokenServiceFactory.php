@@ -6,9 +6,9 @@ namespace Authentication\Authentication;
 
 use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\Authentication\Helper\TokenEncryptHelper;
+use Olobase\Authentication\Util\TokenEncryptHelper;
 use Olobase\Authentication\Service\TokenService;
-use Olobase\Authentication\Service\JwtEncoderInterface;
+use Olobase\Authentication\Contract\JwtEncoderInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TokenServiceFactory implements FactoryInterface

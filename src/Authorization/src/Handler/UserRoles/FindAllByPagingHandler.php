@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authorization\Handler\UserRoles;
 
 use Exception;
-use Common\Helper\RandomStringHelper;
+use Common\Util\RandomStringHelper;
 use Authorization\Model\UserRoleModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;

@@ -2,21 +2,14 @@
 
 namespace Common\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class ObjectId
 {
-    /**
-     * @var string
-     * @OA\Property(
-     *     format="uuid"
-     * )
-     */
-    public $id;
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $name;
+    #[OA\Property(format: "uuid", type: "string")]
+    public string $id;
+
+    #[OA\Property(type: "string")]
+    public string $name;
 }

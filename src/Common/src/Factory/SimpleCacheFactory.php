@@ -9,6 +9,7 @@ use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+
 /**
  * https://docs.laminas.dev/laminas-cache/psr16/
  */

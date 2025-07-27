@@ -10,7 +10,7 @@ use Laminas\Db\TableGateway\TableGateway;
 use Laminas\Cache\Storage\StorageInterface;
 use Olobase\DataTable\ColumnFiltersInterface;
 use Psr\Container\ContainerInterface;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 
 class RoleModelFactory
 {

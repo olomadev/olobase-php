@@ -2,14 +2,11 @@
 
 namespace Common\Schema;
 
-/**
- * @OA\Schema()
- */
+use OpenApi\Attributes as OA;
+
+#[OA\Schema]
 class AvatarObject
 {
-    /**
-     * @var string
-     * @OA\Property()
-     */
-    public $image;
+    #[OA\Property(type: 'string')]
+    public string $image;
 }

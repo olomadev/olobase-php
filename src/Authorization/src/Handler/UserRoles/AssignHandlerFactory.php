@@ -6,7 +6,7 @@ namespace Authorization\Handler\UserRoles;
 
 use Authorization\Model\UserRoleModelInterface;
 use Authorization\InputFilter\UserRoles\AssignRoleFilter;
-use Common\Helper\ErrorWrapperInterface;
+use Common\Util\ErrorWrapperInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;

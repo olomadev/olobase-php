@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Authentication\\Tests\\Handler\\TokenHandlerTest::testSuccessfulTokenGeneration":8},"times":{"Authentication\\Tests\\Handler\\TokenHandlerTest::testSuccessfulTokenGeneration":0.032}}

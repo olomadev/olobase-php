@@ -9,7 +9,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 use OpenApi\Attributes as OA;
 
 #[Route(

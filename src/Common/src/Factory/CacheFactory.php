@@ -7,6 +7,7 @@ namespace Common\Factory;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+
 /**
  * https://docs.laminas.dev/laminas-cache/storage/adapter/#quick-start
  * 

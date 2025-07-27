@@ -6,18 +6,12 @@ namespace Authentication;
 
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
-use Laminas\Cache\Storage\StorageInterface;
-use Olobase\ColumnFiltersInterface;
 use Olobase\Router\AttributeRouteProviderInterface;
-use Olobase\Authentication\Service\JwtAuthentication;
-use Olobase\Authentication\Service\JwtEncoderInterface;
-use Olobase\Authentication\Service\TokenServiceInterface;
-use Olobase\Authentication\Helper\TokenEncryptHelper;
-use Olobase\Authentication\Helper\TokenEncryptHelperFactory;
-use Laminas\Db\Adapter\AdapterInterface;
-use Laminas\Db\ResultSet\ResultSet;
-use Laminas\Db\TableGateway\TableGateway;
-use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+use Olobase\Authentication\Contract\JwtAuthenticationInterface;
+use Olobase\Authentication\Contract\JwtEncoderInterface;
+use Olobase\Authentication\Contract\TokenInterface;
+use Olobase\Authentication\Util\TokenEncryptHelper;
+use Olobase\Authentication\Util\TokenEncryptHelperFactory;
 
 /**
  * The configuration provider for the Authentication module
@@ -60,16 +54,16 @@ class ConfigProvider
     {
         return [
             'aliases' => [
-                AuthenticationInterface::class => JwtAuthentication::class,
+                AuthenticationInterface::class => JwtAuthenticationInterface::class,
             ],
             'factories' => [
-                // authorication
-                \Mezzio\Authorization\AuthorizationInterface::class => \Olobase\Authorization\Service\AuthorizationFactory::class,
+                // authentication services
+                JwtAuthenticationInterface::class => Authentication\JwtAuthenticationServiceFactory::class,
+                JwtEncoderInterface::class => Authentication\JwtEncoderServiceFactory::class,
+                TokenInterface::class => Authentication\TokenServiceFactory::class,
 
-                // services
-                JwtAuthentication::class => Authentication\JwtAuthenticationFactory::class,
-                JwtEncoderInterface::class => Authentication\JwtEncoderFactory::class,
-                TokenServiceInterface::class => Authentication\TokenServiceFactory::class,
+                // authorization
+                \Mezzio\Authorization\AuthorizationInterface::class => \Olobase\Authorization\Service\AuthorizationFactory::class,
 
                 // middlewares
                 Middleware\JwtAuthenticationMiddleware::class => Middleware\JwtAuthenticationMiddlewareFactory::class,

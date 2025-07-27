@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
-use Common\Helper\ValidationErrorFormatterInterface
+use Olobase\Util\ValidationErrorFormatterInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;

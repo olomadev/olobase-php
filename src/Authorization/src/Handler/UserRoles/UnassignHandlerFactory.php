@@ -6,7 +6,7 @@ namespace Authorization\Handler\UserRoles;
 
 use Authorization\Model\UserRoleModelInterface;
 use Authorization\InputFilter\UserRoles\UnassignRoleFilter;
-use Common\Helper\ErrorWrapperInterface;
+use Olobase\Util\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
@@ -21,7 +21,7 @@ class UnassignHandlerFactory
         return new UnassignHandler(
             $container->get(UserRoleModelInterface::class),
             $inputFilter,
-            $container->get(ErrorWrapperInterface::class)
+            $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

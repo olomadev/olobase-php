@@ -7,10 +7,10 @@ namespace Authorization\Handler\Roles;
 use Olobase\Attribute\Route;
 use Olobase\Filter\AttributeInputFilterCollector;
 use Olobase\Mapper\InputSchemaMapper;
-use Olobase\Authorization\Contracts\RoleModelInterface;,
+use Olobase\Authorization\Contract\RoleModelInterface;
 use Authorization\Schema\RoleSave;
 use Authorization\Dto\RoleCreateDto;
-use Common\Helper\ValidationErrorFormatterInterface as Error;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Psr\Http\Message\ResponseInterface;

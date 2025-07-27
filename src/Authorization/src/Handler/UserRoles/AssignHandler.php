@@ -7,7 +7,7 @@ namespace Authorization\Handler\UserRoles;
 use Authorization\Model\UserRoleModelInterface;
 use Authorization\Schema\UserRoleAssignment;
 use Authorization\InputFilter\UserRoles\AssignRoleFilter;
-use Common\Helper\ErrorWrapperInterface as Error;
+use Common\Util\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

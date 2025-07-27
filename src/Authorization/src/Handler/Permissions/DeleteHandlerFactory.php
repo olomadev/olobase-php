@@ -6,7 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Authorization\Model\PermissionModel;
 use Authorization\InputFilter\Permissions\DeleteFilter;
-use Common\Helper\ErrorWrapperInterface;
+use Olobase\Util\ValidationErrorFormatterInterface;
 use Olobase\Authorization\PermissionModelInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;

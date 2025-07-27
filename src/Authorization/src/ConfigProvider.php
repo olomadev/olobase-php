@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Olobase\DataTable\ColumnFiltersInterface;
 use Olobase\Router\AttributeRouteProviderInterface;
-use Olobase\Authorization\Contracts\PermissionModelInterface;
+use Olobase\Authorization\Contract\PermissionModelInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;

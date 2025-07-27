@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Authorization\Handler\Roles;
 
 use Olobase\Attribute\Route;
-use Olobase\Authorization\Contracts\RoleModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
+use Olobase\Util\ValidationErrorFormatterInterface as Error;
 use Authorization\Schema\RoleSave;
 use Authorization\InputFilter\Roles\SaveFilter;
-use Common\Helper\ValidationErrorFormatterInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
