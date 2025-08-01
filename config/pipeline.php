@@ -30,7 +30,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $config = $container->get('config');
     $errorHandler = new ErrorHandler(
         function () {
-            return new Response;
+            return new Response();
         },
         new Common\Middleware\ErrorResponseGenerator($config, $container)
     );
@@ -87,10 +87,10 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // At this point, if no Response is returned by any middleware, the
     // NotFoundHandler kicks in; alternately, you can provide other fallback
     // middleware to execute.
-    // 
+    //
     $notFoundHandler = new NotFoundHandler(
         function () {
-            $response = new Response;
+            $response = new Response();
             $response = $response->withHeader('Access-Control-Allow-Headers', '*');
             $response = $response->withHeader('Access-Control-Expose-Headers', 'Token-Expired');
             $response = $response->withHeader('Access-Control-Max-Age', '3600'); // 1 hour

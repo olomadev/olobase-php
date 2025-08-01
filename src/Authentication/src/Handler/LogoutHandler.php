@@ -6,8 +6,8 @@ namespace Authentication\Handler;
 
 use Exception;
 use Olobase\Attribute\Route;
+use Olobase\Authentication\JwtAuth\TokenInterface;
 use Firebase\JWT\ExpiredException;
-use Authentication\Model\TokenModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,7 +21,7 @@ use OpenApi\Attributes as OA;
 class LogoutHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private TokenModelInterface $tokenModel
+        private TokenInterface $token
     ) {
     }
 
@@ -41,7 +41,7 @@ class LogoutHandler implements RequestHandlerInterface
     {
         $token = null;
         $authHeader = $request->getHeader('Authorization');
-        
+
         // token check
         if (!empty($authHeader) && preg_match("/Bearer\s+(.*)$/i", $authHeader[0], $matches)) {
             $token = $matches[1];
@@ -50,15 +50,15 @@ class LogoutHandler implements RequestHandlerInterface
             return new JsonResponse(
                 [
                     'data' => [
-                        'error' =>"Invalid token"
+                        'error' => "Invalid token"
                     ]
-                ], 
+                ],
                 401
             );
         }
-        $token = $this->tokenModel->getTokenEncrypt()->decrypt($token);  // decode token
+        $token = $this->token->getTokenEncryptHelper()->decrypt($token);  // decode token
         try {
-            $data = $this->tokenModel->decode($token);
+            $data = $this->token->decode($token);
             if (!empty($data['data']->details->id)) {
                 $this->tokenModel->kill(
                     $data['data']->details->id,
@@ -76,12 +76,12 @@ class LogoutHandler implements RequestHandlerInterface
                         'data' => [
                             'error' => "Invalid token"
                         ]
-                    ], 
+                    ],
                     401
                 );
             }
             if ($token) { // terminate user with expired token
-                $this->tokenModel->kill(
+                $this->token->revokeToken(
                     $token['data']['details']['id'],
                     $token['data']['details']['tokenId']
                 );
@@ -92,7 +92,7 @@ class LogoutHandler implements RequestHandlerInterface
                     'data' => [
                         'error' => $e->getMessage()
                     ]
-                ], 
+                ],
                 401
             );
         }

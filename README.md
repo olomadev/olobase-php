@@ -4,6 +4,11 @@
 Olobase 3.x Php Backend
 
 
+php console.php module:install --module=ModuleName --env=local
+php console.php module:remove --module=ModuleName --env=local
+
+
+
 ## ModuleName
 
 Installing a module

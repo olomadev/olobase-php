@@ -11,7 +11,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Util\ValidationErrorFormatterInterface as Error;
+use Olobase\Validation\ValidationErrorFormatterInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use OpenApi\Attributes as OA;
 
@@ -21,17 +21,14 @@ use OpenApi\Attributes as OA;
 )]
 class RefreshHandler implements RequestHandlerInterface
 {
-    private $config;
     protected const LOGOUT_SIGNAL = 'Logout';
 
     public function __construct(
-        array $config,
         private AuthenticationInterface $authentication,
-        private Error $error
+        private ValidationErrorFormatterInterface $errorFormatter
     ) {
-        $this->config = $config;
     }
-    
+
     #[OA\Post(
         path: '/auth/refresh',
         tags: ['Authentication'],
@@ -64,11 +61,6 @@ class RefreshHandler implements RequestHandlerInterface
                             ref: '#/components/schemas/UserObject'
                         ),
                         new OA\Property(
-                            property: 'avatar',
-                            type: 'object',
-                            ref: '#/components/schemas/AvatarObject'
-                        ),
-                        new OA\Property(
                             property: 'expiresAt',
                             type: 'string',
                             format: 'date-time',
@@ -95,7 +87,8 @@ class RefreshHandler implements RequestHandlerInterface
                 401
             );
         }
-        $token = $this->tokenModel->getTokenEncrypt()->decrypt($post['token']);
+        $tokenClass = $this->authentication->getToken();
+        $token = $tokenClass->getTokenEncryptHelper()->decrypt($post['token']);
         if (!$token) {
             return new JsonResponse(
                 [
@@ -105,9 +98,9 @@ class RefreshHandler implements RequestHandlerInterface
             );
         }
         try {
-            $this->tokenModel->decode($token); // token verification
+            $tokenClass->decodeToken($token); // token verification
         } catch (ExpiredException $e) {
-            
+
             list($header, $payload, $signature) = explode(".", $token);
             $payload = json_decode(base64_decode($payload), true);
 
@@ -119,8 +112,8 @@ class RefreshHandler implements RequestHandlerInterface
                     401
                 );
             }
-            $data = $this->authentication->getTokenService()->refresh($request, $payload); // token renewal process
-            if (false == $data) {
+            $tokenResponse = $tokenClass->refreshToken($request, $payload); // token renewal process
+            if (false == $tokenResponse) {
                 return new JsonResponse(
                     [
                         'data' => ['error' => self::LOGOUT_SIGNAL] // token could not be refreshed
@@ -128,21 +121,7 @@ class RefreshHandler implements RequestHandlerInterface
                     401
                 );
             }
-            $details = $data['data']['details']; // new token and user information
-            return new JsonResponse(
-                [
-                    'data' => [
-                        'token' => $data['token'],
-                        'user'  => [
-                            'id' => $details['id'],
-                            'fullname' => $details['fullname'],
-                            'email' => $details['email'],
-                            'permissions' => $data['data']['roles'],
-                        ],
-                        'expiresAt' => $data['expiresAt'],
-                    ],
-                ]
-            );
+            return new JsonResponse($tokenResponse);
         } catch (Exception $e) {
             return new JsonResponse(
                 [

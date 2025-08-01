@@ -124,11 +124,11 @@
         ],
         "post-install-cmd": [
             "@clear-config-cache",
-            "php bin/fetch-dependencies.php"
+            "php bin/update-dependencies.php"
         ],
         "post-update-cmd": [
             "@clear-config-cache",
-            "php bin/fetch-dependencies.php"
+            "php bin/update-dependencies.php"
         ],
         "development-disable": "laminas-development-mode disable",
         "development-enable": "laminas-development-mode enable",

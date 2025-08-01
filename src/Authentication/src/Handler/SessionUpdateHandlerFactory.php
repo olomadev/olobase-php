@@ -13,8 +13,8 @@ class SessionUpdateHandlerFactory
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         return new SessionUpdateHandler(
-            $container->get('config'),
-            $container->get(StorageInterface::class)
+            config: $container->get('config'),
+            cache: $container->get(StorageInterface::class)
         );
     }
 }

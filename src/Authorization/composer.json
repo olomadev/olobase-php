@@ -8,6 +8,7 @@
         "mezzio/mezzio-authorization": "^1.10"
     },
     "extra": {
+        "olobase-module-name": "Authorization",
         "olobase-module-type": "external"
     }
 }

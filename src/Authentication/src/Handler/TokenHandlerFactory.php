@@ -14,13 +14,12 @@ class TokenHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
-        $pluginManager = $container->get(InputFilterPluginManager::class);
-
         return new TokenHandler(
-            $container->get('config'),
-            $container->get(AuthenticationInterface::class),
-            $pluginManager,
-            $container->get(ValidationErrorFormatterInterface::class)
+            config: $container->get('config'),
+            pluginManager: $container->get(InputFilterPluginManager::class),
+            authentication: $container->get(AuthenticationInterface::class),
+            errorFormatter: $container->get(ValidationErrorFormatterInterface::class)
         );
+
     }
 }

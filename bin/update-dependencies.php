@@ -1,22 +1,36 @@
 <?php
+
+declare(strict_types=1);
+
+use Olobase\ModuleManager\Server;
+
 /**
  * Creates Olobase module dependencies config file.
  */
 $targetFile = __DIR__ . '/../config/autoload/module.dependencies.global.php';
 
-define('MODULE_DEPENDENCIES_URL', 'https://olobase.dev/api/command/modules/findAllDependencies');
-
 echo "Fetching module dependency list from Oloma Server...\n";
 
-$ch = curl_init(MODULE_DEPENDENCIES_URL);
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 5,
+$context = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'timeout' => 10,
+        'header' => "Accept: application/json\r\n"
+    ]
 ]);
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+$url = Server::getModuleDependenciesUrl();
+$response = file_get_contents($url, false, $context);
+
+$httpCode = null;
+if (isset($http_response_header)) {
+    foreach ($http_response_header as $header) {
+        if (preg_match('#^HTTP/\d+\.\d+\s+(\d+)#', $header, $matches)) {
+            $httpCode = (int)$matches[1];
+            break;
+        }
+    }
+}
 
 if ($httpCode !== 200 || !$response) {
     echo "\033[31mFetching dependency list failed from Oloma Server.\033[0m\n";

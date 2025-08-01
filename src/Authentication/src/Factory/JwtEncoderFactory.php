@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Authentication\Authentication;
+namespace Authentication\Factory;
 
 use Psr\Container\ContainerInterface;
-use Olobase\Authentication\Service\JwtEncoderService;
+use Olobase\Authentication\Service\JwtEncoder;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class JwtEncoderServiceFactory implements FactoryInterface
+class JwtEncoderFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        return new JwtEncoderService($container->get('config'));
+        return new JwtEncoder(config: $container->get('config'));
     }
 }

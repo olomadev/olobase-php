@@ -33,7 +33,6 @@ $aggregator = new ConfigAggregator([
   \Laminas\Router\ConfigProvider::class,
   \Laminas\HttpHandlerRunner\ConfigProvider::class,
   \Laminas\Validator\ConfigProvider::class,
-  
   // Cache config
   new ArrayProvider($cacheConfig),
   \Mezzio\Helper\ConfigProvider::class,

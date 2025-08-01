@@ -2,8 +2,10 @@
 /coveralls-upload.json
 /vendor/
 .phpunit.result.cache
+/.phpunit.cache/
 /tools/
 .php_cs.cache
+.php-cs-fixer.cache
 .idea/
 debugfiles/
 composer.lock

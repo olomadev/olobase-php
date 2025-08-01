@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Modules\Model;
@@ -84,7 +85,7 @@ class ModuleModel implements ModuleModelInterface
             'id',
             'name',
             'version',
-            'isActive'
+            'is_active'
         ]);
         $select->from(['m' => 'modules']);
         return $select;

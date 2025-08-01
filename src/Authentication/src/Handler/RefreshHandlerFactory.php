@@ -14,9 +14,8 @@ class RefreshHandlerFactory
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         return new RefreshHandler(
-            $container->get('config'), 
-            $container->get(AuthenticationInterface::class), 
-            $container->get(ValidationErrorFormatterInterface::class)
+            authentication: $container->get(AuthenticationInterface::class),
+            errorFormatter: $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

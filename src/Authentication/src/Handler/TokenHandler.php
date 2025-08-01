@@ -7,7 +7,7 @@ namespace Authentication\Handler;
 use Exception;
 use Olobase\Attribute\Route;
 use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Util\ValidationErrorFormatterInterface as Error;
+use Olobase\Validation\ValidationErrorFormatterInterface;
 use Firebase\JWT\ExpiredException;
 use Mezzio\Authentication\UserInterface;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -17,6 +17,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Authentication\Dto\TokenRequestDto;
+use Authentication\Dto\TokenDataDto;
+use Authentication\Dto\TokenMetaDto;
+use Authentication\Dto\TokenResponseDto;
 use OpenApi\Attributes as OA;
 
 #[Route(
@@ -25,16 +28,14 @@ use OpenApi\Attributes as OA;
 )]
 class TokenHandler implements RequestHandlerInterface
 {
-    private $config;
     private const EXPIRE_SIGNAL = 'Token Expired';
 
     public function __construct(
-        array $config, 
+        private array $config,
+        private InputFilterPluginManager $pluginManager,
         private AuthenticationInterface $authentication,
-        private InputFilterPluginManager $filterPluginManager,
-        private Error $error
+        private ValidationErrorFormatterInterface $errorFormatter
     ) {
-        $this->config = $config;
     }
 
     #[OA\Post(
@@ -45,41 +46,13 @@ class TokenHandler implements RequestHandlerInterface
         requestBody: new OA\RequestBody(
             description: 'Login credentials',
             required: true,
-            content: new OA\JsonContent(
-                type: 'object',
-                required: ['username', 'password'],
-                properties: [
-                    new OA\Property(property: 'username', type: 'string', format: 'email'),
-                    new OA\Property(property: 'password', type: 'string')
-                ]
-            )
+            content: new OA\JsonContent(ref: '#/components/schemas/TokenRequest')
         ),
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Successful operation',
-                content: new OA\JsonContent(
-                    type: 'object',
-                    properties: [
-                        new OA\Property(property: 'token', type: 'string'),
-                        new OA\Property(
-                            property: 'user',
-                            type: 'object',
-                            ref: '#/components/schemas/UserObject'
-                        ),
-                        new OA\Property(
-                            property: 'avatar',
-                            type: 'object',
-                            ref: '#/components/schemas/AvatarObject'
-                        ),
-                        new OA\Property(
-                            property: 'expiresAt',
-                            type: 'string',
-                            format: 'date-time',
-                            description: 'Expiration date of token'
-                        )
-                    ]
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/TokenResponse')
             ),
             new OA\Response(
                 response: 400,
@@ -90,42 +63,42 @@ class TokenHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $dto = new TokenRequestDto();
-        $collector = new AttributeInputFilterCollector($this->filterPluginManager);
+        $collector = new AttributeInputFilterCollector($this->pluginManager);
         $filter = $collector->fromObject($dto, $request->getParsedBody());
-        
+
         if ($filter->isValid()) {
             try {
                 $user = $this->authentication->authenticateWithCredentials($request);
-                if (null !== $user) {
-                    $request = $request->withAttribute(UserInterface::class, $user);
-                    $encoded = $this->authentication->getTokenService()->create($request);
-                    $details = $user->getDetails();
-                    $date = new \DateTime($encoded['expiresAt'], new \DateTimeZone('UTC'));
 
-                    return new JsonResponse(
-                        [
-                            'data' => [
-                                'token' => $encoded['token'],
-                                'user'  => [
-                                    'id' => $details['id'],
-                                    'fullname' => $details['fullname'],
-                                    'email' => $user->getIdentity(),
-                                    'permissions' => $user->getRoles(),
-                                ],
-                                'avatar' => $details['avatar'],
-                                'expiresAt' => $date->format('Y-m-d\TH:i:s.v\Z')                                
-                            ]
-                        ]
+                if ($user !== null) {
+                    $request = $request->withAttribute(UserInterface::class, $user);
+                    $tokenData = $this->authentication->getToken()->generateToken($request);
+                    $data = $tokenData['data'];
+
+                    $dto = new TokenResponseDto(
+                        token: $tokenData['token'],
+                        data: new TokenDataDto(
+                            roles: $data['roles'] ?? [],
+                            details: $data['details'],
+                            meta: new TokenMetaDto(
+                                tokenId: $data['meta']['tokenId'],
+                                ipAddress: $data['meta']['ipAddress'],
+                                deviceKey: $data['meta']['deviceKey'],
+                                expiresAt: $data['meta']['expiresAt']
+                            )
+                        )
                     );
+
+                    return new JsonResponse($dto);
                 }
             } catch (ExpiredException $e) {
                 return new JsonResponse(
                     [
                         'data' => [
-                            'error' => Self::EXPIRE_SIGNAL,
+                            'error' => self::EXPIRE_SIGNAL,
                             'message' => 'Your token has expired. Please login again.'
                         ]
-                    ], 
+                    ],
                     401,
                     ['Token-Expired' => 1]
                 );
@@ -133,7 +106,7 @@ class TokenHandler implements RequestHandlerInterface
                 return new JsonResponse(
                     [
                         'data' => ['error' => $e->getMessage()]
-                    ], 
+                    ],
                     400
                 );
             }
@@ -141,7 +114,7 @@ class TokenHandler implements RequestHandlerInterface
 
         } else {
 
-            return new JsonResponse($this->error->format($filter), 400);
+            return new JsonResponse($this->errorFormatter->format($filter), 400);
         }
 
     }

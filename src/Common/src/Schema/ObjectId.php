@@ -7,9 +7,9 @@ use OpenApi\Attributes as OA;
 #[OA\Schema]
 class ObjectId
 {
-    #[OA\Property(format: "uuid", type: "string")]
+    #[OA\Property(property: 'id', format: 'uuid', type: 'string')]
     public string $id;
 
-    #[OA\Property(type: "string")]
+    #[OA\Property(property: 'id', type: 'string')]
     public string $name;
 }

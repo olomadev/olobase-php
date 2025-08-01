@@ -6,14 +6,14 @@ namespace Authentication\Handler;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Authentication\Model\TokenModelInterface;
+use Olobase\Authentication\JwtAuth\TokenInterface;
 
 class LogoutHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         return new LogoutHandler(
-            $container->get(TokenModelInterface::class) 
+            token: $container->get(TokenInterface::class)
         );
     }
 }

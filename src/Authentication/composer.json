@@ -10,6 +10,17 @@
         "mezzio/mezzio-authentication-laminasauthentication": "^1.7"
     },
     "extra": {
-        "olobase-module-type": "external"
+        "olobase-module-name": "Authentication",
+        "olobase-module-type": "external",
+        "olobase-post-install-cmd": [
+            "php ./src/Authentication/scripts/install/authentication-adapter.php",
+            "php ./src/Authentication/scripts/install/authentication-config.php"
+        ],
+        "olobase-post-remove-cmd": [
+            "php ./src/Authentication/scripts/remove/authentication-files.php",
+        ],
+        "olobase-post-update-cmd": [
+            "php ./src/Authentication/scripts/install/authentication-adapter.php"
+        ]
     }
 }

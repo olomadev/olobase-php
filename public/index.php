@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 define('APP_ROOT', dirname(__DIR__));
+define('APP_SESSION_KEY', 'session:');
 define('APP_CACHE_PREFIX', 'olobase_app:');
 
 // Delegate static file requests back to the PHP built-in webserver
