@@ -19,26 +19,18 @@ class ModuleModel implements ModuleModelInterface
     private $conn;
     private $adapter;
 
-    /**
-     * Constructor
-     * 
-     * @param TableGatewayInterface $modules object
-     * @param StorageInterface $cache object
-     * @param ColumnFilters object
-     */
     public function __construct(
         private TableGatewayInterface $modules,
         private StorageInterface $cache,
         private ColumnFiltersInterface $columnFilters
-    )
-    {        
+    ) {
         $this->adapter = $modules->getAdapter();
         $this->conn = $this->adapter->getDriver()->getConnection();
     }
 
     public function findAll(): array
     {
-        $key = APP_CACHE_PREFIX.Self::class.':'. __FUNCTION__;
+        $key = APP_CACHE_PREFIX.self::class.':'. __FUNCTION__;
         if ($this->cache->hasItem($key)) {
             return $this->cache->getItem($key);
         }
@@ -51,19 +43,16 @@ class ModuleModel implements ModuleModelInterface
                     'name',
                     'version',
                 ]);
-
-            if (getenv("APP_ENV") != "local") {
-                $select->where(['isActive' => true]);    
-            }
+            $select->where(['is_active' => 1]);
             $select->order('name ASC');
 
             $statement = $sql->prepareStatementForSqlObject($select);
             $resultSet = $statement->execute();
             $results = iterator_to_array($resultSet, false);
 
-            // Her eleman için uiName ekle
+            // Add uiName for each element
             foreach ($results as &$result) {
-                // Kebap case formatında uiName oluştur
+                // Create uiName in kebab case format
                 $result['uiName'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1-$2', $result['name']));
             }
 
@@ -76,7 +65,7 @@ class ModuleModel implements ModuleModelInterface
             return [];
         }
     }
-    
+
     public function findAllBySelect()
     {
         $sql = new Sql($this->adapter);
@@ -91,7 +80,7 @@ class ModuleModel implements ModuleModelInterface
         return $select;
     }
 
-    public function findAllByPaging(array $get) : Paginator
+    public function findAllByPaging(array $get): Paginator
     {
         $select = $this->findAllBySelect();
         $this->columnFilters->clear();
@@ -135,7 +124,7 @@ class ModuleModel implements ModuleModelInterface
             'id',
             'name',
             'version',
-            'isActive'
+            'is_active'
         ]);
         $select->from(['m' => 'modules']);
         $select->where(['m.id' => $moduleId]);
@@ -149,7 +138,7 @@ class ModuleModel implements ModuleModelInterface
         return $row;
     }
 
-    public function create(array $data) : void
+    public function create(array $data): void
     {
         try {
             $this->conn->beginTransaction();
@@ -162,7 +151,7 @@ class ModuleModel implements ModuleModelInterface
         }
     }
 
-    public function update(array $data) : void
+    public function update(array $data): void
     {
         unset($data['modules']['id']);
         try {
@@ -176,7 +165,7 @@ class ModuleModel implements ModuleModelInterface
         }
     }
 
-    public function delete(string $moduleId) : void
+    public function delete(string $moduleId): void
     {
         try {
             $this->conn->beginTransaction();
@@ -189,9 +178,9 @@ class ModuleModel implements ModuleModelInterface
         }
     }
 
-    private function deleteCache() : void
+    private function deleteCache(): void
     {
-        $this->cache->removeItem(APP_CACHE_PREFIX.Self::class.':findAll');
-    }    
+        $this->cache->removeItem(APP_CACHE_PREFIX.self::class.':findAll');
+    }
 
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Factory;
 
-use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Psr\Container\ContainerInterface;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * https://docs.laminas.dev/laminas-cache/storage/adapter/#quick-start
- * 
+ *
  * Max Memory Config
  * https://stackoverflow.com/questions/33115325/how-to-set-redis-max-memory/33119590
  */

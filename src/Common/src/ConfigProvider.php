@@ -21,7 +21,7 @@ class ConfigProvider
      * To add a bit of a structure, each section is defined in a separate
      * method which returns an array with its configuration.
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -31,7 +31,7 @@ class ConfigProvider
     /**
      * Returns the container dependencies
      */
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'invokables' => [
@@ -40,7 +40,7 @@ class ConfigProvider
             'factories'  => [
                 // classes
                 StorageInterface::class => Factory\CacheFactory::class,
-                SimpleCacheInterface::class => Factory\SimpleCacheFactory::class,   
+                SimpleCacheInterface::class => Factory\SimpleCacheFactory::class,
                 PredisInterface::class => Factory\PredisFactory::class,
 
                 // middlewares
@@ -51,5 +51,5 @@ class ConfigProvider
             ],
         ];
     }
-    
+
 }

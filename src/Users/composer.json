@@ -1,5 +1,6 @@
 {
     "name": "olobase/users",
+    "version": "1.0.0",
     "description": "Users module for medicine tracker app",
     "type": "library",
     "minimum-stability": "dev",

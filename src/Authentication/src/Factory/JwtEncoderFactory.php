@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Factory;
 
 use Psr\Container\ContainerInterface;
-use Olobase\Authentication\Service\JwtEncoder;
+use Olobase\Authentication\JwtAuth\JwtEncoder;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class JwtEncoderFactory implements FactoryInterface

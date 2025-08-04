@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace Modules\Dto;
 
+use OpenApi\Attributes as OA;
 use Olobase\Attribute\Input;
 use Olobase\Attribute\InputFilter;
 use Laminas\Validator\StringLength;
 use Laminas\Validator\Uuid;
 
 #[InputFilter]
+#[OA\Schema(
+    schema: "ModuleCreateDto",
+    title: "Module Create DTO",
+    description: "Data transfer object used to create a new module",
+    required: ["id", "name", "version"]
+)]
 class ModuleCreateDto
 {
     #[Input(
@@ -22,10 +29,16 @@ class ModuleCreateDto
                 'options' => [
                     'table'   => 'modules',
                     'field'   => 'id',
-                    'adapter' => 'default', // veya dinamik olarak atanacaksa service-level çözülmeli
+                    'adapter' => 'default',
                 ]
             ]
         ]
+    )]
+    #[OA\Property(
+        property: "id",
+        type: "string",
+        format: "uuid",
+        description: "Module's unique ID (UUID)"
     )]
     public string $id;
 
@@ -46,6 +59,13 @@ class ModuleCreateDto
             ]
         ]
     )]
+    #[OA\Property(
+        property: "name",
+        type: "string",
+        minLength: 3,
+        maxLength: 40,
+        description: "Module name"
+    )]
     public string $name;
 
     #[Input(
@@ -65,6 +85,13 @@ class ModuleCreateDto
             ]
         ]
     )]
+    #[OA\Property(
+        property: "version",
+        type: "string",
+        minLength: 3,
+        maxLength: 16,
+        description: "Module version (example: 1.0.0)"
+    )]
     public string $version;
 
     #[Input(
@@ -73,6 +100,12 @@ class ModuleCreateDto
         filters: [
             ['name' => \Laminas\Filter\ToInt::class],
         ]
+    )]
+    #[OA\Property(
+        property: "is_active",
+        type: "integer",
+        nullable: true,
+        description: "Is the module active? (1 = yes, 0 = no)"
     )]
     public ?int $isActive = null;
 }

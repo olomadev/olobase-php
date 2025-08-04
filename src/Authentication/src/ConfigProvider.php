@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Authentication;
 
-use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
+use Mezzio\Authentication\AuthenticationInterface;
 use Olobase\Router\AttributeRouteProviderInterface;
-use Olobase\Authentication\Service\JwtAuthenticationInterface;
-use Olobase\Authentication\Service\JwtEncoderInterface;
-use Olobase\Authentication\Service\TokenInterface;
+use Olobase\Authentication\JwtAuth\JwtAuthenticationInterface;
+use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
+use Olobase\Authentication\JwtAuth\TokenInterface;
 use Olobase\Authentication\Util\TokenEncryptHelper;
 use Olobase\Authentication\Util\TokenEncryptHelperFactory;
 
@@ -44,12 +44,12 @@ class ConfigProvider
             ],
             'factories' => [
                 // authentication
-                JwtAuthenticationInterface::class => Factory\JwtAuthenticationServiceFactory::class,
-                JwtEncoderInterface::class => Factory\JwtEncoderServiceFactory::class,
-                TokenInterface::class => Factory\TokenServiceFactory::class,
+                JwtAuthenticationInterface::class => Factory\JwtAuthenticationFactory::class,
+                JwtEncoderInterface::class => Factory\JwtEncoderFactory::class,
+                TokenInterface::class => Factory\TokenFactory::class,
 
                 // authorization
-                \Mezzio\Authorization\AuthorizationInterface::class => \Olobase\Authorization\Service\AuthorizationFactory::class,
+                \Mezzio\Authorization\AuthorizationInterface::class => \Olobase\Authorization\AuthorizationFactory::class,
 
                 // middlewares
                 Middleware\JwtAuthenticationMiddleware::class => Middleware\JwtAuthenticationMiddlewareFactory::class,

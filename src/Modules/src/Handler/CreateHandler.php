@@ -6,7 +6,6 @@ namespace Modules\Handler;
 
 use Modules\Dto\ModuleCreateDto;
 use Modules\Model\ModuleModelInterface;
-use Modules\Schema\ModuleSave;
 use Olobase\Attribute\Route;
 use Olobase\Filter\AttributeInputFilterCollector;
 use Olobase\Mapper\InputSchemaMapper;
@@ -32,18 +31,17 @@ class CreateHandler implements RequestHandlerInterface
         private ModuleModelInterface $moduleModel,
         private InputFilterPluginManager $filterPluginManager,
         private Error $error,
-    ) 
-    {
+    ) {
     }
-    
+
     #[OA\Post(
         path: '/modules/create',
         operationId: 'modules_create',
         summary: 'Create a new module',
         tags: ['Modules'],
         requestBody: new OA\RequestBody(
-            description: 'Create a new role',
-            content: new OA\JsonContent(ref: '#/components/schemas/ModuleSave'),
+            description: 'Create a new module',
+            content: new OA\JsonContent(ref: '#/components/schemas/ModuleCreateDto'),
         ),
         responses: [
             new OA\Response(
@@ -58,19 +56,18 @@ class CreateHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $data = array();
-        $response = array();
         $dto = new ModuleCreateDto();
         $collector = new AttributeInputFilterCollector($this->filterPluginManager);
-        $filter = $collector->fromObject($dto, $post);
+        $filter = $collector->fromObject($dto, $request->getParsedBody());
 
         if ($filter->isValid()) {
             $mapper = new InputSchemaMapper();
-            $data = $mapper->map($filter, ModuleSave::class);
+            $data = $mapper->map($filter, $dto);
+
             $this->moduleModel->create($data);
         } else {
-            return new JsonResponse($this->error->getMessages($this->filter), 400);
+            return new JsonResponse($this->error->getMessages($filter), 400);
         }
-        return new JsonResponse($response);     
+        return new JsonResponse($response);
     }
 }

@@ -12,7 +12,7 @@ use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
 use Olobase\Authentication\JwtAuth\SessionAwareToken;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class TokenServiceFactory implements FactoryInterface
+class TokenFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
@@ -24,7 +24,7 @@ class TokenServiceFactory implements FactoryInterface
             config: $config,
             cache: $container->get(StorageInterface::class),
             tokenEncrypt: $container->get(TokenEncryptHelper::class),
-            encoder: $container->get(JwtEncoderInterface::class),
+            jwtEncoder: $container->get(JwtEncoderInterface::class),
         );
     }
 }

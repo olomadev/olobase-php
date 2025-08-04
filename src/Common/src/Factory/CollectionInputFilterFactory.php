@@ -14,7 +14,7 @@ class CollectionInputFilterFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $collectionInputFilter = new CollectionInputFilter;
+        $collectionInputFilter = new CollectionInputFilter();
         $validator = $container->get(ValidatorPluginManager::class);
         $notEmptyValidator = $validator->get(NotEmpty::class);
         $collectionInputFilter->setNotEmptyValidator($notEmptyValidator);

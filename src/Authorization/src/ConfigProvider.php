@@ -26,7 +26,7 @@ class ConfigProvider
      * To add a bit of a structure, each section is defined in a separate
      * method which returns an array with its configuration.
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -35,11 +35,11 @@ class ConfigProvider
         ];
     }
 
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'invokables' => [
-                
+
             ],
             'aliases' => [
                 Model\PermissionModel::class => PermissionModelInterface::class, // permission model used by Authorization
@@ -69,7 +69,7 @@ class ConfigProvider
                 Handler\Permissions\FindAllByPagingHandler::class => Handler\Permissions\FindAllByPagingHandlerFactory::class,
 
                 // models
-                Model\UserRoleModelInterface::Class => function ($container) {
+                Model\UserRoleModelInterface::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $columnFilters = $container->get(ColumnFiltersInterface::class);
                     $userRoles = new TableGateway('userRoles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
@@ -81,7 +81,7 @@ class ConfigProvider
                     $columnFilters = $container->get(ColumnFiltersInterface::class);
                     $permissions = new TableGateway('permissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
                     return new Model\PermissionModel(
-                        $permissions, 
+                        $permissions,
                         $cacheStorage,
                         $columnFilters
                     );
@@ -90,7 +90,7 @@ class ConfigProvider
         ];
     }
 
-    public function getInputFilters() : array
+    public function getInputFilters(): array
     {
         return [
             'factories' => [
@@ -107,7 +107,7 @@ class ConfigProvider
         ];
     }
 
-    public function getTranslations() : array
+    public function getTranslations(): array
     {
         return [
             'translation_file_patterns' => [

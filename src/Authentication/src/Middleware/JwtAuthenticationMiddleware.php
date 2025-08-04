@@ -24,14 +24,13 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
     public function __construct(
         array $config,
         AuthenticationInterface $authentication
-    )
-    {
+    ) {
         $this->authentication = $authentication;
         $this->config = $config;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
-    {        
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         try {
             $user = $this->authentication->authenticate($request);
 
@@ -42,10 +41,10 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
             return new JsonResponse(
                 [
                     'data' => [
-                        'error' => Self::EXPIRE_SIGNAL]
+                        'error' => self::EXPIRE_SIGNAL]
                     ],
-                    401,
-                    [
+                401,
+                [
                         'Token-Expired' => 1
                     ]
             );

@@ -14,7 +14,7 @@ final class Version20250707153500 extends AbstractMigration
     {
         return 'Insert default users demo records.';
     }
-    
+
     public function up(Schema $schema): void
     {
         $createdAt = date("Y-m-d H:i:s");

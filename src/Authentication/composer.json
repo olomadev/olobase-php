@@ -1,5 +1,6 @@
 {
     "name": "olobase/authentication",
+    "version": "1.0.0",
     "description": "Authentication Module for Olobase App",
     "type": "library",
     "minimum-stability": "dev",
@@ -12,15 +13,18 @@
     "extra": {
         "olobase-module-name": "Authentication",
         "olobase-module-type": "external",
+        "olobase-module-dependencies": {
+            "Authorization": "1.0.0"
+        },
         "olobase-post-install-cmd": [
-            "php ./src/Authentication/scripts/install/authentication-adapter.php",
-            "php ./src/Authentication/scripts/install/authentication-config.php"
+            "php ./src/Authentication/scripts/install/generate-adapter.php",
+            "php ./src/Authentication/scripts/install/generate-config.php"
         ],
         "olobase-post-remove-cmd": [
-            "php ./src/Authentication/scripts/remove/authentication-files.php",
+            "php ./src/Authentication/scripts/remove/unlink-config.php"
         ],
         "olobase-post-update-cmd": [
-            "php ./src/Authentication/scripts/install/authentication-adapter.php"
+            "php ./src/Authentication/scripts/install/generate-adapter.php"
         ]
     }
 }

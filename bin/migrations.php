@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 declare(strict_types=1);
@@ -6,6 +7,8 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 define('APP_ROOT', dirname(__DIR__));
+
+chdir(__DIR__ . '/../');
 
 require APP_ROOT . '/vendor/autoload.php';
 
@@ -16,9 +19,7 @@ use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Tools\Console\Command;
 use Olobase\Command\DoctrineHelper;
 
-// --------------------------
-// 1. Get module name
-// --------------------------
+// get module name
 $argv = $_SERVER['argv'];
 $module = null;
 
@@ -35,36 +36,26 @@ if (!$module) {
     exit(1);
 }
 
-// --------------------------
-// 2. Migration path
-// --------------------------
+// migration path
 $migrationPath = APP_ROOT . "/src/{$module}/src/Migrations";
 if (!is_dir($migrationPath)) {
     echo "\033[31m[ERROR]\033[0m Migration path not found: $migrationPath\n";
     exit(1);
 }
 
-// --------------------------
-// 3. Migration Config
-// --------------------------
+// migration config
 $config = DoctrineHelper::createMigrationConfig($module);
 
-// --------------------------
-// 4. DB bağlantısı
-// --------------------------
+// db connection
 $container = require APP_ROOT . '/config/container.php';
 $laminasDbConfig = $container->get('config')['db'];
 $doctrineDbConfig = DoctrineHelper::formatLaminasDbConfig($laminasDbConfig);
 $conn = DriverManager::getConnection($doctrineDbConfig);
 
-// --------------------------
-// 5. DependencyFactory
-// --------------------------
+// dependecy factory
 $dependencyFactory = DependencyFactory::fromConnection($config, new ExistingConnection($conn));
 
-// --------------------------
-// 6. Symfony Console CLI
-// --------------------------
+// symfony console app
 $cli = new Application("Doctrine Migrations for module: $module");
 
 $cli->addCommands([

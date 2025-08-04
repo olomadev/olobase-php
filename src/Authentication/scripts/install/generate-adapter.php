@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-$targetPath = dirname(getcwd()) . '/src/MyAuthenticationAdapter.php';
+$targetPath = dirname(__DIR__, 4) . '/MyAuthenticationAdapter.php';
 
 if (file_exists($targetPath)) {
-    echo "\033[32m✔ MyAuthenticationAdapter already exists. Skipping...\n\033[0m";
+    echo "\033[32m⚠ File MyAuthenticationAdapter already exists. Skipping ...\n\033[0m";
+    return;
 }
 
 $template = <<<PHP
@@ -34,7 +35,7 @@ class MyAuthenticationAdapter extends AuthenticationAdapter
         // \$select->where(['u.tenant_id' => 'your-tenant-id']);
 
         // Debug SQL Output:
-        // echo \$select->getSqlString($this->laminasDb->getPlatform());
+        // echo \$select->getSqlString(\$this->laminasDb->getPlatform());
         // die;
         // 
         return \$select;
@@ -43,4 +44,4 @@ class MyAuthenticationAdapter extends AuthenticationAdapter
 PHP;
 
 file_put_contents($targetPath, $template);
-echo "\033[32mYour custom authentication adapter 'MyAuthenticationAdapter' created at src/Authentication/MyAuthenticationAdapter.php\n\033[0m";
+echo "\033[32m✔ Custom authentication adapter 'MyAuthenticationAdapter.php' file created at src/Authentication/\n\033[0m";

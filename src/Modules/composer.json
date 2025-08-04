@@ -1,5 +1,6 @@
 {
     "name": "olobase/modules",
+    "version": "1.0.0",
     "description": "Modules module for Olobase App",
     "type": "library",
     "minimum-stability": "dev",

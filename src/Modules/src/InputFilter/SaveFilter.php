@@ -19,8 +19,7 @@ class SaveFilter extends InputFilter
     public function __construct(
         private AdapterInterface $adapter,
         private ServerRequestInterface $request
-    )
-    {
+    ) {
     }
 
     public function setInputData(array $data)
@@ -42,7 +41,7 @@ class SaveFilter extends InputFilter
                 ]
             ],
         ]);
-        
+
         $this->add([
             'name' => 'name',
             'required' => true,

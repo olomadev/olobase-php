@@ -6,7 +6,7 @@ namespace Modules\Handler;
 
 use Modules\Model\ModuleModelInterface;
 use Modules\InputFilter\SaveFilter;
-use Common\Helper\ErrorWrapperInterface;
+use Olobase\Validation\ValidationErrorFormatterInterface;
 use Mezzio\Authentication\AuthenticationInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -18,12 +18,11 @@ class CreateHandlerFactory
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         $pluginManager = $container->get(InputFilterPluginManager::class);
-        $inputFilter   = $pluginManager->get(SaveFilter::class);
 
         return new CreateHandler(
             $container->get(ModuleModelInterface::class),
-            $inputFilter,
-            $container->get(ErrorWrapperInterface::class)
+            $pluginManager,
+            $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

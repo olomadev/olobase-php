@@ -24,11 +24,10 @@ use OpenApi\Attributes as OA;
 class DeleteHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private ModuleModelInterface $roleModel,        
+        private ModuleModelInterface $roleModel,
         private DeleteFilter $filter,
         private Error $error,
-    ) 
-    {
+    ) {
     }
 
     #[OA\Delete(
@@ -56,7 +55,7 @@ class DeleteHandler implements RequestHandlerInterface
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
-    {   
+    {
         $this->filter->setInputData($request->getQueryParams());
         if ($this->filter->isValid()) {
             $this->moduleModel->delete(

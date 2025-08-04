@@ -27,29 +27,28 @@ class JwtAuthenticationFactory implements FactoryInterface
                 'UserInterface factory service is missing for authentication'
             );
         }
+
         $passwordValidation = function ($hash, $password) {
             return password_verify($password, $hash);
         };
 
-        $excludedFields = [ // sensitive data columns must not shown in auth response.
-            'password'
-        ];
-        $authAdapter = new MyAuthenticationAdapter(  // Change it with your own adapter ..
+        $authAdapter = new MyAuthenticationAdapter(
             $container->get(Adapter::class),
             $config['authentication']['adapter']['options']['table'],
             $config['authentication']['adapter']['options']['identity_column'],
             $config['authentication']['adapter']['options']['credential_column'],
             $passwordValidation
         );
+
         return new JwtAuthentication(
             config: $config,
             authAdapter: $authAdapter,
-            encoderService: $container->get(JwtEncoderInterface::class),
-            tokenService: $container->get(TokenInterface::class),
+            jwtEncoder: $container->get(JwtEncoderInterface::class),
+            token: $container->get(TokenInterface::class),
             roleModel: $container->get(RoleModelInterface::class),
-            user: $container->has(UserInterface::class) ? $container->get(UserInterface::class) : null,
+            userFactory: $container->get(UserInterface::class),
             ipAddress: RequestHelper::getRealUserIp(),
-            excludedFields: $excludedFields
+            excludedFields: $config['authentication']['excluded_fields'] ?? ['password'] // sensitive data columns must not shown in auth response.
         );
     }
 }

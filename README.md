@@ -4,24 +4,26 @@
 Olobase 3.x Php Backend
 
 
-php console.php module:install --module=ModuleName --env=local
-php console.php module:remove --module=ModuleName --env=local
-
-
-
 ## ModuleName
 
 Installing a module
 
 ```sh
-php bin/module.php install --module="ModuleName" --env=local
+php bin/console.php module:install --name="ModuleName" --env=local
+```
+
+Installing Specific Version
+
+```sh
+php bin/console.php module:install --name="ModuleName" --env=local --v=1.0.1
 ```
 
 Removing a module
 
 ```sh
-php bin/module.php remove --module="ModuleName" --env=local
+php bin/console.php module:remove --name="ModuleName" --env=local
 ```
+
 
 ## Open API - Swagger
 

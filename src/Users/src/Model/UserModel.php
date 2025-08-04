@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Users\Model;
@@ -27,22 +28,21 @@ class UserModel implements UserModelInterface
         private TableGatewayInterface $userRoles,
         private StorageInterface $cache,
         private ColumnFiltersInterface $columnFilters,
-
     ) {
         $this->adapter = $users->getAdapter();
         $this->conn = $this->adapter->getDriver()->getConnection();
     }
-    
+
     public function findAll(): array
     {
-        $key = APP_CACHE_PREFIX.Self::class.':'. __FUNCTION__;
+        $key = APP_CACHE_PREFIX.self::class.':'. __FUNCTION__;
         if ($this->cache->hasItem($key)) {
             return $this->cache->getItem($key);
         }
         try {
             $sql = new Sql($this->adapter);
             $select = $sql->select();
-            
+
             $select->columns(
                 [
                     'id',
@@ -54,7 +54,7 @@ class UserModel implements UserModelInterface
             $statement = $sql->prepareStatementForSqlObject($select);
             $resultSet = $statement->execute();
             $results = iterator_to_array($resultSet, false);
-        
+
             if (!empty($results)) {
                 $this->cache->setItem($key, $results);
             }
@@ -68,10 +68,10 @@ class UserModel implements UserModelInterface
     {
         $platform = $this->adapter->getPlatform();
         $roles = "JSON_ARRAYAGG(";
-        $roles.= "JSON_OBJECT(";
-        $roles.= "'id' , r.id , ";
-        $roles.= "'name' , r.name ";
-        $roles.= "))";
+        $roles .= "JSON_OBJECT(";
+        $roles .= "'id' , r.id , ";
+        $roles .= "'name' , r.name ";
+        $roles .= "))";
         $this->rolesFunction = $platform->quoteIdentifierInFragment(
             "(SELECT $roles FROM userRoles ur LEFT JOIN roles r ON r.id = ur.roleId WHERE ur.userId = u.id)",
             [
@@ -113,13 +113,13 @@ class UserModel implements UserModelInterface
             'is_active',
             'is_email_activated',
             'created_at',
-            'user_roles' => new Expression($this->rolesFunction),            
+            'user_roles' => new Expression($this->rolesFunction),
         ]);
         $select->from(['u' => 'users']);
         return $select;
     }
 
-    public function findAllByPaging(array $get) : Paginator
+    public function findAllByPaging(array $get): Paginator
     {
         $select = $this->findAllBySelect();
         $this->columnFilters->clear();
@@ -173,7 +173,7 @@ class UserModel implements UserModelInterface
                 } else {
                     $select->where->like(new Expression($column), '%'.$value.'%');
                 }
-            }   
+            }
         }
         if ($this->columnFilters->whereDataIsNotEmpty()) {
             foreach ($this->columnFilters->getWhereData() as $column => $value) {
@@ -189,10 +189,10 @@ class UserModel implements UserModelInterface
             }
         }
         // date filters
-        // 
+        //
         $this->columnFilters->setDateFilter('created_at');
         // orders
-        // 
+        //
         if ($this->columnFilters->orderDataIsNotEmpty()) {
             foreach ($this->columnFilters->getOrderData() as $order) {
                 $select->order(new Expression($order));
@@ -213,7 +213,7 @@ class UserModel implements UserModelInterface
         $select = $sql->select();
         $select->columns(
             [
-                'id',            
+                'id',
                 'firstname',
                 'lastname',
                 'email',
@@ -223,11 +223,14 @@ class UserModel implements UserModelInterface
             ]
         );
         $select->from(['u' => 'users']);
-        $select->join(['ua' => 'user_avatars'], 'ua.user_id = u.id',
+        $select->join(
+            ['ua' => 'user_avatars'],
+            'ua.user_id = u.id',
             [
                 'avatar_image' => new Expression("JSON_OBJECT('image', CONCAT('data:image/png;base64,', TO_BASE64(avatar_image)))"),
             ],
-        $select::JOIN_LEFT);
+            $select::JOIN_LEFT
+        );
         $select->where(['u.id' => $userId]);
 
         // echo $select->getSqlString($this->adapter->getPlatform());
@@ -261,7 +264,7 @@ class UserModel implements UserModelInterface
         return $row;
     }
 
-    public function create(array $data) : void
+    public function create(array $data): void
     {
         $userId = $data['id'];
         try {
@@ -281,7 +284,7 @@ class UserModel implements UserModelInterface
             if (! empty($data['avatar']['image'])) {
                 $this->userAvatars->insert(['user_id' => $userId, 'avatar_image' => $data['avatar']['image']]);
             }
-            $this->userRoles->insert(['user_id' => $userId, 'role_id' => Self::DEFAULT_USER_ROLE_ID]);
+            $this->userRoles->insert(['user_id' => $userId, 'role_id' => self::DEFAULT_USER_ROLE_ID]);
             $this->deleteCache();
             $this->conn->commit();
         } catch (Exception $e) {
@@ -290,7 +293,7 @@ class UserModel implements UserModelInterface
         }
     }
 
-    public function update(array $data) : void
+    public function update(array $data): void
     {
         $userId = $data['id'];
         try {
@@ -319,7 +322,7 @@ class UserModel implements UserModelInterface
                 );
                 $this->userAvatars->insert(
                     [
-                        'user_id' => $userId, 
+                        'user_id' => $userId,
                         'mime_type' => $mimeType,
                         'avatar_image' => $data['avatar']['image']
                     ]
@@ -333,11 +336,11 @@ class UserModel implements UserModelInterface
         }
     }
 
-    public function delete(string $userId) : void
+    public function delete(string $userId): void
     {
         try {
             $this->conn->beginTransaction();
-            $this->users->delete(['id' => $userId]);        
+            $this->users->delete(['id' => $userId]);
             $this->userAvatars->delete(['user_id' => $userId]);
             $this->deleteCache();
             $this->conn->commit();
@@ -347,7 +350,7 @@ class UserModel implements UserModelInterface
         }
     }
 
-    public function updatePasswordById(string $userId, string $newPassword) : void
+    public function updatePasswordById(string $userId, string $newPassword): void
     {
         $password = password_hash($newPassword, PASSWORD_DEFAULT, ['cost' => 10]);
         try {
@@ -360,12 +363,12 @@ class UserModel implements UserModelInterface
         }
     }
 
-    private function deleteCache() : void
+    private function deleteCache(): void
     {
-        $this->cache->removeItem(APP_CACHE_PREFIX.Self::class.':findAll');
+        $this->cache->removeItem(APP_CACHE_PREFIX.self::class.':findAll');
     }
 
-    public function getAdapter() : AdapterInterface
+    public function getAdapter(): AdapterInterface
     {
         return $this->adapter;
     }

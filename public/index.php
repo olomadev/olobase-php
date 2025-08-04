@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 
 define('APP_ROOT', dirname(__DIR__));
 define('APP_SESSION_KEY', 'session:');
-define('APP_CACHE_PREFIX', 'olobase_app:');
+define('APP_CACHE_PREFIX', 'app:');
 
 // Delegate static file requests back to the PHP built-in webserver
 if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
@@ -37,12 +37,15 @@ if (! is_file('config/module.config.php')) {
     (require 'config/pipeline.php')($app, $factory, $container);
     (require 'config/routes.php')($app, $factory, $container);
 
+    print_r($container->get('config'));
+    die;
+
     // Register module routes ..
     $modules = $container->get('config')['modules'];
     $moduleProviders = [];
     foreach ($modules as $module) {
         $configProviderClass = $module . '\ConfigProvider';
-        if (class_exists($configProviderClass) 
+        if (class_exists($configProviderClass)
             && method_exists($configProviderClass, 'registerRoutes')) {
             $configProviderClass::registerRoutes($container);
         }

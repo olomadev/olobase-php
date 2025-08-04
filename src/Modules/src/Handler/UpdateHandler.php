@@ -30,8 +30,7 @@ class UpdateHandler implements RequestHandlerInterface
         private DataManagerInterface $dataManager,
         private SaveFilter $filter,
         private Error $error,
-    ) 
-    {
+    ) {
     }
 
     #[OA\Put(
@@ -89,6 +88,6 @@ class UpdateHandler implements RequestHandlerInterface
             return new JsonResponse($this->error->getMessages($this->filter), 400);
         }
         $response['data']['oldRecord'] = $oldRow;
-        return new JsonResponse($response);   
+        return new JsonResponse($response);
     }
 }
