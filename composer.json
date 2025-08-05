@@ -94,12 +94,10 @@
             "@development-enable"
         ],
         "post-install-cmd": [
-            "@clear-config-cache",
-            "php bin/update-dependencies.php"
+            "@clear-config-cache"
         ],
         "post-update-cmd": [
-            "@clear-config-cache",
-            "php bin/update-dependencies.php"
+            "@clear-config-cache"
         ],
         "development-disable": "laminas-development-mode disable",
         "development-enable": "laminas-development-mode enable",

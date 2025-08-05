@@ -27,12 +27,12 @@ class JwtAuthenticationFactory implements FactoryInterface
                 'UserInterface factory service is missing for authentication'
             );
         }
-
         $passwordValidation = function ($hash, $password) {
             return password_verify($password, $hash);
         };
+        $adapterClass = $config['authentication']['adapter']['class'];
 
-        $authAdapter = new MyAuthenticationAdapter(
+        $authAdapter = new $adapterClass(
             $container->get(Adapter::class),
             $config['authentication']['adapter']['options']['table'],
             $config['authentication']['adapter']['options']['identity_column'],

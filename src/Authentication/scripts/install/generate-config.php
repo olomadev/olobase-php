@@ -18,6 +18,7 @@ return [
     'authentication' => [
         'adapter' => [
             'type' => \Laminas\Authentication\Adapter\DbTable\CallbackCheckAdapter::class,
+            'class' => 'AuthenticationAdapter',
             'options' => [
                 'table' => 'users',
                 'identity_column' => 'email',

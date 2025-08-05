@@ -5,7 +5,7 @@ declare(strict_types=1);
 $targetPath = dirname(__DIR__, 4) . '/MyAuthenticationAdapter.php';
 
 if (file_exists($targetPath)) {
-    echo "\033[32m⚠ File MyAuthenticationAdapter already exists. Skipping ...\n\033[0m";
+    echo "\033[33m⚠ File MyAuthenticationAdapter already exists. Skipping ...\n\033[0m";
     return;
 }
 
