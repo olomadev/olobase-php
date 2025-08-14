@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
-use Modules\Model\ModuleModelInterface;
-use Modules\InputFilter\DeleteFilter;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Modules\InputFilter\DeleteFilter;
+use Modules\Model\ModuleModelInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/modules/delete/:id',
     methods: ['DELETE'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class DeleteHandler implements RequestHandlerInterface
@@ -45,13 +47,13 @@ class DeleteHandler implements RequestHandlerInterface
                     type: 'string',
                     format: 'uuid'
                 )
-            )
+            ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Successful operation'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface

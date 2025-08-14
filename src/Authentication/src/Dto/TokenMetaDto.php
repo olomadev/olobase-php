@@ -23,7 +23,7 @@ class TokenMetaDto
 
     public function __construct(string $tokenId, string $ipAddress, string $deviceKey, string $expiresAt)
     {
-        $this->tokenId = $tokenId;
+        $this->tokenId   = $tokenId;
         $this->ipAddress = $ipAddress;
         $this->deviceKey = $deviceKey;
         $this->expiresAt = $expiresAt;

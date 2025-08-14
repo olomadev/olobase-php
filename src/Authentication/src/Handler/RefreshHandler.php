@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Olobase\Attribute\Route;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authentication\AuthenticationInterface;
+use Olobase\Attribute\Route;
+use Olobase\Validation\ValidationErrorFormatterInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Validation\ValidationErrorFormatterInterface;
-use Mezzio\Authentication\AuthenticationInterface;
-use OpenApi\Attributes as OA;
+
+use function base64_decode;
+use function explode;
+use function json_decode;
+use function json_last_error;
+
+use const JSON_ERROR_NONE;
 
 #[Route(
     path: '/api/auth/refresh',
@@ -43,7 +50,7 @@ class RefreshHandler implements RequestHandlerInterface
                     new OA\Property(
                         property: 'token',
                         type: 'string'
-                    )
+                    ),
                 ]
             )
         ),
@@ -65,14 +72,14 @@ class RefreshHandler implements RequestHandlerInterface
                             type: 'string',
                             format: 'date-time',
                             description: 'Expiration date of token'
-                        )
+                        ),
                     ]
                 )
             ),
             new OA\Response(
                 response: 401,
                 description: 'Unauthorized Response: token is expired'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -82,17 +89,17 @@ class RefreshHandler implements RequestHandlerInterface
         if (empty($post['token'])) {
             return new JsonResponse(
                 [
-                    'data' => ['error' => self::LOGOUT_SIGNAL] // no token, exited
+                    'data' => ['error' => self::LOGOUT_SIGNAL], // no token, exited
                 ],
                 401
             );
         }
         $tokenClass = $this->authentication->getToken();
-        $token = $tokenClass->getTokenEncryptHelper()->decrypt($post['token']);
-        if (!$token) {
+        $token      = $tokenClass->getTokenEncryptHelper()->decrypt($post['token']);
+        if (! $token) {
             return new JsonResponse(
                 [
-                    'data' => ['error' => self::LOGOUT_SIGNAL] // token is invalid
+                    'data' => ['error' => self::LOGOUT_SIGNAL], // token is invalid
                 ],
                 401
             );
@@ -100,14 +107,13 @@ class RefreshHandler implements RequestHandlerInterface
         try {
             $tokenClass->decodeToken($token); // token verification
         } catch (ExpiredException $e) {
-
-            list($header, $payload, $signature) = explode(".", $token);
-            $payload = json_decode(base64_decode($payload), true);
+            [$header, $payload, $signature] = explode(".", $token);
+            $payload                        = json_decode(base64_decode($payload), true);
 
             if (json_last_error() != JSON_ERROR_NONE) {
                 return new JsonResponse(
                     [
-                        'data' => ['error' => "Invalid token"]
+                        'data' => ['error' => "Invalid token"],
                     ],
                     401
                 );
@@ -116,7 +122,7 @@ class RefreshHandler implements RequestHandlerInterface
             if (false == $tokenResponse) {
                 return new JsonResponse(
                     [
-                        'data' => ['error' => self::LOGOUT_SIGNAL] // token could not be refreshed
+                        'data' => ['error' => self::LOGOUT_SIGNAL], // token could not be refreshed
                     ],
                     401
                 );
@@ -125,7 +131,7 @@ class RefreshHandler implements RequestHandlerInterface
         } catch (Exception $e) {
             return new JsonResponse(
                 [
-                    'data' => ['error' => $e->getMessage()]
+                    'data' => ['error' => $e->getMessage()],
                 ],
                 401
             );
@@ -133,7 +139,7 @@ class RefreshHandler implements RequestHandlerInterface
 
         return new JsonResponse(
             [
-                'data' => ['info' => "Token not expired to refresh"]
+                'data' => ['info' => "Token not expired to refresh"],
             ]
         );
     }

@@ -62,7 +62,7 @@ INSERT INTO `permissions` VALUES ('2ecb0afa-5802-4a81-92c9-72c311d9fec4', 'Users
 INSERT INTO `permissions` VALUES ('4489a158-8d19-4100-adaa-e1de137fc4b3', 'Users', 'Users', 'list', '/api/users/findAllByPaging', 'GET');
 INSERT INTO `permissions` VALUES ('81a4e936-0ca9-46c0-a4c2-f757ffa9a705', 'Users', 'Users', 'show', '/api/users/findAllByPaging', 'GET');
 INSERT INTO `permissions` VALUES ('861aa1d3-fd95-401f-9666-d2616eb43eb8', 'Users', 'Users', NULL, '/api/users/findAll', 'GET');
-INSERT INTO `permissions` VALUES ('a7b0b4a2-4504-46d8-88c8-0a4c49f23b07', 'Users', 'Users', NULL, '/api/users/findOneById/:userId', 'GET');
+INSERT INTO `permissions` VALUES ('a7b0b4a2-4504-46d8-88c8-0a4c49f23b07', 'Users', 'Users', NULL, '/api/users/findById/:userId', 'GET');
 INSERT INTO `permissions` VALUES ('ae28c04b-07b7-486d-b782-6b5c0e93ab01', 'Users', 'Users', 'edit', '/api/users/update/:userId', 'PUT');
 INSERT INTO `permissions` VALUES ('c99e90cd-0403-4a4e-aa8c-b6d21dc38e96', 'Users', 'Users', 'create', '/api/users/create', 'POST');
 INSERT INTO `permissions` VALUES ('a8b787bc-0652-4b13-b24c-7cc9ed565b13', 'Users', 'Roles', 'list', '/api/users/roles/findAll', 'GET');
@@ -70,22 +70,16 @@ INSERT INTO `permissions` VALUES ('7f7320be-7882-4ae4-bdd1-1a577b9fecf8', 'Users
 INSERT INTO `permissions` VALUES ('f7ff6d01-a40c-4cbf-9501-840153120764', 'Users', 'My Account', 'edit', '/api/users/myAccount/updatePassword', 'PUT');
 INSERT INTO `permissions` VALUES ('ee3c41ff-aa4b-48de-86cd-bf1590bbc275', 'Users', 'My Account', 'edit', '/api/users/myAccount/update', 'PUT');
 
-INSERT INTO `permissions` VALUES ('2d059610-9351-4d1e-b2e2-035bdc353b64', 'Modules', 'Modules', 'list', '/api/modules/findAllByPaging', 'GET');
-INSERT INTO `permissions` VALUES ('496ef5b5-e39d-4ece-baab-82fe18b632c3', 'Modules', 'Modules', 'list', '/api/modules/findAll', 'GET');
-INSERT INTO `permissions` VALUES ('4aeaefad-a4bd-4273-9d92-7908471f95b4', 'Modules', 'Modules', 'create', '/api/modules/update/:moduleId', 'PUT');
-INSERT INTO `permissions` VALUES ('6cb2bea6-2e6f-4135-86e5-e6249779c49a', 'Modules', 'Modules', 'create', '/api/modules/create', 'POST');
-INSERT INTO `permissions` VALUES ('9951e57b-b2a7-4ab3-8443-4649add1e079', 'Modules', 'Modules', 'delete', '/api/modules/delete/:moduleId', 'DELETE');
-
 INSERT INTO `permissions` VALUES ('6566781a-267e-46d6-91c7-d92d46c9d501', 'Authorization', 'Permissions', 'list', '/api/authorization/permissions/findAllByPaging', 'GET');
 INSERT INTO `permissions` VALUES ('e7a2a41b-dec3-48bb-911d-d8adab449105', 'Authorization', 'Permissions', 'edit', '/api/authorization/permissions/update/:permId', 'PUT');
-INSERT INTO `permissions` VALUES ('f03cb2aa-1a5c-495b-aa05-2809da2f2bbe', 'Authorization', 'Permissions', NULL, '/api/authorization/permissions/findOneById', 'GET');
+INSERT INTO `permissions` VALUES ('f03cb2aa-1a5c-495b-aa05-2809da2f2bbe', 'Authorization', 'Permissions', NULL, '/api/authorization/permissions/findById', 'GET');
 INSERT INTO `permissions` VALUES ('8b336350-9ed7-4eee-94b1-d335b33fff2a', 'Authorization', 'Permissions', 'delete', '/api/authorization/permissions/delete/:permId', 'DELETE');
 INSERT INTO `permissions` VALUES ('9f0e7359-021e-4853-b577-7a1b174794e9', 'Authorization', 'Permissions', 'create', '/api/authorization/permissions/copy/:permId', 'POST');
 INSERT INTO `permissions` VALUES ('bf077931-9467-434e-afe8-8cb531187280', 'Authorization', 'Permissions', 'create', '/api/authorization/permissions/create', 'POST');
 INSERT INTO `permissions` VALUES ('5401297e-a971-4df2-a550-7cde1455a3e4', 'Authorization', 'Roles', NULL, '/api/authorization/roles/findAll', 'GET');
 INSERT INTO `permissions` VALUES ('56075480-5a2a-4597-988b-76fe53eb7eae', 'Authorization', 'Roles', 'create', '/api/authorization/roles/create', 'POST');
 INSERT INTO `permissions` VALUES ('5a210c0f-3034-4aa8-a592-dd002cdd4c04', 'Authorization', 'Roles', 'list', '/api/authorization/roles/findAllByPaging', 'GET');
-INSERT INTO `permissions` VALUES ('119a2ce9-c938-4a59-8ee2-72bf4bead996', 'Authorization', 'Roles', NULL, '/api/authorization/roles/findOneById/:roleId', 'GET');
+INSERT INTO `permissions` VALUES ('119a2ce9-c938-4a59-8ee2-72bf4bead996', 'Authorization', 'Roles', NULL, '/api/authorization/roles/findById/:roleId', 'GET');
 INSERT INTO `permissions` VALUES ('e55d7246-7d38-4c6c-b347-0754bb88a06c', 'Authorization', 'Roles', 'delete', '/api/authorization/roles/delete/:roleId', 'DELETE');
 INSERT INTO `permissions` VALUES ('8d14368f-3899-4d54-9948-fda03a4e2f87', 'Authorization', 'Roles', 'edit', '/api/authorization/roles/update/:roleId', 'PUT');
 INSERT INTO `permissions` VALUES ('05e6c960-6e20-4b69-8bde-87340388f072', 'Authorization', 'UserRoles', 'edit', '/api/authorization/userRoles/assign', 'PUT');
@@ -99,7 +93,7 @@ DROP TABLE IF EXISTS `role_permissions`;
 CREATE TABLE `role_permissions`  (
   `role_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `perm_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`role_id`, `permId`) USING BTREE
+  PRIMARY KEY (`role_id`, `perm_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

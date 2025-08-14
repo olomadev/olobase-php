@@ -15,10 +15,10 @@ use Mezzio\Router\Middleware\MethodNotAllowedMiddleware;
 use Mezzio\Router\Middleware\RouteMiddleware;
 use Psr\Container\ContainerInterface;
 use Laminas\Diactoros\Response;
-use Common\Middleware\ModuleValidationMiddleware;
-use Common\Middleware\JsonBodyParserMiddleware;
-use Common\Middleware\ErrorResponseGenerator;
-use Common\Middleware\CorsMiddleware;
+use Olobase\Middleware\JsonBodyParserMiddleware;
+use Olobase\Middleware\ErrorResponseGenerator;
+use Olobase\Middleware\CorsMiddleware;
+use Olobase\Middleware\ClientIpMiddleware;
 
 /**
  * Setup middleware pipeline:
@@ -32,11 +32,12 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
         function () {
             return new Response();
         },
-        new Common\Middleware\ErrorResponseGenerator($config, $container)
+        new Olobase\Middleware\ErrorResponseGenerator($config, $container)
     );
     $app->pipe($errorHandler);
     $app->pipe(CorsMiddleware::class);
     $app->pipe(ServerUrlMiddleware::class);
+    $app->pipe(ClientIpMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:
     // - bootstrapping
@@ -48,7 +49,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // middleware eventually (i.e., callable or service name).
     //
     // Middleware can be attached to specific paths, allowing you to mix and match
-    // applications under a common domain.  The handlers in each middleware
+    // applications under a Olobase domain.  The handlers in each middleware
     // attached this way will see a URI with the matched path segment removed.
     //
     // i.e., path of "/api/member/profile" only passes "/member/profile" to $apiMiddleware
@@ -61,7 +62,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $app->pipe(RouteMiddleware::class);
     $app->pipe(JsonBodyParserMiddleware::class);
 
-    // The following handle routing failures for common conditions:
+    // The following handle routing failures for Olobase conditions:
     // - HEAD request but no routes answer that method
     // - OPTIONS request but no routes answer that method
     // - method not allowed

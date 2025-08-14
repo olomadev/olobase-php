@@ -18,10 +18,14 @@ class TokenDataDto
     #[OA\Property(ref: '#/components/schemas/TokenMeta')]
     public TokenMetaDto $meta;
 
-    public function __construct(array $roles, array $details, TokenMetaDto $meta)
+    #[OA\Property(type: 'object')]
+    public array $extra;
+
+    public function __construct(array $roles, array $details, TokenMetaDto $meta, array $extra = [])
     {
-        $this->roles = $roles;
+        $this->roles   = $roles;
         $this->details = $details;
-        $this->meta = $meta;
+        $this->meta    = $meta;
+        $this->extra   = $extra;
     }
 }

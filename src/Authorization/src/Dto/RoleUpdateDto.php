@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authorization\Dto;
 
-use Olobase\Attribute\Input;
-use Olobase\Attribute\CollectionInput;
-use Olobase\Attribute\InputFilter;
-use Laminas\Validator\Uuid;
-use Laminas\Validator\StringLength;
+use Laminas\Filter\ToInt;
 use Laminas\Validator\Db\RecordExists;
+use Laminas\Validator\StringLength;
+use Laminas\Validator\Uuid;
+use Olobase\Attribute\CollectionInput;
+use Olobase\Attribute\Input;
+use Olobase\Attribute\InputFilter;
 
 #[InputFilter]
 class RoleUpdateDto
@@ -18,12 +21,11 @@ class RoleUpdateDto
         validators: [
             ['name' => Uuid::class],
             [
-                'name' => RecordExists::class,
+                'name'    => RecordExists::class,
                 'options' => [
                     'table'   => 'roles',
                     'field'   => 'id',
-                    'adapter' => 'default',
-                ]
+                ],
             ],
         ]
     )]
@@ -34,9 +36,9 @@ class RoleUpdateDto
         required: true,
         validators: [
             [
-                'name' => StringLength::class,
+                'name'    => StringLength::class,
                 'options' => ['encoding' => 'UTF-8', 'min' => 2, 'max' => 60],
-            ]
+            ],
         ]
     )]
     public string $key;
@@ -46,9 +48,9 @@ class RoleUpdateDto
         required: true,
         validators: [
             [
-                'name' => StringLength::class,
+                'name'    => StringLength::class,
                 'options' => ['encoding' => 'UTF-8', 'min' => 2, 'max' => 100],
-            ]
+            ],
         ]
     )]
     public string $name;
@@ -57,7 +59,7 @@ class RoleUpdateDto
         name: 'level',
         required: true,
         filters: [
-            ['name' => \Laminas\Filter\ToInt::class]
+            ['name' => ToInt::class],
         ]
     )]
     public int $level;
@@ -66,12 +68,12 @@ class RoleUpdateDto
         name: 'rolePermissions',
         fields: [
             [
-                'name' => 'id',
-                'required' => true,
+                'name'       => 'id',
+                'required'   => true,
                 'validators' => [
-                    ['name' => Uuid::class]
-                ]
-            ]
+                    ['name' => Uuid::class],
+                ],
+            ],
         ]
     )]
     public array $rolePermissions;

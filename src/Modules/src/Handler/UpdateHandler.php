@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
-use Modules\Model\ModuleModelInterface;
-use Modules\Schema\ModuleSave;
-use Modules\InputFilter\SaveFilter;
-use Olobase\DataTable\DataManagerInterface;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Modules\InputFilter\SaveFilter;
+use Modules\Model\ModuleModelInterface;
+use Modules\Schema\ModuleSave;
+use Olobase\DataTable\DataManagerInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/modules/update/:id',
     methods: ['PUT'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class UpdateHandler implements RequestHandlerInterface
@@ -44,7 +46,7 @@ class UpdateHandler implements RequestHandlerInterface
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'string')
-            )
+            ),
         ],
         requestBody: new OA\RequestBody(
             description: 'Update role',
@@ -59,25 +61,25 @@ class UpdateHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 400,
                 description: 'Bad request, returns to validation errors'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->filter->setInputData($request->getParsedBody());
-        $data = array();
-        $response = array();
+        $data     = [];
+        $response = [];
         if ($this->filter->isValid()) {
             $this->dataManager->setInputFilter($this->filter);
-            $data = $this->dataManager->getSaveData(ModuleSave::class, 'modules');
-            $module = $data['modules'];
+            $data     = $this->dataManager->getSaveData(ModuleSave::class, 'modules');
+            $module   = $data['modules'];
             $moduleId = $this->filter->getValue('id');
             if ($module['name'] == 'Modules') {
                 return new JsonResponse(
                     [
                         'data' => [
                             'info' => 'The core module `Modules` cannot be modified',
-                        ]
+                        ],
                     ],
                     400
                 );

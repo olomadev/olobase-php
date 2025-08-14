@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Authorization;
 
-use Psr\Container\ContainerInterface;
+use Authorization\Repository\UserRoleRepositoryInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Olobase\DataTable\ColumnFiltersInterface;
-use Olobase\Router\AttributeRouteProviderInterface;
-use Olobase\Authorization\Contract\PermissionModelInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
+use Olobase\DataTable\ColumnFiltersInterface;
+use Olobase\Router\AttributeRouteProviderInterface;
+use Psr\Container\ContainerInterface;
+
+use function dirname;
 
 /**
  * The configuration provider for the Authorization module
@@ -30,80 +32,61 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
-            'input_filters' => $this->getInputFilters(),
-            'translator' => $this->getTranslations(),
+            'translator'   => $this->getTranslations(),
         ];
     }
 
     public function getDependencies(): array
     {
         return [
-            'invokables' => [
-
-            ],
-            'aliases' => [
-                Model\PermissionModel::class => PermissionModelInterface::class, // permission model used by Authorization
-            ],
+            'invokables' => [],
+            'aliases'    => [],
             'factories'  => [
-                Model\RoleModel::class => Model\RoleModelFactory::class,
 
                 // handlers - roles
-                Handler\Roles\CreateHandler::class => Handler\Roles\CreateHandlerFactory::class,
-                Handler\Roles\UpdateHandler::class => Handler\Roles\UpdateHandlerFactory::class,
-                Handler\Roles\DeleteHandler::class => Handler\Roles\DeleteHandlerFactory::class,
-                Handler\Roles\FindOneByIdHandler::class => Handler\Roles\FindOneByIdHandlerFactory::class,
-                Handler\Roles\FindAllHandler::class => Handler\Roles\FindAllHandlerFactory::class,
+                Handler\Roles\CreateHandler::class          => Handler\Roles\CreateHandlerFactory::class,
+                Handler\Roles\UpdateHandler::class          => Handler\Roles\UpdateHandlerFactory::class,
+                Handler\Roles\DeleteHandler::class          => Handler\Roles\DeleteHandlerFactory::class,
+                Handler\Roles\FindByIdHandler::class        => Handler\Roles\FindByIdHandlerFactory::class,
+                Handler\Roles\FindAllHandler::class         => Handler\Roles\FindAllHandlerFactory::class,
                 Handler\Roles\FindAllByPagingHandler::class => Handler\Roles\FindAllByPagingHandlerFactory::class,
 
                 // handlers - user roles
-                Handler\UserRoles\AssignHandler::class => Handler\UserRoles\AssignHandlerFactory::class,
-                Handler\UserRoles\UnassignHandler::class => Handler\UserRoles\UnassignHandlerFactory::class,
+                Handler\UserRoles\AssignHandler::class          => Handler\UserRoles\AssignHandlerFactory::class,
+                Handler\UserRoles\UnassignHandler::class        => Handler\UserRoles\UnassignHandlerFactory::class,
                 Handler\UserRoles\FindAllByPagingHandler::class => Handler\UserRoles\FindAllByPagingHandlerFactory::class,
 
                 // handlers - permissions
-                Handler\Permissions\CopyHandler::class => Handler\Permissions\CopyHandlerFactory::class,
-                Handler\Permissions\CreateHandler::class => Handler\Permissions\CreateHandlerFactory::class,
-                Handler\Permissions\UpdateHandler::class => Handler\Permissions\UpdateHandlerFactory::class,
-                Handler\Permissions\DeleteHandler::class => Handler\Permissions\DeleteHandlerFactory::class,
-                Handler\Permissions\FindAllHandler::class => Handler\Permissions\FindAllHandlerFactory::class,
+                Handler\Permissions\CreateHandler::class          => Handler\Permissions\CreateHandlerFactory::class,
+                Handler\Permissions\UpdateHandler::class          => Handler\Permissions\UpdateHandlerFactory::class,
+                Handler\Permissions\DeleteHandler::class          => Handler\Permissions\DeleteHandlerFactory::class,
+                Handler\Permissions\FindAllHandler::class         => Handler\Permissions\FindAllHandlerFactory::class,
                 Handler\Permissions\FindAllByPagingHandler::class => Handler\Permissions\FindAllByPagingHandlerFactory::class,
 
-                // models
-                Model\UserRoleModelInterface::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
+                // respositories
+                UserRoleRepositoryInterface::class     => function ($container) {
+                    $dbAdapter     = $container->get(AdapterInterface::class);
                     $columnFilters = $container->get(ColumnFiltersInterface::class);
-                    $userRoles = new TableGateway('userRoles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                    $userRoles     = new TableGateway('user_roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
                     return new Model\UserRoleModel($userRoles, $columnFilters);
                 },
-                PermissionModelInterface::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $cacheStorage = $container->get(StorageInterface::class);
+                Repository\RoleRepository::class       => function ($container) {
+                    $dbAdapter       = $container->get(AdapterInterface::class);
+                    $cacheStorage    = $container->get(StorageInterface::class);
+                    $columnFilters   = $container->get(ColumnFiltersInterface::class);
+                    $roles           = new TableGateway('roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                    $rolePermissions = new TableGateway('role_rermissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                    $userRoles       = new TableGateway('user_roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                    return new Repository\RoleRepository($roles, $rolePermissions, $userRoles, $cacheStorage, $columnFilters);
+                },
+                Repository\PermissionRepository::class => function ($container) {
+                    $dbAdapter     = $container->get(AdapterInterface::class);
+                    $cacheStorage  = $container->get(StorageInterface::class);
                     $columnFilters = $container->get(ColumnFiltersInterface::class);
-                    $permissions = new TableGateway('permissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    return new Model\PermissionModel(
-                        $permissions,
-                        $cacheStorage,
-                        $columnFilters
-                    );
+                    $permissions   = new TableGateway('permissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                    return new Repository\PermissionRepository($permissions, $cacheStorage, $columnFilters);
                 },
             ],
-        ];
-    }
-
-    public function getInputFilters(): array
-    {
-        return [
-            'factories' => [
-                // Permissions
-                InputFilter\Permissions\SaveFilter::class => InputFilter\Permissions\SaveFilterFactory::class,
-                InputFilter\Permissions\DeleteFilter::class => InputFilter\Permissions\DeleteFilterFactory::class,
-                // Roles
-                InputFilter\Roles\SaveFilter::class => InputFilter\Roles\SaveFilterFactory::class,
-                InputFilter\Roles\DeleteFilter::class => InputFilter\Roles\DeleteFilterFactory::class,
-                // UserRoles
-                InputFilter\UserRoles\AssignRoleFilter::class => InputFilter\UserRoles\AssignRoleFilterFactory::class,
-                InputFilter\UserRoles\UnassignRoleFilter::class => InputFilter\UserRoles\UnassignRoleFilterFactory::class,
-            ]
         ];
     }
 
@@ -112,10 +95,10 @@ class ConfigProvider
         return [
             'translation_file_patterns' => [
                 [
-                    'type' => 'PhpArray',
+                    'type'     => 'PhpArray',
                     'base_dir' => __DIR__ . '/i18n',
-                    'pattern' => '%s/messages.php',
-                ]
+                    'pattern'  => '%s/messages.php',
+                ],
             ],
         ];
     }

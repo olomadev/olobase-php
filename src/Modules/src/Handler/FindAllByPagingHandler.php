@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Common\Helper\JsonHelper;
-use Modules\Model\ModuleModelInterface;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Modules\Model\ModuleModelInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/modules/findAllByPaging',
     methods: ['GET'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class FindAllByPagingHandler implements RequestHandlerInterface
@@ -62,7 +64,7 @@ class FindAllByPagingHandler implements RequestHandlerInterface
                     type: 'array',
                     items: new OA\Items()
                 )
-            )
+            ),
         ],
         responses: [
             new OA\Response(
@@ -73,29 +75,28 @@ class FindAllByPagingHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 404,
                 description: 'No result found'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $get = $request->getQueryParams();
-        $page = empty($get['_page']) ? 1 : (int)$get['_page'];
-        $perPage = empty($get['_perPage']) ? 5 : (int)$get['_perPage'];
+        $get     = $request->getQueryParams();
+        $page    = empty($get['_page']) ? 1 : (int) $get['_page'];
+        $perPage = empty($get['_perPage']) ? 5 : (int) $get['_perPage'];
 
         // https://docs.laminas.dev/tutorials/pagination/
         $paginator = $this->moduleModel->findAllByPaging($get);
 
-        $page = ($page < 1) ? 1 : $page;
+        $page = $page < 1 ? 1 : $page;
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($perPage);
 
         return new JsonResponse([
-            'page' => $paginator->getCurrentPageNumber(),
-            'perPage' => $paginator->getItemCountPerPage(),
+            'page'       => $paginator->getCurrentPageNumber(),
+            'perPage'    => $paginator->getItemCountPerPage(),
             'totalPages' => $paginator->count(),
             'totalItems' => $paginator->getTotalItemCount(),
-            'data' => JsonHelper::paginatorJsonDecode($paginator->getCurrentItems()),
+            'data'       => JsonHelper::paginatorJsonDecode($paginator->getCurrentItems()),
         ]);
     }
-
 }

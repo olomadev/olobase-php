@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Authentication\Factory;
 
-use Authentication\MyAuthenticationAdapter;
-use Psr\Container\ContainerInterface;
-use Olobase\Util\RequestHelper;
-use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
-use Olobase\Authentication\JwtAuth\TokenInterface;
-use Olobase\Authentication\JwtAuth\JwtAuthentication;
-use Olobase\Authorization\Contract\RoleModelInterface;
 use Laminas\Db\Adapter\Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\Authentication\Adapter\DbTable\CallbackCheckAdapter;
 use Mezzio\Authentication\Exception;
 use Mezzio\Authentication\UserInterface;
+use Olobase\Authentication\JwtAuth\JwtAuthentication;
+use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
+use Olobase\Authentication\JwtAuth\TokenInterface;
+use Olobase\Authorization\RoleRepositoryInterface;
+use Psr\Container\ContainerInterface;
+
+use function password_verify;
 
 class JwtAuthenticationFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config') ?? [];
         if (! $container->has(UserInterface::class)) {
@@ -30,7 +29,7 @@ class JwtAuthenticationFactory implements FactoryInterface
         $passwordValidation = function ($hash, $password) {
             return password_verify($password, $hash);
         };
-        $adapterClass = $config['authentication']['adapter']['class'];
+        $adapterClass       = $config['authentication']['adapter']['class'];
 
         $authAdapter = new $adapterClass(
             $container->get(Adapter::class),
@@ -45,10 +44,8 @@ class JwtAuthenticationFactory implements FactoryInterface
             authAdapter: $authAdapter,
             jwtEncoder: $container->get(JwtEncoderInterface::class),
             token: $container->get(TokenInterface::class),
-            roleModel: $container->get(RoleModelInterface::class),
-            userFactory: $container->get(UserInterface::class),
-            ipAddress: RequestHelper::getRealUserIp(),
-            excludedFields: $config['authentication']['excluded_fields'] ?? ['password'] // sensitive data columns must not shown in auth response.
+            roleRepository: $container->get(RoleRepositoryInterface::class),
+            userFactory: $container->get(UserInterface::class)
         );
     }
 }

@@ -18,11 +18,7 @@ return function (Application $app, ContainerInterface $container) {
     $app->route('/api/authorization/userRoles/unassign', [...$auth, ...[Authorization\Handler\UserRoles\UnassignHandler::class]], ['PUT']);
     $app->route('/api/authorization/userRoles/findAllByPaging/:roleId', [...$auth, ...[Authorization\Handler\UserRoles\FindAllByPagingHandler::class]], ['GET']);
 
-    // Permissions (private)
-    $app->route('/api/authorization/permissions/create', [...$auth, [Authorization\Handler\Permissions\CreateHandler::class]], ['POST']);
-    $app->route('/api/authorization/permissions/copy/:permId', [...$auth, [Authorization\Handler\Permissions\CopyHandler::class]], ['POST']);
-    $app->route('/api/authorization/permissions/update/:permId', [...$auth, [Authorization\Handler\Permissions\UpdateHandler::class]], ['PUT']);
-    $app->route('/api/authorization/permissions/delete/:permId', [...$auth, [Authorization\Handler\Permissions\DeleteHandler::class]], ['DELETE']);
+    $app->route('/api/authorization/permissions/update/:id', [...$auth, [Authorization\Handler\Permissions\UpdateHandler::class]], ['PUT']);
     $app->route('/api/authorization/permissions/findAll', [JwtAuthenticationMiddleware::class, Authorization\Handler\Permissions\FindAllHandler::class], ['GET']);
     $app->route('/api/authorization/permissions/findAllByPaging', [...$auth, [Authorization\Handler\Permissions\FindAllByPagingHandler::class]], ['GET']);
 };

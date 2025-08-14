@@ -13,10 +13,17 @@ $cacheConfig = [
 
 // Let's merge the configuration with ConfigAggregator
 $aggregator = new ConfigAggregator([
-  \Mezzio\Tooling\ConfigProvider::class,
+  \Mezzio\Router\LaminasRouter\ConfigProvider::class,
+  \Laminas\Router\ConfigProvider::class,
   \Olobase\ConfigProvider::class,
+  \Laminas\Hydrator\ConfigProvider::class,
+  \Mezzio\Authorization\ConfigProvider::class,
+  \Authorization\ConfigProvider::class,
+  \Mezzio\Authentication\LaminasAuthentication\ConfigProvider::class,
+  \Mezzio\Authentication\ConfigProvider::class,
+  \Authentication\ConfigProvider::class,
+  \Mezzio\Tooling\ConfigProvider::class,
   \Swagger\ConfigProvider::class,
-  \Common\ConfigProvider::class,
   \Laminas\Db\ConfigProvider::class,
   \Laminas\Paginator\ConfigProvider::class,
   \Laminas\Serializer\ConfigProvider::class,
@@ -24,8 +31,6 @@ $aggregator = new ConfigAggregator([
   \Laminas\Cache\Storage\Adapter\Redis\ConfigProvider::class,
   \Laminas\InputFilter\ConfigProvider::class,
   \Laminas\Filter\ConfigProvider::class,
-  \Mezzio\Router\LaminasRouter\ConfigProvider::class,
-  \Laminas\Router\ConfigProvider::class,
   \Laminas\HttpHandlerRunner\ConfigProvider::class,
   \Laminas\Validator\ConfigProvider::class,
   // Cache config

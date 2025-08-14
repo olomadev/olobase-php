@@ -13,18 +13,16 @@
     "extra": {
         "olobase-module-name": "Authentication",
         "olobase-module-type": "external",
-        "olobase-module-dependencies": {
-            "Authorization": "1.0.0"
-        },
+        "olobase-module-dependencies": {},
         "olobase-post-install-cmd": [
-            "php ./src/Authentication/scripts/install/generate-adapter.php",
-            "php ./src/Authentication/scripts/install/generate-config.php"
+            "php ./src/Authentication/script/install/generate-adapter.php",
+            "php ./src/Authentication/script/install/generate-config.php"
         ],
         "olobase-post-remove-cmd": [
-            "php ./src/Authentication/scripts/remove/unlink-config.php"
+            "php ./src/Authentication/script/remove/unlink-config.php"
         ],
         "olobase-post-update-cmd": [
-            "php ./src/Authentication/scripts/install/generate-adapter.php"
+            "php ./src/Authentication/script/install/generate-adapter.php"
         ]
     }
 }

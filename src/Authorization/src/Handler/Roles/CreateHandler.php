@@ -4,38 +4,39 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Attribute\Route;
-use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Mapper\InputSchemaMapper;
-use Olobase\Authorization\Contract\RoleModelInterface;
-use Authorization\Schema\RoleSave;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Authorization\Dto\RoleCreateDto;
-use Olobase\Util\ValidationErrorFormatterInterface as Error;
+use Authorization\Entity\Role;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Olobase\Attribute\Route;
+use Olobase\Authorization\Contract\RoleRepositoryInterface;
+use Olobase\Filter\AttributeInputFilterCollector;
+use Olobase\Mapper\InputSchemaMapper;
+use Olobase\Util\ValidationErrorFormatterInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/authorization/roles/create',
     methods: ['POST'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class CreateHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private RoleModelInterface $roleModel,
+        private RoleRepositoryInterface $roleRepository,
         private InputFilterPluginManager $filterPluginManager,
-        private Error $error,
-    ) 
-    {
+        private ValidationErrorFormatterInterface $errorFormatter,
+    ) {
     }
-    
+
     #[OA\Post(
         path: '/authorization/roles/create',
         tags: ['Authorization Roles'],
@@ -45,7 +46,7 @@ class CreateHandler implements RequestHandlerInterface
             description: 'Create a new role',
             required: true,
             content: new OA\JsonContent(
-                ref: '#/components/schemas/RoleSave'
+                ref: '#/components/schemas/RoleCreateDto'
             )
         ),
         responses: [
@@ -56,21 +57,20 @@ class CreateHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 400,
                 description: 'Bad request, returns to validation errors'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $dto = new RoleCreateDto();
-        $collector = new AttributeInputFilterCollector($this->filterPluginManager);
-        $filter = $collector->fromObject($dto, $request->getParsedBody());
+        $collector = new AttributeInputFilterCollector($this->filterManager);
+        $filter    = $collector->fromObject(new RoleCreateDto(), $request->getParsedBody());
         if ($filter->isValid()) {
             $mapper = new InputSchemaMapper();
-            $data = $mapper->map($filter, RoleSave::class);
-            $this->roleModel->create($data);
+            $entity = $mapper->mapToEntity($filter, Role::class);
+            $this->roleRepository->createEntity($entity);
         } else {
-            return new JsonResponse($this->error->format($filter), 400);
+            return new JsonResponse($this->errorFormatter->format($filter), 400);
         }
-        return new JsonResponse([]);     
+        return new JsonResponse([]);
     }
 }

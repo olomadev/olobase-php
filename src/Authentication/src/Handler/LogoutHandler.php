@@ -5,14 +5,22 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Exception;
-use Olobase\Attribute\Route;
-use Olobase\Authentication\JwtAuth\TokenInterface;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
+use Olobase\Attribute\Route;
+use Olobase\Authentication\JwtAuth\TokenInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
+
+use function base64_decode;
+use function explode;
+use function json_decode;
+use function json_last_error;
+use function preg_match;
+
+use const JSON_ERROR_NONE;
 
 #[Route(
     path: '/api/auth/logout',
@@ -34,24 +42,24 @@ class LogoutHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 200,
                 description: 'Successful operation'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $token = null;
+        $token      = null;
         $authHeader = $request->getHeader('Authorization');
 
         // token check
-        if (!empty($authHeader) && preg_match("/Bearer\s+(.*)$/i", $authHeader[0], $matches)) {
+        if (! empty($authHeader) && preg_match("/Bearer\s+(.*)$/i", $authHeader[0], $matches)) {
             $token = $matches[1];
         }
         if (empty($token)) {
             return new JsonResponse(
                 [
                     'data' => [
-                        'error' => "Invalid token"
-                    ]
+                        'error' => "Invalid token",
+                    ],
                 ],
                 401
             );
@@ -59,23 +67,23 @@ class LogoutHandler implements RequestHandlerInterface
         $token = $this->token->getTokenEncryptHelper()->decrypt($token);  // decode token
         try {
             $data = $this->token->decode($token);
-            if (!empty($data['data']->details->id)) {
+            if (! empty($data['data']->details->id)) {
                 $this->tokenModel->kill(
                     $data['data']->details->id,
                     $data['data']->details->tokenId
                 );
             }
         } catch (ExpiredException $e) {
-            list($header, $payload, $signature) = explode(".", $token);
-            $base64DecodedToken = base64_decode($payload);
-            $token = json_decode($base64DecodedToken, true);
+            [$header, $payload, $signature] = explode(".", $token);
+            $base64DecodedToken             = base64_decode($payload);
+            $token                          = json_decode($base64DecodedToken, true);
 
             if (json_last_error() != JSON_ERROR_NONE) {
                 return new JsonResponse(
                     [
                         'data' => [
-                            'error' => "Invalid token"
-                        ]
+                            'error' => "Invalid token",
+                        ],
                     ],
                     401
                 );
@@ -90,8 +98,8 @@ class LogoutHandler implements RequestHandlerInterface
             return new JsonResponse(
                 [
                     'data' => [
-                        'error' => $e->getMessage()
-                    ]
+                        'error' => $e->getMessage(),
+                    ],
                 ],
                 401
             );

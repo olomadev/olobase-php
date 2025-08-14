@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Permissions;
 
-use Authorization\Model\PermissionModel;
-use Authorization\InputFilter\Permissions\DeleteFilter;
-use Olobase\Util\ValidationErrorFormatterInterface;
-use Olobase\Authorization\PermissionModelInterface;
+use Laminas\InputFilter\InputFilterPluginManager;
+use Olobase\Authorization\PermissionRepositoryInterface;
+use Olobase\Validation\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\InputFilter\InputFilterPluginManager;
 
 class DeleteHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
-        $pluginManager = $container->get(InputFilterPluginManager::class);
-        $inputFilter   = $pluginManager->get(DeleteFilter::class);
-
         return new DeleteHandler(
-            $container->get(PermissionModelInterface::class),
-            $inputFilter,
-            $container->get(ErrorWrapperInterface::class)
+            permissionRepository: $container->get(PermissionRepositoryInterface::class),
+            filterManager: $container->get(InputFilterPluginManager::class),
+            errorFormatter: $container->get(ValidationErrorFormatterInterface::class)
         );
     }
 }

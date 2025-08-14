@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Storage\StorageInterface;
+use Psr\Container\ContainerInterface;
+use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+
 return [
     // Provides application-wide services.
     // We recommend using fully-qualified class names whenever possible as
@@ -20,7 +26,41 @@ return [
         ],
         // Use 'factories' for services provided by callbacks/factory classes.
         'factories' => [
-            // Fully\Qualified\ClassName::class => Fully\Qualified\FactoryName::class,
+            SimpleCacheInterface::class => function (ContainerInterface $container) {
+                return new SimpleCacheDecorator($container->get(StorageInterface::class));
+            },
+            PredisClient::class         => function (ContainerInterface $container) {
+                $config = $container->get('config')['redis'];
+                return new PredisClient([
+                    'scheme'   => 'tcp',
+                    'host'     => $config['host'],
+                    'port'     => $config['port'],
+                    'password' => $config['password'],
+                    'timeout'  => $config['timeout'],
+                    // 'persistent' => '1',
+                ]);
+            },
+            StorageInterface::class     => function (ContainerInterface $container) {
+                $config         = $container->get('config')['redis'];
+                $storageFactory = $container->get(StorageAdapterFactoryInterface::class);
+                $storageConfig  = [
+                    'adapter' => 'redis',
+                    'options' => [
+                        'ttl'       => 0, // 86400 = 24 hours, 3600 = 1 hour
+                        'namespace' => '',
+                        'server'    => [
+                            'host'    => $config['host'],
+                            'port'    => $config['port'],
+                            'timeout' => $config['timeout'],
+                        ],
+                        'password'  => $config['password'],
+                    ],
+                    'plugins' => [
+                        ['name' => 'serializer'],
+                    ],
+                ];
+                return $storageFactory->createFromArrayConfiguration($storageConfig);
+            },
         ],
     ],
 ];

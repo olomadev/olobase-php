@@ -38,5 +38,3 @@ Debug all files for syntax errors
 ```sh
 composer swagger-debug
 ```
-
-

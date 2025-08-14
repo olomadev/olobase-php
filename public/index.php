@@ -37,9 +37,6 @@ if (! is_file('config/module.config.php')) {
     (require 'config/pipeline.php')($app, $factory, $container);
     (require 'config/routes.php')($app, $factory, $container);
 
-    print_r($container->get('config'));
-    die;
-
     // Register module routes ..
     $modules = $container->get('config')['modules'];
     $moduleProviders = [];

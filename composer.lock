@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbccde710edfcd0dcee4850d41be0a35",
+    "content-hash": "8f85d0773802dd0c7c564b73713fde33",
     "packages": [
         {
             "name": "brick/math",
@@ -588,16 +588,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.9.2",
+            "version": "3.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "fa94c6f06b1bc6d4759481ec20b8b81d13e861be"
+                "reference": "cd12028853c418b454602e3fda89e519e9af947b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/fa94c6f06b1bc6d4759481ec20b8b81d13e861be",
-                "reference": "fa94c6f06b1bc6d4759481ec20b8b81d13e861be",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/cd12028853c418b454602e3fda89e519e9af947b",
+                "reference": "cd12028853c418b454602e3fda89e519e9af947b",
                 "shasum": ""
             },
             "require": {
@@ -671,7 +671,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.9.2"
+                "source": "https://github.com/doctrine/migrations/tree/3.9.3"
             },
             "funding": [
                 {
@@ -687,7 +687,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-29T11:36:14+00:00"
+            "time": "2025-08-13T22:04:47+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -744,6 +744,144 @@
                 "source": "https://github.com/php-fig/http-message-util/tree/1.1.5"
             },
             "time": "2020-11-24T22:02:12+00:00"
+        },
+        {
+            "name": "firebase/php-jwt",
+            "version": "v6.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^7.4",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.5",
+                "psr/cache": "^2.0||^3.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0"
+            },
+            "suggest": {
+                "ext-sodium": "Support EdDSA (Ed25519) signatures",
+                "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "keywords": [
+                "jwt",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/firebase/php-jwt/issues",
+                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
+            },
+            "time": "2025-04-09T20:32:01+00:00"
+        },
+        {
+            "name": "laminas/laminas-authentication",
+            "version": "2.18.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-authentication.git",
+                "reference": "c1da3ec75bd4d6e3c63cf3a89f0f1a59a81a82bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-authentication/zipball/c1da3ec75bd4d6e3c63cf3a89f0f1a59a81a82bd",
+                "reference": "c1da3ec75bd4d6e3c63cf3a89f0f1a59a81a82bd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "laminas/laminas-stdlib": "^3.19.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "conflict": {
+                "zendframework/zend-authentication": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~2.5.0",
+                "laminas/laminas-db": "^2.20.0",
+                "laminas/laminas-http": "^2.19.0",
+                "laminas/laminas-ldap": "^2.18.1",
+                "laminas/laminas-session": "^2.21.0",
+                "laminas/laminas-uri": "^2.12.0",
+                "laminas/laminas-validator": "^2.64.1",
+                "phpunit/phpunit": "^9.6.20",
+                "psalm/plugin-phpunit": "^0.19.0",
+                "squizlabs/php_codesniffer": "^3.10.2",
+                "vimeo/psalm": "^5.26.0"
+            },
+            "suggest": {
+                "laminas/laminas-db": "Laminas\\Db component",
+                "laminas/laminas-http": "Laminas\\Http component",
+                "laminas/laminas-ldap": "Laminas\\Ldap component",
+                "laminas/laminas-session": "Laminas\\Session component",
+                "laminas/laminas-uri": "Laminas\\Uri component",
+                "laminas/laminas-validator": "Laminas\\Validator component"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Authentication\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "provides an API for authentication and includes concrete authentication adapters for common use case scenarios",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "Authentication",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-authentication/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-authentication/issues",
+                "rss": "https://github.com/laminas/laminas-authentication/releases.atom",
+                "source": "https://github.com/laminas/laminas-authentication"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-10-21T10:45:35+00:00"
         },
         {
             "name": "laminas/laminas-cache",
@@ -1680,6 +1818,83 @@
             "time": "2025-05-13T21:21:16+00:00"
         },
         {
+            "name": "laminas/laminas-hydrator",
+            "version": "4.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-hydrator.git",
+                "reference": "a162bd571924968d67ef1f43aed044b8f9c108ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-hydrator/zipball/a162bd571924968d67ef1f43aed044b8f9c108ef",
+                "reference": "a162bd571924968d67ef1f43aed044b8f9c108ef",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-stdlib": "^3.20",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "webmozart/assert": "^1.11"
+            },
+            "conflict": {
+                "laminas/laminas-servicemanager": "<3.14.0",
+                "zendframework/zend-hydrator": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~3.0",
+                "laminas/laminas-eventmanager": "^3.13.1",
+                "laminas/laminas-modulemanager": "^2.16.0",
+                "laminas/laminas-serializer": "^2.17.0",
+                "laminas/laminas-servicemanager": "^3.23.0",
+                "phpbench/phpbench": "^1.3.1",
+                "phpunit/phpunit": "^10.5.38",
+                "psalm/plugin-phpunit": "^0.19.0",
+                "vimeo/psalm": "^5.26.1"
+            },
+            "suggest": {
+                "laminas/laminas-eventmanager": "^3.13, to support aggregate hydrator usage",
+                "laminas/laminas-serializer": "^2.17, to use the SerializableStrategy",
+                "laminas/laminas-servicemanager": "^3.22, to support hydrator plugin manager usage"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "component": "Laminas\\Hydrator",
+                    "config-provider": "Laminas\\Hydrator\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Hydrator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Serialize objects to arrays, and vice versa",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "hydrator",
+                "laminas"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-hydrator/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-hydrator/issues",
+                "rss": "https://github.com/laminas/laminas-hydrator/releases.atom",
+                "source": "https://github.com/laminas/laminas-hydrator"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-11-13T14:04:02+00:00"
+        },
+        {
             "name": "laminas/laminas-inputfilter",
             "version": "2.33.0",
             "source": {
@@ -2155,16 +2370,16 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "3.23.0",
+            "version": "3.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "a8640182b892b99767d54404d19c5c3b3699f79b"
+                "reference": "06594db3a644447521eace9b5efdb12dc8446a33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/a8640182b892b99767d54404d19c5c3b3699f79b",
-                "reference": "a8640182b892b99767d54404d19c5c3b3699f79b",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/06594db3a644447521eace9b5efdb12dc8446a33",
+                "reference": "06594db3a644447521eace9b5efdb12dc8446a33",
                 "shasum": ""
             },
             "require": {
@@ -2187,12 +2402,12 @@
             "require-dev": {
                 "composer/package-versions-deprecated": "^1.11.99.5",
                 "friendsofphp/proxy-manager-lts": "^1.0.18",
-                "laminas/laminas-code": "^4.14.0",
+                "laminas/laminas-code": "^4.16.0",
                 "laminas/laminas-coding-standard": "~2.5.0",
                 "laminas/laminas-container-config-test": "^0.8",
                 "mikey179/vfsstream": "^1.6.12",
-                "phpbench/phpbench": "^1.3.1",
-                "phpunit/phpunit": "^10.5.36",
+                "phpbench/phpbench": "^1.4.1",
+                "phpunit/phpunit": "^10.5.51",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "vimeo/psalm": "^5.26.1"
             },
@@ -2241,7 +2456,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-10-28T21:32:16+00:00"
+            "time": "2025-08-12T08:44:02+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
@@ -2686,6 +2901,231 @@
             "time": "2025-04-27T12:45:58+00:00"
         },
         {
+            "name": "mezzio/mezzio-authentication",
+            "version": "1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mezzio/mezzio-authentication.git",
+                "reference": "9aa6602d186ba68411b0e7ca6960f24c4089b74e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mezzio/mezzio-authentication/zipball/9aa6602d186ba68411b0e7ca6960f24c4089b74e",
+                "reference": "9aa6602d186ba68411b0e7ca6960f24c4089b74e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "psr/container": "^1.0 || ^2.0",
+                "psr/http-message": "^1.0.1 || ^2.0.0",
+                "psr/http-server-middleware": "^1.0",
+                "webmozart/assert": "^1.11.0"
+            },
+            "conflict": {
+                "container-interop/container-interop": "<1.2.0",
+                "zendframework/zend-expressive-authentication": "*"
+            },
+            "require-dev": {
+                "ext-sqlite3": "*",
+                "laminas/laminas-coding-standard": "~3.0.1",
+                "phpunit/phpunit": "^10.5.45",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.10.1"
+            },
+            "suggest": {
+                "ext-pdo": "*: for use with the PDO-backed UserRepositoryInterface implementation",
+                "mezzio/mezzio-authentication-basic": "Provides an HTTP Basic Authentication AuthenticationInterface implementation",
+                "mezzio/mezzio-authentication-laminasauthentication": "Provides a laminas-authentication AuthenticationInterface implementation",
+                "mezzio/mezzio-authentication-session": "Provides a username/password + session AuthenticationInterface implementation"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "config-provider": "Mezzio\\Authentication\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mezzio\\Authentication\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Authentication middleware for Mezzio and PSR-7 applications",
+            "homepage": "https://mezzio.dev",
+            "keywords": [
+                "Authentication",
+                "http",
+                "laminas",
+                "mezzio",
+                "middleware",
+                "psr-15",
+                "psr-7"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.mezzio.dev/mezzio-authentication/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/mezzio/mezzio-authentication/issues",
+                "rss": "https://github.com/mezzio/mezzio-authentication/releases.atom",
+                "source": "https://github.com/mezzio/mezzio-authentication"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2025-04-29T09:17:58+00:00"
+        },
+        {
+            "name": "mezzio/mezzio-authentication-laminasauthentication",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mezzio/mezzio-authentication-laminasauthentication.git",
+                "reference": "696bf4f24eca6801879a6e01d20d2e1ebee25912"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mezzio/mezzio-authentication-laminasauthentication/zipball/696bf4f24eca6801879a6e01d20d2e1ebee25912",
+                "reference": "696bf4f24eca6801879a6e01d20d2e1ebee25912",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-authentication": "^2.11.0",
+                "mezzio/mezzio-authentication": "^1.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "psr/container": "^1.0 || ^2.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0.1 || ^2.0.0"
+            },
+            "conflict": {
+                "zendframework/zend-expressive-authentication-zendauthentication": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~3.1.0",
+                "phpunit/phpunit": "^10.5.46",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.10.3"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "config-provider": "Mezzio\\Authentication\\LaminasAuthentication\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mezzio\\Authentication\\LaminasAuthentication\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "laminas-authentication adapter for mezzio-authentication.",
+            "homepage": "https://mezzio.dev",
+            "keywords": [
+                "Authentication",
+                "laminas",
+                "mezzio"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.mezzio.dev/mezzio-authentication-laminasauthentication/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/mezzio/mezzio-authentication-laminasauthentication/issues",
+                "rss": "https://github.com/mezzio/mezzio-authentication-laminasauthentication/releases.atom",
+                "source": "https://github.com/mezzio/mezzio-authentication-laminasauthentication"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2025-05-13T17:23:27+00:00"
+        },
+        {
+            "name": "mezzio/mezzio-authorization",
+            "version": "1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mezzio/mezzio-authorization.git",
+                "reference": "8861b3180e4f980a34aa83ef78afa7b8a8245cfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mezzio/mezzio-authorization/zipball/8861b3180e4f980a34aa83ef78afa7b8a8245cfc",
+                "reference": "8861b3180e4f980a34aa83ef78afa7b8a8245cfc",
+                "shasum": ""
+            },
+            "require": {
+                "mezzio/mezzio-authentication": "^1.3",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "psr/container": "^1.0 || ^2.0",
+                "psr/http-message": "^1.0.1 || ^2.0.0",
+                "psr/http-server-middleware": "^1.0"
+            },
+            "conflict": {
+                "container-interop/container-interop": "<1.2.0",
+                "zendframework/zend-expressive-authorization": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~3.0.0",
+                "phpunit/phpunit": "^10.5.36",
+                "psalm/plugin-phpunit": "^0.19.0",
+                "vimeo/psalm": "^5.26.1"
+            },
+            "suggest": {
+                "mezzio/mezzio-authorization-acl": "^1.0; provides a laminas-permissions-acl-backed adapter",
+                "mezzio/mezzio-authorization-rbac": "^1.0; provides a laminas-permissions-rbac-backed adapter"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "config-provider": "Mezzio\\Authorization\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mezzio\\Authorization\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Authorization middleware for Mezzio and PSR-7 applications",
+            "homepage": "https://mezzio.dev",
+            "keywords": [
+                "authorization",
+                "laminas",
+                "mezzio",
+                "middleware",
+                "psr-15",
+                "psr-7"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.mezzio.dev/mezzio-authorization/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/mezzio/mezzio-authorization/issues",
+                "rss": "https://github.com/mezzio/mezzio-authorization/releases.atom",
+                "source": "https://github.com/mezzio/mezzio-authorization"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-10-16T21:40:03+00:00"
+        },
+        {
             "name": "mezzio/mezzio-helpers",
             "version": "5.18.0",
             "source": {
@@ -2987,16 +3427,16 @@
         },
         {
             "name": "mezzio/mezzio-tooling",
-            "version": "2.10.1",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-tooling.git",
-                "reference": "4fcc2d4ebe5c99685b73920b6ec7259c46d4a3e0"
+                "reference": "fc7f93fb7ad9dd9fb710be22dc892fd8a34d655d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-tooling/zipball/4fcc2d4ebe5c99685b73920b6ec7259c46d4a3e0",
-                "reference": "4fcc2d4ebe5c99685b73920b6ec7259c46d4a3e0",
+                "url": "https://api.github.com/repos/mezzio/mezzio-tooling/zipball/fc7f93fb7ad9dd9fb710be22dc892fd8a34d655d",
+                "reference": "fc7f93fb7ad9dd9fb710be22dc892fd8a34d655d",
                 "shasum": ""
             },
             "require": {
@@ -3066,7 +3506,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2025-03-05T09:37:20+00:00"
+            "time": "2025-08-07T10:03:45+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3125,6 +3565,64 @@
             "time": "2024-09-29T15:01:53+00:00"
         },
         {
+            "name": "olobase/authentication",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "./src/Authentication",
+                "reference": "a606852c441b029fe228d75297bbb3c7c5214643"
+            },
+            "require": {
+                "firebase/php-jwt": "^6.11",
+                "mezzio/mezzio-authentication": "^1.10",
+                "mezzio/mezzio-authentication-laminasauthentication": "^1.7"
+            },
+            "type": "library",
+            "extra": {
+                "olobase-module-name": "Authentication",
+                "olobase-module-type": "external",
+                "olobase-module-dependencies": [],
+                "olobase-post-install-cmd": [
+                    "php ./src/Authentication/script/install/generate-adapter.php",
+                    "php ./src/Authentication/script/install/generate-config.php"
+                ],
+                "olobase-post-remove-cmd": [
+                    "php ./src/Authentication/script/remove/unlink-config.php"
+                ],
+                "olobase-post-update-cmd": [
+                    "php ./src/Authentication/script/install/generate-adapter.php"
+                ]
+            },
+            "description": "Authentication Module for Olobase App",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "olobase/authorization",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "./src/Authorization",
+                "reference": "59c90c50fdacd88fcc7d3bea91ab640f533d4e04"
+            },
+            "require": {
+                "mezzio/mezzio-authorization": "^1.10"
+            },
+            "type": "library",
+            "extra": {
+                "olobase-module-name": "Authorization",
+                "olobase-module-type": "external",
+                "olobase-module-dependencies": []
+            },
+            "description": "Authorization Module for Olobase App",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "olobase/swagger",
             "version": "1.0.0",
             "dist": {
@@ -3147,16 +3645,16 @@
         },
         {
             "name": "olomadev/olobase",
-            "version": "3.0.0-rc-6",
+            "version": "3.0.0-rc-7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/olomadev/olobase.git",
-                "reference": "e15f2b2eede0c51e10cc16832011b6a5288b81d0"
+                "reference": "cf67ee58e64c74ce18b2f9195bb46f825f8259b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olomadev/olobase/zipball/e15f2b2eede0c51e10cc16832011b6a5288b81d0",
-                "reference": "e15f2b2eede0c51e10cc16832011b6a5288b81d0",
+                "url": "https://api.github.com/repos/olomadev/olobase/zipball/cf67ee58e64c74ce18b2f9195bb46f825f8259b5",
+                "reference": "cf67ee58e64c74ce18b2f9195bb46f825f8259b5",
                 "shasum": ""
             },
             "require": {
@@ -3192,9 +3690,9 @@
             ],
             "support": {
                 "issues": "https://github.com/olomadev/olobase/issues",
-                "source": "https://github.com/olomadev/olobase/tree/3.0.0-rc-6"
+                "source": "https://github.com/olomadev/olobase/tree/3.0.0-rc-7"
             },
-            "time": "2025-08-02T07:18:35+00:00"
+            "time": "2025-08-14T11:19:35+00:00"
         },
         {
             "name": "predis/predis",
@@ -5378,16 +5876,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "5.1.4",
+            "version": "5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "471f2e7c24c9508a2ee08df245cab64b62dbf721"
+                "reference": "b82e160f9dcc9c5c5e59bf9a4904ed4a8ffa86a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/471f2e7c24c9508a2ee08df245cab64b62dbf721",
-                "reference": "471f2e7c24c9508a2ee08df245cab64b62dbf721",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/b82e160f9dcc9c5c5e59bf9a4904ed4a8ffa86a4",
+                "reference": "b82e160f9dcc9c5c5e59bf9a4904ed4a8ffa86a4",
                 "shasum": ""
             },
             "require": {
@@ -5458,9 +5956,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/5.1.4"
+                "source": "https://github.com/zircote/swagger-php/tree/5.2.0"
             },
-            "time": "2025-07-15T23:54:13+00:00"
+            "time": "2025-08-11T04:26:13+00:00"
         }
     ],
     "packages-dev": [
@@ -6065,16 +6563,16 @@
         },
         {
             "name": "fidry/cpu-core-counter",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theofidry/cpu-core-counter.git",
-                "reference": "8520451a140d3f46ac33042715115e290cf5785f"
+                "reference": "db9508f7b1474469d9d3c53b86f817e344732678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/cpu-core-counter/zipball/8520451a140d3f46ac33042715115e290cf5785f",
-                "reference": "8520451a140d3f46ac33042715115e290cf5785f",
+                "url": "https://api.github.com/repos/theofidry/cpu-core-counter/zipball/db9508f7b1474469d9d3c53b86f817e344732678",
+                "reference": "db9508f7b1474469d9d3c53b86f817e344732678",
                 "shasum": ""
             },
             "require": {
@@ -6084,10 +6582,10 @@
                 "fidry/makefile": "^0.2.0",
                 "fidry/php-cs-fixer-config": "^1.1.2",
                 "phpstan/extension-installer": "^1.2.0",
-                "phpstan/phpstan": "^1.9.2",
-                "phpstan/phpstan-deprecation-rules": "^1.0.0",
-                "phpstan/phpstan-phpunit": "^1.2.2",
-                "phpstan/phpstan-strict-rules": "^1.4.4",
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-deprecation-rules": "^2.0.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
                 "phpunit/phpunit": "^8.5.31 || ^9.5.26",
                 "webmozarts/strict-phpunit": "^7.5"
             },
@@ -6114,7 +6612,7 @@
             ],
             "support": {
                 "issues": "https://github.com/theofidry/cpu-core-counter/issues",
-                "source": "https://github.com/theofidry/cpu-core-counter/tree/1.2.0"
+                "source": "https://github.com/theofidry/cpu-core-counter/tree/1.3.0"
             },
             "funding": [
                 {
@@ -6122,7 +6620,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-06T10:04:20+00:00"
+            "time": "2025-08-14T07:29:31+00:00"
         },
         {
             "name": "laminas/laminas-coding-standard",
@@ -7002,16 +7500,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.48",
+            "version": "10.5.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6e0a2bc39f6fae7617989d690d76c48e6d2eb541"
+                "reference": "ace160e31aaa317a99c411410c40c502b4be42a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6e0a2bc39f6fae7617989d690d76c48e6d2eb541",
-                "reference": "6e0a2bc39f6fae7617989d690d76c48e6d2eb541",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ace160e31aaa317a99c411410c40c502b4be42a4",
+                "reference": "ace160e31aaa317a99c411410c40c502b4be42a4",
                 "shasum": ""
             },
             "require": {
@@ -7021,7 +7519,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.13.3",
+                "myclabs/deep-copy": "^1.13.4",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.1",
@@ -7038,7 +7536,7 @@
                 "sebastian/exporter": "^5.1.2",
                 "sebastian/global-state": "^6.0.2",
                 "sebastian/object-enumerator": "^5.0.0",
-                "sebastian/recursion-context": "^5.0.0",
+                "sebastian/recursion-context": "^5.0.1",
                 "sebastian/type": "^4.0.0",
                 "sebastian/version": "^4.0.1"
             },
@@ -7083,7 +7581,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.48"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.51"
             },
             "funding": [
                 {
@@ -7107,7 +7605,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-11T04:07:17+00:00"
+            "time": "2025-08-12T07:31:25+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -7175,12 +7673,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "bbba44089fc15f183516c671398fc1547438c4d6"
+                "reference": "3aed1e89d8a5e2b6d350f0fdd21db0e7f49ab9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bbba44089fc15f183516c671398fc1547438c4d6",
-                "reference": "bbba44089fc15f183516c671398fc1547438c4d6",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3aed1e89d8a5e2b6d350f0fdd21db0e7f49ab9dc",
+                "reference": "3aed1e89d8a5e2b6d350f0fdd21db0e7f49ab9dc",
                 "shasum": ""
             },
             "conflict": {
@@ -7297,7 +7795,7 @@
                 "commerceteam/commerce": ">=0.9.6,<0.9.9",
                 "components/jquery": ">=1.0.3,<3.5",
                 "composer/composer": "<1.10.27|>=2,<2.2.24|>=2.3,<2.7.7",
-                "concrete5/concrete5": "<9.4.0.0-RC2-dev",
+                "concrete5/concrete5": "<9.4.3",
                 "concrete5/core": "<8.5.8|>=9,<9.1",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
                 "contao/comments-bundle": ">=2,<4.13.40|>=5.0.0.0-RC1-dev,<5.3.4",
@@ -7309,7 +7807,7 @@
                 "corveda/phpsandbox": "<1.3.5",
                 "cosenary/instagram": "<=2.3",
                 "couleurcitron/tarteaucitron-wp": "<0.3",
-                "craftcms/cms": "<4.15.3|>=5,<5.7.5",
+                "craftcms/cms": "<4.16.3|>=5,<5.8.4",
                 "croogo/croogo": "<4",
                 "cuyz/valinor": "<0.12",
                 "czim/file-handling": "<1.5|>=2,<2.3",
@@ -7381,7 +7879,7 @@
                 "encore/laravel-admin": "<=1.8.19",
                 "endroid/qr-code-bundle": "<3.4.2",
                 "enhavo/enhavo-app": "<=0.13.1",
-                "enshrined/svg-sanitize": "<0.15",
+                "enshrined/svg-sanitize": "<0.22",
                 "erusev/parsedown": "<1.7.2",
                 "ether/logs": "<3.0.4",
                 "evolutioncms/evolution": "<=3.2.3",
@@ -7804,10 +8302,11 @@
                 "scheb/two-factor-bundle": "<3.26|>=4,<4.11",
                 "sensiolabs/connect": "<4.2.3",
                 "serluck/phpwhois": "<=4.2.6",
+                "setasign/fpdi": "<2.6.4",
                 "sfroemken/url_redirect": "<=1.2.1",
                 "sheng/yiicms": "<1.2.1",
                 "shopware/core": "<6.5.8.18-dev|>=6.6,<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
-                "shopware/platform": "<6.5.8.18-dev|>=6.6,<6.6.10.3-dev|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
+                "shopware/platform": "<=6.6.10.4|>=6.7.0.0-RC1-dev,<6.7.0.0-RC2-dev",
                 "shopware/production": "<=6.3.5.2",
                 "shopware/shopware": "<=5.7.17",
                 "shopware/storefront": "<=6.4.8.1|>=6.5.8,<6.5.8.7-dev",
@@ -7854,6 +8353,7 @@
                 "snipe/snipe-it": "<8.1",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
+                "soosyze/soosyze": "<=2",
                 "spatie/browsershot": "<5.0.5",
                 "spatie/image-optimizer": "<1.7.3",
                 "spencer14420/sp-php-email-handler": "<1",
@@ -8127,7 +8627,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-04T16:07:43+00:00"
+            "time": "2025-08-14T00:22:26+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -8875,23 +9375,23 @@
         },
         {
             "name": "sebastian/recursion-context",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/recursion-context.git",
-                "reference": "05909fb5bc7df4c52992396d0116aed689f93712"
+                "reference": "47e34210757a2f37a97dcd207d032e1b01e64c7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/05909fb5bc7df4c52992396d0116aed689f93712",
-                "reference": "05909fb5bc7df4c52992396d0116aed689f93712",
+                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/47e34210757a2f37a97dcd207d032e1b01e64c7a",
+                "reference": "47e34210757a2f37a97dcd207d032e1b01e64c7a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.0"
+                "phpunit/phpunit": "^10.5"
             },
             "type": "library",
             "extra": {
@@ -8926,15 +9426,28 @@
             "homepage": "https://github.com/sebastianbergmann/recursion-context",
             "support": {
                 "issues": "https://github.com/sebastianbergmann/recursion-context/issues",
-                "source": "https://github.com/sebastianbergmann/recursion-context/tree/5.0.0"
+                "security": "https://github.com/sebastianbergmann/recursion-context/security/policy",
+                "source": "https://github.com/sebastianbergmann/recursion-context/tree/5.0.1"
             },
             "funding": [
                 {
                     "url": "https://github.com/sebastianbergmann",
                     "type": "github"
+                },
+                {
+                    "url": "https://liberapay.com/sebastianbergmann",
+                    "type": "liberapay"
+                },
+                {
+                    "url": "https://thanks.dev/u/gh/sebastianbergmann",
+                    "type": "thanks_dev"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/sebastian/recursion-context",
+                    "type": "tidelift"
                 }
             ],
-            "time": "2023-02-03T07:05:40+00:00"
+            "time": "2025-08-10T07:50:56+00:00"
         },
         {
             "name": "sebastian/type",

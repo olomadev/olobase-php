@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Attribute\Route;
-use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Authorization\Contract\RoleModelInterface;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Common\Helper\ErrorWrapperInterface as Error;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Olobase\Attribute\Route;
+use Olobase\Authorization\Contract\RoleModelInterface;
+use Olobase\Filter\AttributeInputFilterCollector;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/authorization/roles/delete/:id',
     methods: ['DELETE'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class DeleteHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private RoleModelInterface $roleModel,        
+        private RoleModelInterface $roleModel,
         private InputFilterPluginManager $filterPluginManager,
         private Error $error,
-    ) 
-    {
+    ) {
     }
-    
+
     #[OA\Delete(
         path: '/authorization/roles/delete/{id}',
         tags: ['Authorization Roles'],
@@ -48,20 +49,20 @@ class DeleteHandler implements RequestHandlerInterface
                     type: 'string',
                     format: 'uuid'
                 )
-            )
+            ),
         ],
         responses: [
             new OA\Response(
                 response: 200,
                 description: 'Successful operation'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
-    {   
-        $dto = new RoleDeleteDto();
+    {
+        $dto       = new RoleDeleteDto();
         $collector = new AttributeInputFilterCollector($this->filterPluginManager);
-        $filter = $collector->fromObject($dto, $request->getQueryParams());
+        $filter    = $collector->fromObject($dto, $request->getQueryParams());
         if ($filter->isValid()) {
             $this->roleModel->delete(
                 $filter->getValue('id')

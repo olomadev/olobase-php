@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Authentication\Middleware;
 
-use Mezzio\Authentication\UserInterface;
-use Mezzio\Authentication\AuthenticationInterface;
 use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authentication\AuthenticationInterface;
+use Mezzio\Authentication\UserInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -26,7 +26,7 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
         AuthenticationInterface $authentication
     ) {
         $this->authentication = $authentication;
-        $this->config = $config;
+        $this->config         = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -41,12 +41,13 @@ class JwtAuthenticationMiddleware implements MiddlewareInterface
             return new JsonResponse(
                 [
                     'data' => [
-                        'error' => self::EXPIRE_SIGNAL]
+                        'error' => self::EXPIRE_SIGNAL,
                     ],
+                ],
                 401,
                 [
-                        'Token-Expired' => 1
-                    ]
+                    'Token-Expired' => 1,
+                ]
             );
         }
         return $this->authentication->unauthorizedResponse($request);

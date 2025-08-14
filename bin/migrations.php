@@ -13,47 +13,48 @@ chdir(__DIR__ . '/../');
 require APP_ROOT . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Tools\Console\Command;
-use Olobase\Command\DoctrineHelper;
+use Olobase\ModuleManager\DoctrineHelper;
+use Doctrine\Migrations\Tools\Console\Command\{
+    DumpSchemaCommand,
+    ExecuteCommand,
+    GenerateCommand,
+    LatestCommand,
+    ListCommand,
+    MigrateCommand,
+    RollupCommand,
+    StatusCommand,
+    SyncMetadataCommand,
+    VersionCommand
+};
 
 // get module name
-$argv = $_SERVER['argv'];
+$argv   = $_SERVER['argv'];
 $module = null;
 
 foreach ($argv as $i => $arg) {
     if (str_starts_with($arg, '--module=')) {
         $module = trim(substr($arg, strlen('--module=')));
-        unset($_SERVER['argv'][$i]); // Symfony Console’a geçmesin
+        unset($_SERVER['argv'][$i]);
         break;
     }
 }
 
-if (!$module) {
+if (! $module) {
     echo "\033[31m[ERROR]\033[0m Please provide a module name using the --module option.\n";
     exit(1);
 }
 
 // migration path
 $migrationPath = APP_ROOT . "/src/{$module}/src/Migrations";
-if (!is_dir($migrationPath)) {
+if (! is_dir($migrationPath)) {
     echo "\033[31m[ERROR]\033[0m Migration path not found: $migrationPath\n";
     exit(1);
 }
-
-// migration config
-$config = DoctrineHelper::createMigrationConfig($module);
-
 // db connection
-$container = require APP_ROOT . '/config/container.php';
-$laminasDbConfig = $container->get('config')['db'];
-$doctrineDbConfig = DoctrineHelper::formatLaminasDbConfig($laminasDbConfig);
-$conn = DriverManager::getConnection($doctrineDbConfig);
-
-// dependecy factory
-$dependencyFactory = DependencyFactory::fromConnection($config, new ExistingConnection($conn));
+$container        = require APP_ROOT . '/config/container.php';
+$laminasDbConfig  = $container->get('config')['db'];
+$dependencyFactory = DoctrineHelper::createDependencyFactory($module, $laminasDbConfig);
 
 // symfony console app
 $cli = new Application("Doctrine Migrations for module: $module");
@@ -73,6 +74,6 @@ $cli->addCommands([
 
 try {
     $cli->run();
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     echo "\033[31m[RUN ERROR]\033[0m " . $e->getMessage() . "\n";
 }

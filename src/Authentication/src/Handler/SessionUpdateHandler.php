@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
-use Olobase\Attribute\Route;
-use Mezzio\Authentication\UserInterface;
-use Laminas\Diactoros\Response\TextResponse;
-use Psr\Http\Message\ResponseInterface;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Diactoros\Response\TextResponse;
+use Mezzio\Authentication\UserInterface;
+use Olobase\Attribute\Route;
+use OpenApi\Attributes as OA;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/auth/session',
     methods: ['POST'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
+        JwtAuthenticationMiddleware::class,
     ]
 )]
 class SessionUpdateHandler implements RequestHandlerInterface
@@ -37,7 +38,7 @@ class SessionUpdateHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 200,
                 description: 'Successful operation'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -45,17 +46,15 @@ class SessionUpdateHandler implements RequestHandlerInterface
         $user = $request->getAttribute(UserInterface::class);
         if ($user) {
             $details = $user->getDetails();
-            //
             // reset session ttl using cache
-            //
-            $userId = $details['id'];
-            $tokenId = $details['tokenId'];
-            $configSessionTTL = (int)$this->config['token']['session_ttl'] * 60;
-            $userHasSession = $this->cache->getItem(APP_SESSION_KEY.$userId.":".$tokenId);
+            $userId           = $details['id'];
+            $tokenId          = $details['tokenId'];
+            $configSessionTTL = (int) $this->config['token']['session_ttl'] * 60;
+            $userHasSession   = $this->cache->getItem(APP_SESSION_KEY . $userId . ":" . $tokenId);
             if ($userHasSession) {
                 // do not change the order of this code otherwise the user will be logged out quickly
                 $this->cache->getOptions()->setTtl($configSessionTTL);
-                $this->cache->setItem(APP_SESSION_KEY.$userId.":".$tokenId, $configSessionTTL);
+                $this->cache->setItem(APP_SESSION_KEY . $userId . ":" . $tokenId, $configSessionTTL);
             }
             return new TextResponse("ok", 200);
         }

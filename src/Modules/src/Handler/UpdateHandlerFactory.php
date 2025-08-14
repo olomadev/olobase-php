@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
-use Modules\Model\ModuleModelInterface;
-use Modules\InputFilter\SaveFilter;
-use Olobase\DataTable\DataManagerInterface;
 use Common\Helper\ErrorWrapperInterface;
-use Mezzio\Authentication\AuthenticationInterface;
-use Psr\Container\ContainerInterface;
-use Laminas\Db\Adapter\AdapterInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
+use Modules\InputFilter\SaveFilter;
+use Modules\Model\ModuleModelInterface;
+use Olobase\DataTable\DataManagerInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class UpdateHandlerFactory
 {

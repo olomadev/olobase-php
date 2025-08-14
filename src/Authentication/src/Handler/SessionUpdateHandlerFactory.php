@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
+use Laminas\Cache\Storage\StorageInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Cache\Storage\StorageInterface;
 
 class SessionUpdateHandlerFactory
 {

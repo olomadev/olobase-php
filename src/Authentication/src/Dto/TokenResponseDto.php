@@ -18,6 +18,6 @@ class TokenResponseDto
     public function __construct(string $token, TokenDataDto $data)
     {
         $this->token = $token;
-        $this->data = $data;
+        $this->data  = $data;
     }
 }

@@ -27,7 +27,7 @@ class ConfigProvider
      * To add a bit of a structure, each section is defined in a separate
      * method which returns an array with its configuration.
      */
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -35,7 +35,7 @@ class ConfigProvider
         ];
     }
 
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'factories'  => [
@@ -47,33 +47,44 @@ class ConfigProvider
                 Handler\FindOneByIdHandler::class => Handler\FindOneByIdHandlerFactory::class,
                 Handler\FindAllHandler::class => Handler\FindAllHandlerFactory::class,
                 Handler\FindAllByPagingHandler::class => Handler\FindAllByPagingHandlerFactory::class,
-                
+
                 // handlers - my account
                 Handler\MyAccount\FindMeHandler::class => Handler\MyAccount\FindMeHandlerFactory::class,
                 Handler\MyAccount\UpdateHandler::class => Handler\MyAccount\UpdateHandlerFactory::class,
                 Handler\MyAccount\UpdatePasswordHandler::class => Handler\MyAccount\UpdatePasswordHandlerFactory::class,
 
-                // models
-                Model\UserModelInterface::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $users = new TableGateway('users', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    $userAvatars = new TableGateway('userAvatars', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    $userRoles = new TableGateway('userRoles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    $columnFilters = $container->get(ColumnFiltersInterface::class);
-                    $cache = $container->get(StorageInterface::class);
-                    return new Model\UserModel(
-                        $users,
-                        $userAvatars,
-                        $userRoles,
-                        $cache,
-                        $columnFilters,
+                Repository\UserRepositoryInterface::class => function ($container) {
+                    return new Repository\UserRepository(
+                        $container->get(AdapterInterface::class)
                     );
                 },
+                Service\UserService::class => function ($container) {
+                    return new Service\UserService(
+                        $container->get(UserRepositoryInterface::class)
+                    );
+                },
+
+                // // models
+                // Model\UserModelInterface::class => function ($container) {
+                //     $dbAdapter = $container->get(AdapterInterface::class);
+                //     $users = new TableGateway('users', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                //     $userAvatars = new TableGateway('userAvatars', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                //     $userRoles = new TableGateway('userRoles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
+                //     $columnFilters = $container->get(ColumnFiltersInterface::class);
+                //     $cache = $container->get(StorageInterface::class);
+                //     return new Model\UserModel(
+                //         $users,
+                //         $userAvatars,
+                //         $userRoles,
+                //         $cache,
+                //         $columnFilters,
+                //     );
+                // },
             ],
         ];
     }
 
-    public function getInputFilters() : array
+    public function getInputFilters(): array
     {
         return [
             'factories' => [
@@ -87,7 +98,7 @@ class ConfigProvider
             ]
         ];
     }
-    
+
     public static function registerRoutes(ContainerInterface $container): void
     {
         $provider = $container->get(AttributeRouteProviderInterface::class);

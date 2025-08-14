@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authentication\Dto;
 
+use Laminas\Filter\StringTrim;
+use Laminas\Validator\EmailAddress;
 use Olobase\Attribute\Input;
 use Olobase\Attribute\InputFilter;
 
@@ -12,13 +16,13 @@ class TokenRequestDto
         name: 'username',
         required: true,
         filters: [
-            ['name' => \Laminas\Filter\StringTrim::class]
+            ['name' => StringTrim::class],
         ],
         validators: [
             [
-                'name' => \Laminas\Validator\EmailAddress::class,
-                'options' => ['useMxCheck' => false]
-            ]
+                'name'    => EmailAddress::class,
+                'options' => ['useMxCheck' => false],
+            ],
         ]
     )]
     public string $username;
@@ -27,7 +31,7 @@ class TokenRequestDto
         name: 'password',
         required: true,
         filters: [
-            ['name' => \Laminas\Filter\StringTrim::class]
+            ['name' => StringTrim::class],
         ]
     )]
     public string $password;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
+use Olobase\Authentication\JwtAuth\TokenInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authentication\JwtAuth\TokenInterface;
 
 class LogoutHandlerFactory
 {

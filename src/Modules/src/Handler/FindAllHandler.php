@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Modules\Handler;
 
-use Modules\Model\ModuleModelInterface;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Modules\Model\ModuleModelInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use OpenApi\Attributes as OA;
 
 #[Route(
     path: '/api/modules/findAll',
     methods: ['GET'],
     middlewares: [
-        \Authentication\Middleware\JwtAuthenticationMiddleware::class,
-        \Mezzio\Authorization\AuthorizationMiddleware::class
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
     ]
 )]
 class FindAllHandler implements RequestHandlerInterface
@@ -39,16 +41,15 @@ class FindAllHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 404,
                 description: 'No result found'
-            )
+            ),
         ]
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $get = $request->getQueryParams();
+        $get  = $request->getQueryParams();
         $data = $this->moduleModel->findAll($get);
         return new JsonResponse([
             'data' => $data,
         ]);
     }
-
 }
