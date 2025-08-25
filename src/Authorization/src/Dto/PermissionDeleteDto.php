@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Authorization\Dto;
 
+use Laminas\Validator\Db\RecordExists;
+use Laminas\Validator\Uuid;
 use Olobase\Attribute\Input;
 use Olobase\Attribute\InputFilter;
-use Laminas\Validator\Uuid;
-use Laminas\Validator\Db\RecordExists;
-use Laminas\Db\Adapter\AdapterInterface;
 use OpenApi\Attributes as OA;
 
 #[InputFilter]
@@ -25,15 +24,15 @@ class PermissionDeleteDto
         required: true,
         validators: [
             [
-                'name' => Uuid::class
+                'name' => Uuid::class,
             ],
             [
-                'name' => RecordExists::class,
+                'name'    => RecordExists::class,
                 'options' => [
                     'table' => 'permissions',
                     'field' => 'id',
-                ]
-            ]
+                ],
+            ],
         ]
     )]
     #[OA\Property(

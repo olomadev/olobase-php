@@ -10,25 +10,37 @@ final class Permission extends AbstractEntity
 {
     public function __construct(
         ?string $id = null,
-        private readonly ?string $name = null,
-        private readonly ?string $action = null,
-        private readonly ?string $method = null,
+        private ?string $module = null,
+        private ?string $name = null,
+        private ?string $action = null,
+        private ?string $route = null,
+        private ?string $method = null,
     ) {
         parent::__construct($id);
     }
 
+    public function getModule(): ?string
+    {
+        return (string) $this->module;
+    }
+
     public function getName(): ?string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
-    public function getAction(): array
+    public function getAction(): string
     {
-        return $this->action;
+        return (string) $this->action;
     }
 
-    public function getMethod(): array
+    public function getRoute(): ?string
     {
-        return $this->method;
+        return (string) $this->route;
+    }
+
+    public function getMethod(): string
+    {
+        return (string) $this->method;
     }
 }

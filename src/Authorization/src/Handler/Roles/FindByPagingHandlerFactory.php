@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Authorization\Handler\Permissions;
+namespace Authorization\Handler\Roles;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\PermissionModelInterface;
+use Olobase\Authorization\Contract\RoleModelInterface;
 
-class FindAllByPagingHandlerFactory
+class FindByPagingHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
-        return new FindAllByPagingHandler($container->get(PermissionModelInterface::class));
+        return new FindByPagingHandler($container->get(RoleModelInterface::class));
     }
 }

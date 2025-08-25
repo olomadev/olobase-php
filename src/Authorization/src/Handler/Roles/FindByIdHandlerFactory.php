@@ -6,12 +6,12 @@ namespace Authorization\Handler\Roles;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\Contract\RoleModelInterface;
+use Olobase\Authorization\RoleRepositoryInterface;
 
 class FindByIdHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
-        return new FindByIdHandler($container->get(RoleModelInterface::class));
+        return new FindByIdHandler($container->get(RoleRepositoryInterface::class));
     }
 }

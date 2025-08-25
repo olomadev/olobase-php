@@ -12,6 +12,7 @@ use Laminas\Db\TableGateway\TableGateway;
 use Olobase\DataTable\ColumnFiltersInterface;
 use Olobase\Router\AttributeRouteProviderInterface;
 use Psr\Container\ContainerInterface;
+use Olobase\Authorization\PermissionRepositoryInterface;
 
 use function dirname;
 
@@ -44,24 +45,24 @@ class ConfigProvider
             'factories'  => [
 
                 // handlers - roles
-                Handler\Roles\CreateHandler::class          => Handler\Roles\CreateHandlerFactory::class,
-                Handler\Roles\UpdateHandler::class          => Handler\Roles\UpdateHandlerFactory::class,
-                Handler\Roles\DeleteHandler::class          => Handler\Roles\DeleteHandlerFactory::class,
-                Handler\Roles\FindByIdHandler::class        => Handler\Roles\FindByIdHandlerFactory::class,
-                Handler\Roles\FindAllHandler::class         => Handler\Roles\FindAllHandlerFactory::class,
-                Handler\Roles\FindAllByPagingHandler::class => Handler\Roles\FindAllByPagingHandlerFactory::class,
+                Handler\Roles\CreateHandler::class       => Handler\Roles\CreateHandlerFactory::class,
+                Handler\Roles\UpdateHandler::class       => Handler\Roles\UpdateHandlerFactory::class,
+                Handler\Roles\DeleteHandler::class       => Handler\Roles\DeleteHandlerFactory::class,
+                Handler\Roles\FindByIdHandler::class     => Handler\Roles\FindByIdHandlerFactory::class,
+                Handler\Roles\FindAllHandler::class      => Handler\Roles\FindHandlerFactory::class,
+                Handler\Roles\FindByPagingHandler::class => Handler\Roles\FindByPagingHandlerFactory::class,
 
                 // handlers - user roles
-                Handler\UserRoles\AssignHandler::class          => Handler\UserRoles\AssignHandlerFactory::class,
-                Handler\UserRoles\UnassignHandler::class        => Handler\UserRoles\UnassignHandlerFactory::class,
-                Handler\UserRoles\FindAllByPagingHandler::class => Handler\UserRoles\FindAllByPagingHandlerFactory::class,
+                Handler\UserRoles\AssignHandler::class       => Handler\UserRoles\AssignHandlerFactory::class,
+                Handler\UserRoles\UnassignHandler::class     => Handler\UserRoles\UnassignHandlerFactory::class,
+                Handler\UserRoles\FindByPagingHandler::class => Handler\UserRoles\FindByPagingHandlerFactory::class,
 
                 // handlers - permissions
-                Handler\Permissions\CreateHandler::class          => Handler\Permissions\CreateHandlerFactory::class,
-                Handler\Permissions\UpdateHandler::class          => Handler\Permissions\UpdateHandlerFactory::class,
-                Handler\Permissions\DeleteHandler::class          => Handler\Permissions\DeleteHandlerFactory::class,
-                Handler\Permissions\FindAllHandler::class         => Handler\Permissions\FindAllHandlerFactory::class,
-                Handler\Permissions\FindAllByPagingHandler::class => Handler\Permissions\FindAllByPagingHandlerFactory::class,
+                Handler\Permissions\CreateHandler::class       => Handler\Permissions\CreateHandlerFactory::class,
+                Handler\Permissions\UpdateHandler::class       => Handler\Permissions\UpdateHandlerFactory::class,
+                Handler\Permissions\DeleteHandler::class       => Handler\Permissions\DeleteHandlerFactory::class,
+                Handler\Permissions\FindAllHandler::class      => Handler\Permissions\FindAllHandlerFactory::class,
+                Handler\Permissions\FindByPagingHandler::class => Handler\Permissions\FindByPagingHandlerFactory::class,
 
                 // respositories
                 UserRoleRepositoryInterface::class     => function ($container) {
@@ -73,11 +74,12 @@ class ConfigProvider
                 Repository\RoleRepository::class       => function ($container) {
                     $dbAdapter       = $container->get(AdapterInterface::class);
                     $cacheStorage    = $container->get(StorageInterface::class);
+                    $permissionRepo  = $container->get(PermissionRepositoryInterface::class);
                     $columnFilters   = $container->get(ColumnFiltersInterface::class);
                     $roles           = new TableGateway('roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
                     $rolePermissions = new TableGateway('role_rermissions', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
                     $userRoles       = new TableGateway('user_roles', $dbAdapter, null, new ResultSet(ResultSet::TYPE_ARRAY));
-                    return new Repository\RoleRepository($roles, $rolePermissions, $userRoles, $cacheStorage, $columnFilters);
+                    return new Repository\RoleRepository($roles, $rolePermissions, $userRoles, $cacheStorage, $permissionRepo, $columnFilters);
                 },
                 Repository\PermissionRepository::class => function ($container) {
                     $dbAdapter     = $container->get(AdapterInterface::class);

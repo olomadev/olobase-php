@@ -6,12 +6,14 @@ namespace Authorization\Handler\Permissions;
 
 use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Authorization\Dto\PermissionDeleteDto;
+use Authorization\Entity\Permission;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authorization\AuthorizationMiddleware;
+use Olobase\Attribute\Entity;
 use Olobase\Attribute\Route;
 use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\Filter\AttributeInputFilterCollector;
+use Olobase\Middleware\EntityMiddleware;
 use Olobase\Validation\ValidationErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
@@ -24,6 +26,7 @@ use Psr\Http\Server\RequestHandlerInterface;
     middlewares: [
         JwtAuthenticationMiddleware::class,
         AuthorizationMiddleware::class,
+        EntityMiddleware::class,
     ]
 )]
 class DeleteHandler implements RequestHandlerInterface
@@ -35,9 +38,10 @@ class DeleteHandler implements RequestHandlerInterface
     ) {
     }
 
+    #[Entity(dto: PermissionDeleteDto::class, entity: Permission::class)]
     #[OA\Delete(
-        path: '/authorization/permissions/delete/{id}',
-        tags: ['Authorization Permissions'],
+        path: '/api/authorization/permissions/delete/{id}',
+        tags: ['Authorization'],
         summary: 'Delete permission',
         operationId: 'authorizationPermissions_delete',
         parameters: [
@@ -61,19 +65,9 @@ class DeleteHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $dto       = new PermissionDeleteDto();
-        $collector = new AttributeInputFilterCollector(
-            $this->filterManager,
-            $this->permissionRepository->getAdapter()
-        );
-        $filter    = $collector->fromObject($dto, $request->getQueryParams());
-        if ($filter->isValid()) {
-            $this->permissionRepository->deleteEntity(
-                $filter->getValue('id')
-            );
-        } else {
-            return new JsonResponse($this->errorFormatter->format($filter), 400);
-        }
+        $entity = $request->getAttribute('entity');
+        $permId = $this->permissionRepository->deleteEntity($entity);
+
         return new JsonResponse([]);
     }
 }

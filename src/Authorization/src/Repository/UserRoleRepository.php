@@ -59,7 +59,7 @@ class UserRoleRepository implements UserRoleRepositoryInterface
         return $select;
     }
 
-    public function findAllByPaging(array $get): Paginator
+    public function findByPaging(array $get): Paginator
     {
         $roleId = $get['roleId'];
         unset($get['roleId']);

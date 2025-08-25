@@ -4,59 +4,80 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Permissions;
 
-use Authorization\Schema\PermissionSave;
-use Authorization\InputFilter\Permissions\SaveFilter;
-use Olobase\Authorization\PermissionModelInterface;
-use Olobase\Helper\ValidationErrorFormatterInterface as Error;
+use Authentication\Middleware\JwtAuthenticationMiddleware;
+use Authorization\Dto\PermissionUpdateDto;
+use Authorization\Entity\Permission;
 use Laminas\Diactoros\Response\JsonResponse;
+use Mezzio\Authorization\AuthorizationMiddleware;
+use Olobase\Attribute\Route;
+use Olobase\Authorization\PermissionRepositoryInterface;
+use Olobase\Filter\AttributeInputFilterCollector;
+use Olobase\Mapper\InputSchemaMapper;
+use Olobase\Validation\ValidationErrorFormatterInterface;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+#[Route(
+    path: '/api/authorization/permissions/update/:id',
+    methods: ['PUT'],
+    middlewares: [
+        JwtAuthenticationMiddleware::class,
+        AuthorizationMiddleware::class,
+    ]
+)]
 class UpdateHandler implements RequestHandlerInterface
 {
     public function __construct(
-        private PermissionModelInterface $permissionModel,
-        private DataManagerInterface $dataManager,
-        private SaveFilter $filter,
-        private Error $error,
-    ) 
-    {
+        private PermissionRepositoryInterface $permissionRepository,
+        private InputFilterPluginManager $filterManager,
+        private ValidationErrorFormatterInterface $errorFormatter
+    ) {
     }
-    
-    /**
-     * @OA\Put(
-     *   path="/authorization/permissions/update/{permId}",
-     *   tags={"Authorization Permissions"},
-     *   summary="Update a permission",
-     *   operationId="authorizationPermissions_update",
-     *   
-     *   @OA\RequestBody(
-     *     description="Create a new permission",
-     *     @OA\JsonContent(ref="#/components/schemas/PermissionSave"),
-     *   ),
-     *   @OA\Response(
-     *     response=200,
-     *     description="Successful operation",
-     *   ),
-     *   @OA\Response(
-     *      response=400,
-     *      description="Bad request, returns to validation errors"
-     *   )
-     *)
-     **/
+
+    #[OA\Put(
+        path: '/api/authorization/permissions/update/{id}',
+        tags: ['Authorization Permissions'],
+        summary: 'Update a permission',
+        operationId: 'authorizationPermissions_update',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                description: 'Permission UUID',
+                schema: new OA\Schema(type: 'string', format: 'uuid')
+            ),
+        ],
+        requestBody: new OA\RequestBody(
+            description: 'Update permission data',
+            required: true,
+            content: new OA\JsonContent(ref: '#/components/schemas/PermissionUpdateDto')
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Bad request, returns validation errors'
+            ),
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->filter->setInputData($request->getParsedBody());
-        $data = array();
-        $response = array();
-        if ($this->filter->isValid()) {
-            $this->dataManager->setInputFilter($this->filter);
-            $data = $this->dataManager->getSaveData(PermissionSave::class, 'permissions');
-            $this->permissionModel->update($data);
+        $dto       = new PermissionUpdateDto();
+        $collector = new AttributeInputFilterCollector($this->filterManager);
+        $filter    = $collector->fromObject($dto, $request->getParsedBody());
+        if ($filter->isValid()) {
+            $mapper = new InputSchemaMapper();
+            $entity = $mapper->mapToEntity($filter, $dto, Permission::class);
+            $this->permissionRepository->updateEntity($entity);
         } else {
-            return new JsonResponse($this->error->getMessages($this->filter), 400);
+            return new JsonResponse($this->errorFormatter->format($filter), 400);
         }
-        return new JsonResponse($response);   
+        return new JsonResponse([]);
     }
 }

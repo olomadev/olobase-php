@@ -34,8 +34,8 @@ class UpdateHandler implements RequestHandlerInterface
     }
     
     #[OA\Put(
-        path: '/authorization/roles/update/{id}',
-        tags: ['Authorization Roles'],
+        path: '/api/authorization/roles/update/{id}',
+        tags: ['Authorization'],
         summary: 'Update role',
         operationId: 'authorizationRoles_update',
         parameters: [

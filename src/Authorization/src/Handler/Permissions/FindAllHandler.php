@@ -17,23 +17,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 #[Route(
     path: '/api/authorization/permissions/findAll',
     methods: ['GET'],
-    middlewares: []
-)]
-#[OA\Get(
-    path: "/authorization/permissions/findAll",
-    tags: ["Authorization Permissions"],
-    summary: "Find all permissions",
-    operationId: "authorizationPermissions_findAll",
-    responses: [
-        new OA\Response(
-            response: 200,
-            description: "Successful operation",
-            content: new OA\JsonContent(ref: "#/components/schemas/PermissionsFindAllDto")
-        ),
-        new OA\Response(
-            response: 404,
-            description: "No result found"
-        ),
+    middlewares: [
+        // JwtAuthenticationMiddleware::class,
+        // AuthorizationMiddleware::class,
     ]
 )]
 class FindAllHandler implements RequestHandlerInterface
@@ -43,10 +29,27 @@ class FindAllHandler implements RequestHandlerInterface
     ) {
     }
 
+    #[OA\Get(
+        path: "/api/authorization/permissions/findAll",
+        tags: ["Authorization"],
+        summary: "Find all permissions",
+        operationId: "authorizationPermissions_findAll",
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Successful operation",
+                content: new OA\JsonContent(ref: "#/components/schemas/PermissionsFindAllDto")
+            ),
+            new OA\Response(
+                response: 404,
+                description: "No result found"
+            ),
+        ]
+    )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $get  = $request->getQueryParams();
-        $data = $this->permissionRepository->findAllPermissions($get);
+        $data = $this->permissionRepository->findAll($get);
         return new JsonResponse([
             'data' => $data,
         ]);

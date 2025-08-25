@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authorization\Dto;
 
-use Olobase\Attribute\Input;
-use Olobase\Attribute\ObjectInput;
-use Olobase\Attribute\InputFilter;
 use Laminas\Validator\InArray;
+use Olobase\Attribute\Input;
+use Olobase\Attribute\InputFilter;
+use Olobase\Attribute\ObjectInput;
 use OpenApi\Attributes as OA;
 
 #[InputFilter]
@@ -29,17 +31,17 @@ class PermissionCreateDto
         name: 'action',
         fields: [
             [
-                'name' => 'id',
-                'required' => true,
+                'name'       => 'id',
+                'required'   => true,
                 'validators' => [
                     [
-                        'name' => InArray::class,
+                        'name'    => InArray::class,
                         'options' => [
-                            'haystack' => ['create', 'delete', 'edit', 'list', 'show']
-                        ]
-                    ]
-                ]
-            ]
+                            'haystack' => ['create', 'delete', 'edit', 'list', 'show'],
+                        ],
+                    ],
+                ],
+            ],
         ]
     )]
     #[OA\Property(
@@ -52,7 +54,7 @@ class PermissionCreateDto
                 type: "string",
                 enum: ["create", "delete", "edit", "list", "show"],
                 description: "Action type"
-            )
+            ),
         ]
     )]
     public array $action;
@@ -61,17 +63,17 @@ class PermissionCreateDto
         name: 'method',
         fields: [
             [
-                'name' => 'id',
-                'required' => true,
+                'name'       => 'id',
+                'required'   => true,
                 'validators' => [
                     [
-                        'name' => InArray::class,
+                        'name'    => InArray::class,
                         'options' => [
-                            'haystack' => ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
-                        ]
-                    ]
-                ]
-            ]
+                            'haystack' => ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+                        ],
+                    ],
+                ],
+            ],
         ]
     )]
     #[OA\Property(
@@ -84,7 +86,7 @@ class PermissionCreateDto
                 type: "string",
                 enum: ["GET", "POST", "PUT", "DELETE", "PATCH"],
                 description: "HTTP method"
-            )
+            ),
         ]
     )]
     public array $method;

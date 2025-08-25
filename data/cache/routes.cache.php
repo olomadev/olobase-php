@@ -1,31 +1,10 @@
 <?php
 
 return array (
-  '_lastModified' => 1755177789,
+  '_lastModified' => 1756033743,
   'data' => 
   array (
     0 => 
-    array (
-      'path' => '/api/authorization/roles/findAllByPaging',
-      'pipeline' => 
-      array (
-        0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
-        1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
-        2 => 'Authorization\\Handler\\Roles\\FindAllByPagingHandler',
-      ),
-      'methods' => 
-      array (
-        0 => 'GET',
-      ),
-      'options' => 
-      array (
-        'meta' => 
-        array (
-          'module' => 'Authorization',
-        ),
-      ),
-    ),
-    1 => 
     array (
       'path' => '/api/authorization/roles/findAll',
       'pipeline' => 
@@ -46,7 +25,7 @@ return array (
         ),
       ),
     ),
-    2 => 
+    1 => 
     array (
       'path' => '/api/authorization/roles/delete/:id',
       'pipeline' => 
@@ -67,7 +46,7 @@ return array (
         ),
       ),
     ),
-    3 => 
+    2 => 
     array (
       'path' => '/api/authorization/roles/findById/:id',
       'pipeline' => 
@@ -88,7 +67,7 @@ return array (
         ),
       ),
     ),
-    4 => 
+    3 => 
     array (
       'path' => '/api/authorization/roles/update/:id',
       'pipeline' => 
@@ -109,7 +88,7 @@ return array (
         ),
       ),
     ),
-    5 => 
+    4 => 
     array (
       'path' => '/api/authorization/roles/create',
       'pipeline' => 
@@ -130,7 +109,7 @@ return array (
         ),
       ),
     ),
-    6 => 
+    5 => 
     array (
       'path' => '/api/authorization/permissions/findAll',
       'pipeline' => 
@@ -149,18 +128,40 @@ return array (
         ),
       ),
     ),
-    7 => 
+    6 => 
     array (
       'path' => '/api/authorization/permissions/delete/:id',
       'pipeline' => 
       array (
         0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
         1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
-        2 => 'Authorization\\Handler\\Permissions\\DeleteHandler',
+        2 => 'Olobase\\Middleware\\EntityMiddleware',
+        3 => 'Authorization\\Handler\\Permissions\\DeleteHandler',
       ),
       'methods' => 
       array (
         0 => 'DELETE',
+      ),
+      'options' => 
+      array (
+        'meta' => 
+        array (
+          'module' => 'Authorization',
+        ),
+      ),
+    ),
+    7 => 
+    array (
+      'path' => '/api/authorization/permissions/update/:id',
+      'pipeline' => 
+      array (
+        0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
+        1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
+        2 => 'Authorization\\Handler\\Permissions\\UpdateHandler',
+      ),
+      'methods' => 
+      array (
+        0 => 'PUT',
       ),
       'options' => 
       array (
@@ -177,11 +178,33 @@ return array (
       array (
         0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
         1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
-        2 => 'Authorization\\Handler\\Permissions\\CreateHandler',
+        2 => 'Olobase\\Middleware\\EntityMiddleware',
+        3 => 'Authorization\\Handler\\Permissions\\CreateHandler',
       ),
       'methods' => 
       array (
         0 => 'POST',
+      ),
+      'options' => 
+      array (
+        'meta' => 
+        array (
+          'module' => 'Authorization',
+        ),
+      ),
+    ),
+    9 => 
+    array (
+      'path' => '/api/authorization/permissions/findByPaging',
+      'pipeline' => 
+      array (
+        0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
+        1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
+        2 => 'Authorization\\Handler\\Permissions\\FindByPagingHandler',
+      ),
+      'methods' => 
+      array (
+        0 => 'GET',
       ),
       'options' => 
       array (

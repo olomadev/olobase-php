@@ -38,8 +38,8 @@ class CreateHandler implements RequestHandlerInterface
     }
 
     #[OA\Post(
-        path: '/authorization/roles/create',
-        tags: ['Authorization Roles'],
+        path: '/api/authorization/roles/create',
+        tags: ['Authorization'],
         summary: 'Create a new role',
         operationId: 'authorizationRoles_create',
         requestBody: new OA\RequestBody(

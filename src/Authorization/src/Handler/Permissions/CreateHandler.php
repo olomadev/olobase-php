@@ -10,10 +10,10 @@ use Authorization\Entity\Permission;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authorization\AuthorizationMiddleware;
+use Olobase\Attribute\Entity;
 use Olobase\Attribute\Route;
 use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Mapper\InputSchemaMapper;
+use Olobase\Middleware\EntityMiddleware;
 use Olobase\Validation\ValidationErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
@@ -26,6 +26,7 @@ use Psr\Http\Server\RequestHandlerInterface;
     middlewares: [
         JwtAuthenticationMiddleware::class,
         AuthorizationMiddleware::class,
+        EntityMiddleware::class,
     ]
 )]
 class CreateHandler implements RequestHandlerInterface
@@ -37,9 +38,10 @@ class CreateHandler implements RequestHandlerInterface
     ) {
     }
 
+    #[Entity(dto: PermissionCreateDto::class, entity: Permission::class)]
     #[OA\Post(
-        path: '/authorization/permissions/create',
-        tags: ['Authorization Permissions'],
+        path: '/api/authorization/permissions/create',
+        tags: ['Authorization'],
         summary: 'Create a new permission',
         operationId: 'authorizationPermissions_create',
         requestBody: new OA\RequestBody(
@@ -76,22 +78,13 @@ class CreateHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $dto       = new PermissionCreateDto();
-        $collector = new AttributeInputFilterCollector($this->filterManager);
-        $filter    = $collector->fromObject($dto, $request->getParsedBody());
-        if ($filter->isValid()) {
-            $mapper = new InputSchemaMapper();
-            $entity = $mapper->mapToEntity($filter, $dto, Permission::class);
-            $permId = $this->permissionRepository->createEntity($entity);
-        } else {
-            return new JsonResponse($this->errorFormatter->format($filter), 400);
-        }
-        return new JsonResponse(
-            [
-                'data' => [
-                    'id' => $permId,
-                ],
-            ]
-        );
+        $entity = $request->getAttribute('entity');
+
+        // var_dump($entity->toCamelCaseArray());
+        // die;
+
+        $permId = $this->permissionRepository->createEntity($entity);
+
+        return new JsonResponse(['data' => ['id' => $permId]]);
     }
 }

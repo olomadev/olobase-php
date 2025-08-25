@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Olobase\Cache\CacheStorageAdapter;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 
@@ -59,7 +60,9 @@ return [
                         ['name' => 'serializer'],
                     ],
                 ];
-                return $storageFactory->createFromArrayConfiguration($storageConfig);
+                $realStorage    = $storageFactory->createFromArrayConfiguration($storageConfig);
+                $cacheEnabled   = $container->get('config')['cache_enabled'] ?? true;
+                return new CacheStorageAdapter($realStorage, $cacheEnabled);
             },
         ],
     ],

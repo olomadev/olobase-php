@@ -27,8 +27,8 @@ class FindAllHandler implements RequestHandlerInterface
     }
 
     #[OA\Get(
-        path: '/authorization/roles/findAll',
-        tags: ['Authorization Roles'],
+        path: '/api/authorization/roles/findAll',
+        tags: ['Authorization'],
         summary: 'Find all roles',
         operationId: 'authorizationRoles_findAll',
         responses: [

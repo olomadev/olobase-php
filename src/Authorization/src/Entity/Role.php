@@ -10,37 +10,31 @@ final class Role extends AbstractEntity
 {
     public function __construct(
         ?string $id = null,
-        private readonly ?string $key = null,
-        private readonly ?string $name = null,
-        private readonly ?int $level = null,
-        private readonly ?array $rolePermissions = [],
+        private ?string $key = null,
+        private ?string $name = null,
+        private ?int $level = null,
+        private ?array $permissions = [],
     ) {
         parent::__construct($id);
     }
 
-    public function getKey(): ?string
+    public function getKey(): string
     {
-        return $this->key;
+        return (string) $this->key;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
-    public function getLevel(): ?int
+    public function getLevel(): int
     {
-        return $this->level;
+        return (int) $this->level;
     }
 
-    public function setRolePermissions(array $rolePermissions)
+    public function getPermissions(): array
     {
-        $this->rolePermissions = $rolePermissions;
+        return (array) $this->permissions;
     }
-
-    public function getRolePermissions(): ?array
-    {
-        return $this->rolePermissions;
-    }
-
 }

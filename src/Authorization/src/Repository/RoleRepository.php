@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Authorization\Repository;
 
-use Authorization\Entity\Permission;
 use Authorization\Entity\Role;
 use Authorization\Repository\PermissionRepository;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\TableGatewayInterface;
-use Laminas\Hydrator\ReflectionHydrator;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Paginator\Paginator;
+use Olobase\Authorization\PermissionRepositoryInterface;
 use Olobase\Authorization\RoleRepositoryInterface;
 use Olobase\DataTable\ColumnFiltersInterface;
 use Olobase\Repository\AbstractRepository;
@@ -30,7 +29,8 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         private TableGatewayInterface $rolePermissions,
         private TableGatewayInterface $userRoles,
         private StorageInterface $cache,
-        private ColumnFiltersInterface $columnFilters
+        private PermissionRepositoryInterface $permissionRepo,
+        private ColumnFiltersInterface $columnFilters,
     ) {
         parent::__construct($roles, $cache);
     }
@@ -85,7 +85,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         return $row ?: null;
     }
 
-    public function findAllKeys(): array
+    public function findKeys(): array
     {
         $data = [];
         foreach ($this->roles->select() as $row) {
@@ -94,7 +94,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         return $data;
     }
 
-    public function findAllLevels(): array
+    public function findLevels(): array
     {
         $levels = [];
         foreach ($this->roles->select() as $row) {
@@ -103,7 +103,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         return $levels;
     }
 
-    public function findAllByPaging(array $get): Paginator
+    public function findByPaging(array $get): Paginator
     {
         $sql    = new Sql($this->roles->getAdapter());
         $select = $sql->select('roles')
@@ -150,40 +150,21 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         if (! $row) {
             return null;
         }
-        // role permissions query
-        $select = $sql->select();
-        $select->columns([
-            'id',
-            'module',
-            'name',
-            'action',
-            'route',
-            'method',
-        ]);
-        $select->from(['p' => 'permissions']);
-        $select->join(['rp' => 'role_permissions'], 'p.id = rp.perm_id', [], $select::JOIN_LEFT);
-        $select->where(['rp.role_id' => $roleId]);
+        $permissions = $this->permissionRepo->findByRoleId($roleId);
 
-        $statement           = $sql->prepareStatementForSqlObject($select);
-        $resultSet           = $statement->execute();
-        $rolePermissionsData = iterator_to_array($resultSet);
-        $statement->getResource()->closeCursor();
-
-        $hydrator    = new ReflectionHydrator();
-        $role        = $hydrator->hydrate($row, new Role());
-        $permissions = [];
-        foreach ($rolePermissionsData as $permData) {
-            $permissions[] = $hydrator->hydrate($permData, new Permission());
-        }
-        $role->setRolePermissions($permissions);
-
-        return $role;
+        return new Role(
+            $row['id'],
+            $row['key'],
+            $row['name'],
+            $row['level'],
+            $permissions,
+        );
     }
 
     /** @inheritDoc */
     protected function doCreate(object $entity)
     {
-        $this->roles->insert($entity->toArray(['rolePermissions']));
+        $this->roles->insert($entity->toSnakeCaseArray(['rolePermissions']));
 
         $data = [];
         foreach ($entity->getRolePermissions() as $val) {
@@ -197,7 +178,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     protected function doUpdate(object $entity)
     {
         $roleId = $entity->getId();
-        $this->roles->update($entity->toArray(['id', 'rolePermissions']), ['id' => $roleId]);
+        $this->roles->update($entity->toSnakeCaseArray(['id', 'rolePermissions']), ['id' => $roleId]);
 
         $existing    = $this->rolePermissions->fetchAll(['role_id' => $roleId]);
         $existingIds = array_column($existing, 'perm_id');
@@ -226,9 +207,9 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     }
 
     /** @inheritDoc */
-    protected function doDelete(int|string $id)
+    protected function doDelete(object $entity)
     {
-        return $this->roles->delete(['id' => $id]);
+        return $this->roles->delete(['id' => $entity->getId()]);
     }
 
     protected function deleteCache(): void

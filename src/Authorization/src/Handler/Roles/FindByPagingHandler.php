@@ -6,7 +6,7 @@ namespace Authorization\Handler\Roles;
 
 use Olobase\Attribute\Route;
 use Common\Util\JsonHelper;
-use Olobase\Authorization\Contract\RoleModelInterface;
+use Olobase\Authorization\RoleRepositoryInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,13 +23,13 @@ use OpenApi\Attributes as OA;
 )]
 class FindAllByPagingHandler implements RequestHandlerInterface
 {
-    public function __construct(private RoleModelInterface $roleModel)
+    public function __construct(private RoleRepositoryInterface $roleRepository)
     {
     }
 
     #[OA\Get(
-        path: '/authorization/roles/findAllByPaging',
-        tags: ['Authorization Roles'],
+        path: '/api/authorization/roles/findAllByPaging',
+        tags: ['Authorization'],
         summary: 'Find all roles by pagination',
         operationId: 'authorizationRoles_findAllByPaging',
         parameters: [
@@ -69,7 +69,7 @@ class FindAllByPagingHandler implements RequestHandlerInterface
             new OA\Response(
                 response: 200,
                 description: 'Successful operation',
-                content: new OA\JsonContent(ref: '#/components/schemas/RolesFindAllByPaging')
+                content: new OA\JsonContent(ref: '#/components/schemas/RolesFindAllByPagingDto')
             ),
             new OA\Response(
                 response: 404,
@@ -84,7 +84,7 @@ class FindAllByPagingHandler implements RequestHandlerInterface
         $perPage = empty($get['_perPage']) ? 5 : (int)$get['_perPage'];
 
         // https://docs.laminas.dev/tutorials/pagination/
-        $paginator = $this->roleModel->findAllByPaging($get);
+        $paginator = $this->roleRepository->findAllByPaging($get);
 
         $page = ($page < 1) ? 1 : $page;
         $paginator->setCurrentPageNumber($page);

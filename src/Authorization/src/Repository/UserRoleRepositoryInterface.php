@@ -30,5 +30,5 @@ interface UserRoleRepositoryInterface
      * @param  array  $get query string
      * @return Laminas\Paginator\Paginator
      */
-    public function findAllByPaging(array $get): Paginator;
+    public function findByPaging(array $get): Paginator;
 }

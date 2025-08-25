@@ -35,8 +35,8 @@ class DeleteHandler implements RequestHandlerInterface
     }
 
     #[OA\Delete(
-        path: '/authorization/roles/delete/{id}',
-        tags: ['Authorization Roles'],
+        path: '/api/authorization/roles/delete/{id}',
+        tags: ['Authorization'],
         summary: 'Delete role',
         operationId: 'authorizationRoles_delete',
         parameters: [
