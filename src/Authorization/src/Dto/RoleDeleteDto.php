@@ -6,7 +6,7 @@ namespace Authorization\Dto;
 
 use Laminas\Validator\Db\RecordExists;
 use Laminas\Validator\Uuid;
-use Olobase\Attribute\Input;
+use Modularity\Attribute\Input;
 
 #[InputFilter]
 class RoleDeleteDto

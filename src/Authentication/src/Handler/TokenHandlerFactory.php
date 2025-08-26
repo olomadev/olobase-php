@@ -6,7 +6,7 @@ namespace Authentication\Handler;
 
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authentication\AuthenticationInterface;
-use Olobase\Validation\ValidationErrorFormatterInterface;
+use Modularity\Validation\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 

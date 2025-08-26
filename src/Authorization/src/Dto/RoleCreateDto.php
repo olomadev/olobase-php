@@ -2,9 +2,9 @@
 
 namespace Authorization\Dto;
 
-use Olobase\Attribute\Input;
-use Olobase\Attribute\CollectionInput;
-use Olobase\Attribute\InputFilter;
+use Modularity\Attribute\Input;
+use Modularity\Attribute\CollectionInput;
+use Modularity\Attribute\InputFilter;
 use Laminas\Validator\Uuid;
 use Laminas\Validator\StringLength;
 use OpenApi\Attributes as OA;

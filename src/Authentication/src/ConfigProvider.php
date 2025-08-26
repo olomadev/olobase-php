@@ -6,13 +6,13 @@ namespace Authentication;
 
 use Mezzio\Authentication\AuthenticationInterface;
 use Mezzio\Authorization\AuthorizationInterface;
-use Olobase\Authentication\JwtAuth\JwtAuthenticationInterface;
-use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
-use Olobase\Authentication\JwtAuth\TokenInterface;
-use Olobase\Authentication\Util\TokenEncryptHelper;
-use Olobase\Authentication\Util\TokenEncryptHelperFactory;
-use Olobase\Authorization\AuthorizationFactory;
-use Olobase\Router\AttributeRouteProviderInterface;
+use Modularity\Authentication\JwtAuth\JwtAuthenticationInterface;
+use Modularity\Authentication\JwtAuth\JwtEncoderInterface;
+use Modularity\Authentication\JwtAuth\TokenInterface;
+use Modularity\Authentication\Util\TokenEncryptHelper;
+use Modularity\Authentication\Util\TokenEncryptHelperFactory;
+use Modularity\Authorization\AuthorizationFactory;
+use Modularity\Router\AttributeRouteProviderInterface;
 use Psr\Container\ContainerInterface;
 
 use function dirname;

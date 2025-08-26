@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  '_lastModified' => 1756033743,
+  '_lastModified' => 1756192855,
   'data' => 
   array (
     0 => 
@@ -135,7 +135,7 @@ return array (
       array (
         0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
         1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
-        2 => 'Olobase\\Middleware\\EntityMiddleware',
+        2 => 'Modularity\\Middleware\\EntityMiddleware',
         3 => 'Authorization\\Handler\\Permissions\\DeleteHandler',
       ),
       'methods' => 
@@ -178,7 +178,7 @@ return array (
       array (
         0 => 'Authentication\\Middleware\\JwtAuthenticationMiddleware',
         1 => 'Mezzio\\Authorization\\AuthorizationMiddleware',
-        2 => 'Olobase\\Middleware\\EntityMiddleware',
+        2 => 'Modularity\\Middleware\\EntityMiddleware',
         3 => 'Authorization\\Handler\\Permissions\\CreateHandler',
       ),
       'methods' => 

@@ -8,7 +8,7 @@ use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Diactoros\Response\TextResponse;
 use Mezzio\Authentication\UserInterface;
-use Olobase\Attribute\Route;
+use Modularity\Attribute\Route;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

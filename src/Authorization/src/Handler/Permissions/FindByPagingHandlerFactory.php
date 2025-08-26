@@ -6,7 +6,7 @@ namespace Authorization\Handler\Permissions;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\PermissionRepositoryInterface;
+use Modularity\Authorization\PermissionRepositoryInterface;
 
 class FindByPagingHandlerFactory
 {

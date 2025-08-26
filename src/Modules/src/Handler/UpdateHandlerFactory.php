@@ -8,7 +8,7 @@ use Common\Helper\ErrorWrapperInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Modules\InputFilter\SaveFilter;
 use Modules\Model\ModuleModelInterface;
-use Olobase\DataTable\DataManagerInterface;
+use Modularity\DataTable\DataManagerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 

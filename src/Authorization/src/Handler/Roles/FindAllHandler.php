@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Attribute\Route;
+use Modularity\Attribute\Route;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\Contract\RoleModelInterface;
+use Modularity\Authorization\Contract\RoleModelInterface;
 use OpenApi\Attributes as OA;
 
 #[Route(

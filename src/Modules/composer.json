@@ -1,12 +1,12 @@
 {
-    "name": "olobase/modules",
+    "name": "modularity/modules",
     "version": "1.0.0",
-    "description": "Modules module for Olobase App",
+    "description": "Modules module for Modularity App",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {},
     "extra": {
-        "olobase-module-type": "external"
+        "modularity-module-type": "external"
     }
 }

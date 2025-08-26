@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Authorization\Dto;
 
-use Olobase\Dto\AbstractDto;
+use Modularity\Dto\AbstractDto;
 use OpenApi\Attributes as OA;
 use Authorization\Entity\Role;
 
 #[OA\Schema(
-    description: "Roles find by id response scheme"
+    description: "Role find by id response scheme"
 )]
 class RolesFindByIdDto extends AbstractDto
 {
@@ -19,8 +19,8 @@ class RolesFindByIdDto extends AbstractDto
     )]
     public array $data;
 
-    public function __construct(Role $roleEntity)
+    public function __construct(Role $entity)
     {
-        $this->data = RoleDto::hydrate($roleEntity->toCamelCaseArray())->toArray();
+        $this->data = RoleDto::hydrate($entity->toCamelCaseArray())->toArray();
     }
 }

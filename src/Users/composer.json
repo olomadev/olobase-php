@@ -1,5 +1,5 @@
 {
-    "name": "olobase/users",
+    "name": "modularity/users",
     "version": "1.0.0",
     "description": "Users module for medicine tracker app",
     "type": "library",
@@ -7,6 +7,6 @@
     "prefer-stable": true,
     "require": {},
     "extra": {
-        "olobase-module-type": "external"
+        "modularity-module-type": "external"
     }
 }

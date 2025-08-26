@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Authorization\Dto;
 
 use Laminas\Validator\InArray;
-use Olobase\Attribute\Input;
-use Olobase\Attribute\InputFilter;
-use Olobase\Attribute\ObjectInput;
+use Modularity\Attribute\Input;
+use Modularity\Attribute\InputFilter;
+use Modularity\Attribute\ObjectInput;
 use OpenApi\Attributes as OA;
 
 #[InputFilter]

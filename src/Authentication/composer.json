@@ -1,7 +1,7 @@
 {
-    "name": "olobase/authentication",
+    "name": "modularity/authentication",
     "version": "1.0.0",
-    "description": "Authentication Module for Olobase App",
+    "description": "Authentication Module for Modularity App",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -11,17 +11,17 @@
         "mezzio/mezzio-authentication-laminasauthentication": "^1.7"
     },
     "extra": {
-        "olobase-module-name": "Authentication",
-        "olobase-module-type": "external",
-        "olobase-module-dependencies": {},
-        "olobase-post-install-cmd": [
+        "modularity-module-name": "Authentication",
+        "modularity-module-type": "external",
+        "modularity-module-dependencies": {},
+        "modularity-post-install-cmd": [
             "php ./src/Authentication/script/install/generate-adapter.php",
             "php ./src/Authentication/script/install/generate-config.php"
         ],
-        "olobase-post-remove-cmd": [
+        "modularity-post-remove-cmd": [
             "php ./src/Authentication/script/remove/unlink-config.php"
         ],
-        "olobase-post-update-cmd": [
+        "modularity-post-update-cmd": [
             "php ./src/Authentication/script/install/generate-adapter.php"
         ]
     }

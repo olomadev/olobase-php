@@ -15,10 +15,10 @@ use Mezzio\Router\Middleware\MethodNotAllowedMiddleware;
 use Mezzio\Router\Middleware\RouteMiddleware;
 use Psr\Container\ContainerInterface;
 use Laminas\Diactoros\Response;
-use Olobase\Middleware\JsonBodyParserMiddleware;
-use Olobase\Middleware\ErrorResponseGenerator;
-use Olobase\Middleware\CorsMiddleware;
-use Olobase\Middleware\ClientIpMiddleware;
+use Modularity\Middleware\JsonBodyParserMiddleware;
+use Modularity\Middleware\ErrorResponseGenerator;
+use Modularity\Middleware\CorsMiddleware;
+use Modularity\Middleware\ClientIpMiddleware;
 
 /**
  * Setup middleware pipeline:
@@ -32,7 +32,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
         function () {
             return new Response();
         },
-        new Olobase\Middleware\ErrorResponseGenerator($config, $container)
+        new Modularity\Middleware\ErrorResponseGenerator($config, $container)
     );
     $app->pipe($errorHandler);
     $app->pipe(CorsMiddleware::class);
@@ -49,7 +49,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // middleware eventually (i.e., callable or service name).
     //
     // Middleware can be attached to specific paths, allowing you to mix and match
-    // applications under a Olobase domain.  The handlers in each middleware
+    // applications under a Modularity domain.  The handlers in each middleware
     // attached this way will see a URI with the matched path segment removed.
     //
     // i.e., path of "/api/member/profile" only passes "/member/profile" to $apiMiddleware
@@ -62,7 +62,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $app->pipe(RouteMiddleware::class);
     $app->pipe(JsonBodyParserMiddleware::class);
 
-    // The following handle routing failures for Olobase conditions:
+    // The following handle routing failures for Modularity conditions:
     // - HEAD request but no routes answer that method
     // - OPTIONS request but no routes answer that method
     // - method not allowed

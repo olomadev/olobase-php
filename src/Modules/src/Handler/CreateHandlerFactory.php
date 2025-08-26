@@ -6,7 +6,7 @@ namespace Modules\Handler;
 
 use Laminas\InputFilter\InputFilterPluginManager;
 use Modules\Service\ModuleService;
-use Olobase\Validation\ValidationErrorFormatterInterface;
+use Modularity\Validation\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 

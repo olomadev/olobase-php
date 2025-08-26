@@ -6,8 +6,8 @@ namespace Authentication\Dto;
 
 use Laminas\Filter\StringTrim;
 use Laminas\Validator\EmailAddress;
-use Olobase\Attribute\Input;
-use Olobase\Attribute\InputFilter;
+use Modularity\Attribute\Input;
+use Modularity\Attribute\InputFilter;
 
 #[InputFilter]
 class TokenRequestDto

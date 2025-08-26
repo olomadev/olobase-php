@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Authorization\Handler\Roles;
 
 use Authentication\Middleware\JwtAuthenticationMiddleware;
-use Authorization\Dto\RoleCreateDto;
-use Authorization\Entity\Role;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authorization\AuthorizationMiddleware;
-use Olobase\Attribute\Route;
-use Olobase\Authorization\Contract\RoleRepositoryInterface;
-use Olobase\Filter\AttributeInputFilterCollector;
-use Olobase\Mapper\InputSchemaMapper;
-use Olobase\Util\ValidationErrorFormatterInterface;
+use Modularity\Attribute\Route;
+use Modularity\Authorization\Contract\RoleRepositoryInterface;
+use Modularity\Middleware\EntityMiddleware;
+use Modularity\Util\ValidationErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -26,6 +23,7 @@ use Psr\Http\Server\RequestHandlerInterface;
     middlewares: [
         JwtAuthenticationMiddleware::class,
         AuthorizationMiddleware::class,
+        EntityMiddleware::class,
     ]
 )]
 class CreateHandler implements RequestHandlerInterface
@@ -62,15 +60,9 @@ class CreateHandler implements RequestHandlerInterface
     )]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $collector = new AttributeInputFilterCollector($this->filterManager);
-        $filter    = $collector->fromObject(new RoleCreateDto(), $request->getParsedBody());
-        if ($filter->isValid()) {
-            $mapper = new InputSchemaMapper();
-            $entity = $mapper->mapToEntity($filter, Role::class);
-            $this->roleRepository->createEntity($entity);
-        } else {
-            return new JsonResponse($this->errorFormatter->format($filter), 400);
-        }
-        return new JsonResponse([]);
+        $entity = $request->getAttribute('entity');
+        $roleId = $this->roleRepository->createEntity($entity);
+
+        return new JsonResponse(['data' => ['id' => $roleId]]);
     }
 }

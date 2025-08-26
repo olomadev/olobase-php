@@ -11,10 +11,10 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Paginator\Paginator;
-use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\DataTable\ColumnFiltersInterface;
-use Olobase\Db\JsonExpressionHelper;
-use Olobase\Repository\AbstractRepository;
+use Modularity\Authorization\PermissionRepositoryInterface;
+use Modularity\DataTable\ColumnFiltersInterface;
+use Modularity\Db\JsonExpressionHelper;
+use Modularity\Repository\AbstractRepository;
 
 use function array_map;
 use function iterator_to_array;
@@ -65,14 +65,24 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
 
     public function findByRoleId(string $roleId): array
     {
+        $platform   = strtolower($this->adapter->getPlatform()->getName());
+        $jsonHelper = new JsonExpressionHelper($platform);
+        
         $sql    = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
             'id',
             'module',
             'name',
-            'action',
             'route',
+            'action' => $jsonHelper->jsonObject([
+                'id' => 'p.action',
+                'name' => $jsonHelper->ucfirst('p.action')
+            ]),
+            'method' => $jsonHelper->jsonObject([
+                'id' => 'p.method',
+                'name' => $jsonHelper->upper('p.method')
+            ]),
             'method',
         ]);
         $select->from(['p' => 'permissions'])
@@ -94,9 +104,9 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
                 $r['id'],
                 $r['module'],
                 $r['name'],
-                json_encode(['id' => $r['action'], 'name' => ucfirst($r['action'])]),
+                $r['action'],
                 $r['route'],
-                json_encode(['id' => $r['method'], 'name' => strtoupper($r['method'])]),
+                $r['method'],
             ),
             $rows
         );

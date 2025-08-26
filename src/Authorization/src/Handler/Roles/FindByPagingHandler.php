@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Attribute\Route;
+use Modularity\Attribute\Route;
 use Common\Util\JsonHelper;
-use Olobase\Authorization\RoleRepositoryInterface;
+use Modularity\Authorization\RoleRepositoryInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

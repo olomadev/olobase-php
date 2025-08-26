@@ -11,7 +11,7 @@ use Mezzio\Authorization\AuthorizationMiddleware;
 use Modules\InputFilter\SaveFilter;
 use Modules\Model\ModuleModelInterface;
 use Modules\Schema\ModuleSave;
-use Olobase\DataTable\DataManagerInterface;
+use Modularity\DataTable\DataManagerInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

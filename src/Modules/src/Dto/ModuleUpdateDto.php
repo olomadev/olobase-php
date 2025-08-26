@@ -9,8 +9,8 @@ use Laminas\Filter\ToInt;
 use Laminas\Validator\Db\RecordExists;
 use Laminas\Validator\StringLength;
 use Laminas\Validator\Uuid;
-use Olobase\Attribute\Input;
-use Olobase\Attribute\InputFilter;
+use Modularity\Attribute\Input;
+use Modularity\Attribute\InputFilter;
 use OpenApi\Attributes as OA;
 
 #[InputFilter]

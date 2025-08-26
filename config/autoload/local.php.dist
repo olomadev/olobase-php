@@ -20,11 +20,11 @@ return [
     // will also disable it by default; clear the configuration cache using
     // `composer clear-config-cache`.
     ConfigAggregator::ENABLE_CACHE => false,
-
-    // Toggle cache storage configuration
+    
+    // Cache storage global configuration
     // 
     'cache_enabled' => false,
-    
+
     'db' => [
         'driver'   => 'Pdo_Mysql',
         'driver_options' => [
@@ -37,10 +37,10 @@ return [
             // Enable exceptions
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ],
-        'database' => '',
+        'database' => 'olobase_default',
         'hostname' => 'localhost',
-        'username' => '',
-        'password' => '',
+        'username' => 'admin',
+        'password' => 'Mbry8992@',
         'platform' => 'Mysql',
     ],
     'redis' => [

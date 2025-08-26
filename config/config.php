@@ -13,9 +13,9 @@ $cacheConfig = [
 
 // Let's merge the configuration with ConfigAggregator
 $aggregator = new ConfigAggregator([
+  \Modularity\ConfigProvider::class,
   \Mezzio\Router\LaminasRouter\ConfigProvider::class,
   \Laminas\Router\ConfigProvider::class,
-  \Olobase\ConfigProvider::class,
   \Laminas\Hydrator\ConfigProvider::class,
   \Mezzio\Authorization\ConfigProvider::class,
   \Authorization\ConfigProvider::class,

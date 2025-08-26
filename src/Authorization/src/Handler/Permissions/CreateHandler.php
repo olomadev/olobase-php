@@ -10,11 +10,11 @@ use Authorization\Entity\Permission;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authorization\AuthorizationMiddleware;
-use Olobase\Attribute\Entity;
-use Olobase\Attribute\Route;
-use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\Middleware\EntityMiddleware;
-use Olobase\Validation\ValidationErrorFormatterInterface;
+use Modularity\Attribute\Entity;
+use Modularity\Attribute\Route;
+use Modularity\Authorization\PermissionRepositoryInterface;
+use Modularity\Middleware\EntityMiddleware;
+use Modularity\Validation\ValidationErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -79,10 +79,6 @@ class CreateHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $entity = $request->getAttribute('entity');
-
-        // var_dump($entity->toCamelCaseArray());
-        // die;
-
         $permId = $this->permissionRepository->createEntity($entity);
 
         return new JsonResponse(['data' => ['id' => $permId]]);

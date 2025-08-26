@@ -35,7 +35,7 @@ return array (
   ),
   'Authentication\\Dto\\TokenRequestDto' => 
   array (
-    '_lastModified' => 1754472650,
+    '_lastModified' => 1756133037,
     'data' => 
     array (
       0 => 

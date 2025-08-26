@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authorization\Dto;
 
 use Laminas\Paginator\Paginator;
-use Olobase\Dto\AbstractDto;
+use Modularity\Dto\AbstractDto;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(schema: 'RolesFindByPagingDto', type: 'object')]

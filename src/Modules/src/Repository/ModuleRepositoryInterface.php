@@ -6,7 +6,7 @@ namespace Modules\Repository;
 
 use Modules\Entity\Module;
 use Laminas\Paginator\Paginator;
-use Olobase\Repository\CrudRepositoryInterface;
+use Modularity\Repository\CrudRepositoryInterface;
 
 interface ModuleRepositoryInterface extends CrudRepositoryInterface
 {

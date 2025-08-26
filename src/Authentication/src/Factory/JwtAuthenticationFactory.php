@@ -8,10 +8,10 @@ use Laminas\Db\Adapter\Adapter;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Mezzio\Authentication\Exception;
 use Mezzio\Authentication\UserInterface;
-use Olobase\Authentication\JwtAuth\JwtAuthentication;
-use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
-use Olobase\Authentication\JwtAuth\TokenInterface;
-use Olobase\Authorization\RoleRepositoryInterface;
+use Modularity\Authentication\JwtAuth\JwtAuthentication;
+use Modularity\Authentication\JwtAuth\JwtEncoderInterface;
+use Modularity\Authentication\JwtAuth\TokenInterface;
+use Modularity\Authorization\RoleRepositoryInterface;
 use Psr\Container\ContainerInterface;
 
 use function password_verify;

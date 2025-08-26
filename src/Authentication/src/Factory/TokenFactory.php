@@ -6,10 +6,10 @@ namespace Authentication\Factory;
 
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Olobase\Authentication\JwtAuth\JwtEncoderInterface;
-use Olobase\Authentication\JwtAuth\SessionAwareToken;
-use Olobase\Authentication\JwtAuth\StatelessToken;
-use Olobase\Authentication\Util\TokenEncryptHelper;
+use Modularity\Authentication\JwtAuth\JwtEncoderInterface;
+use Modularity\Authentication\JwtAuth\SessionAwareToken;
+use Modularity\Authentication\JwtAuth\StatelessToken;
+use Modularity\Authentication\Util\TokenEncryptHelper;
 use Psr\Container\ContainerInterface;
 
 class TokenFactory implements FactoryInterface

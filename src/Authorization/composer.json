@@ -1,7 +1,7 @@
 {
-    "name": "olobase/authorization",
+    "name": "modularity/authorization",
     "version": "1.0.0",
-    "description": "Authorization Module for Olobase App",
+    "description": "Authorization Module for Modularity App",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -9,8 +9,8 @@
         "mezzio/mezzio-authorization": "^1.10"
     },
     "extra": {
-        "olobase-module-name": "Authorization",
-        "olobase-module-type": "external",
-        "olobase-module-dependencies": {}
+        "modularity-module-name": "Authorization",
+        "modularity-module-type": "external",
+        "modularity-module-dependencies": {}
     }
 }

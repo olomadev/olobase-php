@@ -11,7 +11,7 @@ use Laminas\Db\TableGateway\TableGatewayInterface;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Paginator\Paginator;
 use Modules\Entity\Module;
-use Olobase\DataTable\ColumnFiltersInterface;
+use Modularity\DataTable\ColumnFiltersInterface;
 
 class ModuleRepository extends AbstractRepository implements ModuleRepositoryInterface
 {

@@ -9,8 +9,8 @@ use Psr\Container\ContainerInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\InputFilter\InputFilterPluginManager;
-use Olobase\Util\ValidationErrorFormatterInterface;
-use Olobase\Authorization\Contract\RoleModelInterface;
+use Modularity\Util\ValidationErrorFormatterInterface;
+use Modularity\Authorization\Contract\RoleModelInterface;
 
 class UpdateHandlerFactory
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Authorization\Handler\Permissions;
 
 use Laminas\InputFilter\InputFilterPluginManager;
-use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\Validation\ValidationErrorFormatterInterface;
+use Modularity\Authorization\PermissionRepositoryInterface;
+use Modularity\Validation\ValidationErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 

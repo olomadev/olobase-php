@@ -12,10 +12,10 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Paginator\Paginator;
-use Olobase\Authorization\PermissionRepositoryInterface;
-use Olobase\Authorization\RoleRepositoryInterface;
-use Olobase\DataTable\ColumnFiltersInterface;
-use Olobase\Repository\AbstractRepository;
+use Modularity\Authorization\PermissionRepositoryInterface;
+use Modularity\Authorization\RoleRepositoryInterface;
+use Modularity\DataTable\ColumnFiltersInterface;
+use Modularity\Repository\AbstractRepository;
 
 use function array_column;
 use function array_diff;

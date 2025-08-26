@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Authorization\Handler\Roles;
 
-use Olobase\Attribute\Route;
-use Olobase\Authorization\Contract\RoleModelInterface;
-use Olobase\Util\ValidationErrorFormatterInterface as Error;
+use Modularity\Attribute\Route;
+use Modularity\Authorization\Contract\RoleModelInterface;
+use Modularity\Util\ValidationErrorFormatterInterface as Error;
 use Authorization\Schema\RoleSave;
 use Authorization\InputFilter\Roles\SaveFilter;
 use Laminas\Diactoros\Response\JsonResponse;

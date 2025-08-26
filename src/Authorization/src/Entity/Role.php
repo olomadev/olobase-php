@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Authorization\Entity;
 
-use Olobase\Entity\AbstractEntity;
+use Modularity\Entity\AbstractEntity;
 
 final class Role extends AbstractEntity
 {

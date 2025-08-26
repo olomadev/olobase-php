@@ -9,10 +9,10 @@ use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
-use Olobase\DataTable\ColumnFiltersInterface;
-use Olobase\Router\AttributeRouteProviderInterface;
+use Modularity\DataTable\ColumnFiltersInterface;
+use Modularity\Router\AttributeRouteProviderInterface;
 use Psr\Container\ContainerInterface;
-use Olobase\Authorization\PermissionRepositoryInterface;
+use Modularity\Authorization\PermissionRepositoryInterface;
 
 use function dirname;
 

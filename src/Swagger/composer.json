@@ -1,7 +1,7 @@
 {
-    "name": "olobase/swagger",
+    "name": "modularity/swagger",
     "version": "1.0.0",
-    "description": "Swagger Module for Olobase App",
+    "description": "Swagger Module for Modularity App",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -9,6 +9,6 @@
         "zircote/swagger-php": "^5.1"
     },
     "extra": {
-        "olobase-module-type": "internal"
+        "modularity-module-type": "internal"
     }
 }

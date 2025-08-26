@@ -10,7 +10,7 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 use Laminas\Paginator\Adapter\DbSelect;
 use Laminas\Paginator\Paginator;
-use Olobase\DataTable\ColumnFiltersInterface;
+use Modularity\DataTable\ColumnFiltersInterface;
 
 class UserRoleRepository implements UserRoleRepositoryInterface
 {

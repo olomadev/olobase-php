@@ -6,7 +6,7 @@ namespace Authorization\Handler\Roles;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Olobase\Authorization\RoleRepositoryInterface;
+use Modularity\Authorization\RoleRepositoryInterface;
 
 class FindByIdHandlerFactory
 {
