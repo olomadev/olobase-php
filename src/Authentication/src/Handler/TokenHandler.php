@@ -16,7 +16,7 @@ use Mezzio\Authentication\AuthenticationInterface;
 use Mezzio\Authentication\UserInterface;
 use Modularity\Attribute\Route;
 use Modularity\Filter\AttributeInputFilterCollector;
-use Modularity\Validation\ValidationErrorFormatterInterface;
+use Modularity\Validation\ErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -33,7 +33,7 @@ class TokenHandler implements RequestHandlerInterface
     public function __construct(
         private InputFilterPluginManager $filterManager,
         private AuthenticationInterface $authentication,
-        private ValidationErrorFormatterInterface $errorFormatter
+        private ErrorFormatterInterface $errorFormatter
     ) {
     }
 

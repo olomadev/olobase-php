@@ -14,24 +14,39 @@ composer global require squizlabs/php_codesniffer
 composer global require laminas/laminas-coding-standard
 ```
 
+After doing this, add the path ~/.composer/vendor/bin (~/.config/composer/vendor/bin for Ubuntu 24.04) to PATH:
+
+```sh
+export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+echo 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"' >> ~/.bashrc
+```
+
+
+You can add this to your .bashrc or .zshrc file to make it permanent:
+
+```sh
+source ~/.bashrc
+```
+
 test it 
 
 ```sh
-user@user:~$ /home/user/.config/composer/vendor/bin/phpcs -i
+phpcs -i
 
-The installed coding standards are MySource, PEAR, PSR1, PSR2, PSR12, Squiz, Zend, LaminasCodingStandard, SlevomatCodingStandard, coding-standard and WebimpressCodingStandard
+# Example output:
+# The installed coding standards are MySource, PEAR, PSR1, PSR2, PSR12, Squiz, Zend, LaminasCodingStandard, SlevomatCodingStandard, coding-standard and WebimpressCodingStandard
 ```
 
 ```sh
-cd /home/user/.config/sublime-text/Packages/User
+cd ~/.config/sublime-text/Packages/User
 vim laminas-cs.sublime-build
 ```
 
-Change "user" variable with your user name and copy&paste below the code in your laminas-cs.sublime-build file.
+Change "$USER" variable with your username and copy&paste below the code in your laminas-cs.sublime-build file.
 
 ```json
 {
-  "cmd": ["/home/user/.config/composer/vendor/bin/phpcs", "--standard=LaminasCodingStandard", "$file"],
+  "cmd": ["/home/$USER/.config/composer/vendor/bin/phpcs", "--standard=LaminasCodingStandard", "$file"],
   "selector": "source.php",
   "working_dir": "${file_path}"
 }
@@ -51,3 +66,7 @@ touch laminas-cs.sublime-build
 ```
 
 via command line.
+
+
+Open a php file with sublime text. Click "Ctrl + B" shortcuts. Choose "laminas-cs" if the prompt open in a window.
+

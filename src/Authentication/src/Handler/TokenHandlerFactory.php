@@ -6,7 +6,7 @@ namespace Authentication\Handler;
 
 use Laminas\InputFilter\InputFilterPluginManager;
 use Mezzio\Authentication\AuthenticationInterface;
-use Modularity\Validation\ValidationErrorFormatterInterface;
+use Modularity\Validation\ErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -17,7 +17,7 @@ class TokenHandlerFactory
         return new TokenHandler(
             filterManager: $container->get(InputFilterPluginManager::class),
             authentication: $container->get(AuthenticationInterface::class),
-            errorFormatter: $container->get(ValidationErrorFormatterInterface::class)
+            errorFormatter: $container->get(ErrorFormatterInterface::class)
         );
     }
 }

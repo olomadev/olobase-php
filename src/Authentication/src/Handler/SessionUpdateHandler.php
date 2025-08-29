@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Authentication\Handler;
 
-use Authentication\Middleware\JwtAuthenticationMiddleware;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Diactoros\Response\TextResponse;
 use Mezzio\Authentication\UserInterface;
-use Modularity\Attribute\Route;
 use OpenApi\Attributes as OA;
+use Modularity\Attribute\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

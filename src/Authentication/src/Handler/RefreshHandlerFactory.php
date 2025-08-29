@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authentication\Handler;
 
 use Mezzio\Authentication\AuthenticationInterface;
-use Modularity\Util\ValidationErrorFormatterInterface;
+use Modularity\Validation\ErrorFormatterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -15,7 +15,7 @@ class RefreshHandlerFactory
     {
         return new RefreshHandler(
             authentication: $container->get(AuthenticationInterface::class),
-            errorFormatter: $container->get(ValidationErrorFormatterInterface::class)
+            errorFormatter: $container->get(ErrorFormatterInterface::class)
         );
     }
 }

@@ -9,7 +9,7 @@ use Firebase\JWT\ExpiredException;
 use Laminas\Diactoros\Response\JsonResponse;
 use Mezzio\Authentication\AuthenticationInterface;
 use Modularity\Attribute\Route;
-use Modularity\Validation\ValidationErrorFormatterInterface;
+use Modularity\Validation\ErrorFormatterInterface;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,7 +32,7 @@ class RefreshHandler implements RequestHandlerInterface
 
     public function __construct(
         private AuthenticationInterface $authentication,
-        private ValidationErrorFormatterInterface $errorFormatter
+        private ErrorFormatterInterface $errorFormatter
     ) {
     }
 
