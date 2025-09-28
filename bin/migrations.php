@@ -14,7 +14,7 @@ require APP_ROOT . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 use Doctrine\Migrations\Tools\Console\Command;
-use Olobase\ModuleManager\DoctrineHelper;
+use Modularity\ModuleManager\DoctrineHelper;
 use Doctrine\Migrations\Tools\Console\Command\{
     DumpSchemaCommand,
     ExecuteCommand,

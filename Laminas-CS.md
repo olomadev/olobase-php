@@ -9,7 +9,11 @@ sudo apt remove php-codesniffer
 
 Install new packages with composer
 
+WARNING ! : User must not be root ! 
+
 ```php
+ersin@ersin  WARNING ! : User must not be root ! 
+
 composer global require squizlabs/php_codesniffer
 composer global require laminas/laminas-coding-standard
 ```

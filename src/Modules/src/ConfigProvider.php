@@ -69,9 +69,10 @@ class ConfigProvider
         ];
     }
 
-    public static function registerRoutes(ContainerInterface $container): void
+    public static function registerRoutes(ContainerInterface $container, ?string $moduleName = null): void
     {
         $provider = $container->get(AttributeRouteProviderInterface::class);
-        $provider->registerRoutes(dirname(__DIR__));
+        $provider->registerRoutes(dirname(__DIR__), $moduleName);
     }
+
 }

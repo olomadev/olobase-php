@@ -11,10 +11,10 @@ chdir(__DIR__ . '/../');
 require 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
-use Olobase\ModuleManager\Command\ModuleInstallCommand;
-use Olobase\ModuleManager\Command\ModuleRemoveCommand;
-use Olobase\ModuleManager\Command\MigrationsListCommand;
-use Olobase\ModuleManager\Command\MigrationsMigrateCommand;
+use Modularity\ModuleManager\Command\ModuleInstallCommand;
+use Modularity\ModuleManager\Command\ModuleRemoveCommand;
+use Modularity\ModuleManager\Command\MigrationsListCommand;
+use Modularity\ModuleManager\Command\MigrationsMigrateCommand;
 
 $container = require APP_ROOT . '/config/container.php';
 $application = new Application();

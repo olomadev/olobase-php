@@ -37,15 +37,5 @@ if (! is_file('config/module.config.php')) {
     (require 'config/pipeline.php')($app, $factory, $container);
     (require 'config/routes.php')($app, $factory, $container);
 
-    // Register module routes ..
-    $modules = $container->get('config')['modules'];
-    $moduleProviders = [];
-    foreach ($modules as $module) {
-        $configProviderClass = $module . '\ConfigProvider';
-        if (class_exists($configProviderClass)
-            && method_exists($configProviderClass, 'registerRoutes')) {
-            $configProviderClass::registerRoutes($container);
-        }
-    }
     $app->run();
 })();

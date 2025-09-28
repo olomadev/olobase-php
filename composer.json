@@ -51,12 +51,12 @@
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.11",
         "mezzio/mezzio-tooling": "^2.10",
-        "modularity/authentication": "1.0.0",
         "modularity/authorization": "1.0.0",
         "modularity/swagger": "*",
         "olomadev/mezzio-modularity": "1.x-dev",
         "predis/predis": "^2.3",
-        "symfony/console": "^6.4"
+        "symfony/console": "^6.4",
+        "modularity/authentication": "1.0.0"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "~2.5.0",
@@ -76,14 +76,14 @@
         },
         {
             "type": "path",
-            "url": "./src/Authentication",
+            "url": "./src/Authorization",
             "options": {
                 "symlink": true
             }
         },
         {
             "type": "path",
-            "url": "./src/Authorization",
+            "url": "./src/Authentication",
             "options": {
                 "symlink": true
             }
@@ -93,14 +93,14 @@
         "psr-4": {
             "Common\\": "src/Common/src/",
             "Swagger\\": "src/Swagger/src/",
-            "Authentication\\": "src/Authentication/src/",
-            "Authorization\\": "src/Authorization/src/"
+            "Authorization\\": "src/Authorization/src/",
+            "Authentication\\": "src/Authentication/src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Authentication\\Tests\\": "src/Authentication/Tests/",
-            "Authorization\\Tests\\": "src/Authorization/Tests/"
+            "Authorization\\Tests\\": "src/Authorization/Tests/",
+            "Authentication\\Tests\\": "src/Authentication/Tests/"
         }
     },
     "scripts": {

@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'Authentication',
-    'Authorization'
+    'Authorization',
+    'Authentication'
 ];

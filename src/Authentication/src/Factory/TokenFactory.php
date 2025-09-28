@@ -22,9 +22,9 @@ class TokenFactory implements FactoryInterface
 
         return new $tokenClass(
             config: $config,
-            cache: $container->get(StorageInterface::class),
             tokenEncrypt: $container->get(TokenEncryptHelper::class),
             jwtEncoder: $container->get(JwtEncoderInterface::class),
+            cache: $container->get(StorageInterface::class),
         );
     }
 }

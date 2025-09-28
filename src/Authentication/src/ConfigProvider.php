@@ -15,8 +15,6 @@ use Modularity\Authorization\AuthorizationFactory;
 use Modularity\Router\AttributeRouteProviderInterface;
 use Psr\Container\ContainerInterface;
 
-use function dirname;
-
 /**
  * The configuration provider for the Authentication module
  *
@@ -70,9 +68,9 @@ class ConfigProvider
         ];
     }
 
-    public static function registerRoutes(ContainerInterface $container): void
+    public static function registerRoutes(ContainerInterface $container, ?string $moduleName = null): void
     {
         $provider = $container->get(AttributeRouteProviderInterface::class);
-        $provider->registerRoutes(dirname(__DIR__));
+        $provider->registerRoutes($moduleName);
     }
 }
