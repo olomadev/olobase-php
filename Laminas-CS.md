@@ -9,13 +9,13 @@ sudo apt remove php-codesniffer
 
 Install new packages with composer
 
-WARNING ! : User must not be root ! 
+***WARNING ! : User must not be root ! 
 
 ```php
 ersin@ersin  WARNING ! : User must not be root ! 
 
-composer global require squizlabs/php_codesniffer
-composer global require laminas/laminas-coding-standard
+composer global remove squizlabs/php_codesniffer
+composer global require squizlabs/php_codesniffer:^3.10 laminas/laminas-coding-standard
 ```
 
 After doing this, add the path ~/.composer/vendor/bin (~/.config/composer/vendor/bin for Ubuntu 24.04) to PATH:
