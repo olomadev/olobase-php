@@ -56,21 +56,13 @@ Change "$USER" variable with your username and copy&paste below the code in your
 }
 ```
 
-You can do this using sublime text ui 
+Select laminas-cs using below the command.
 
 ```
 Tools > Build System > New Build System
 ```
 
-or
-
-```sh
-cd /home/user/.config/sublime-text/Packages/User
-touch laminas-cs.sublime-build
-```
-
-via command line.
-
+Using Ctrl + B you can run cs-fixer.
 
 Open a php file with sublime text. Click "Ctrl + B" shortcuts. Choose "laminas-cs" if the prompt open in a window.
 
