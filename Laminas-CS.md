@@ -50,7 +50,7 @@ Change "$USER" variable with your username and copy&paste below the code in your
 
 ```json
 {
-  "cmd": ["/home/$USER/.config/composer/vendor/bin/phpcs", "--standard=LaminasCodingStandard", "$file"],
+  "cmd": ["/home/$USER/.config/composer/vendor/bin/phpcbf", "--standard=LaminasCodingStandard", "$file"],
   "selector": "source.php",
   "working_dir": "${file_path}"
 }
